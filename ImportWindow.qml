@@ -6,7 +6,7 @@ Rectangle {
   id: root
   anchors.centerIn: parent
   width: 700
-  height: 320
+  height: 415
   color: "transparent"
 
   property string loadedFilePath: ""
@@ -44,11 +44,14 @@ Rectangle {
 
   // Icone de la caméra
   Image {
-    source: "./images/film.png"
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.topMargin: 30
+    id: cameraImage
+    source: "./images/camera.png"
+    anchors.top: parent.top
+    anchors.topMargin: 50
+    anchors.left: parent.left
+    anchors.leftMargin: 255
     width: 200
-    height: 200
+    height: 170
   }
 
   // Bouton pour importer une vidéo
@@ -57,8 +60,8 @@ Rectangle {
     width: 300
     height: 45
     anchors.horizontalCenter: parent.horizontalCenter
-    anchors.top: parent.top
-    anchors.topMargin: 200
+    anchors.top: cameraImage.top
+    anchors.topMargin: 195
     color: "#dddddd"
     radius: 25
 
@@ -70,12 +73,12 @@ Rectangle {
     }
 
     Image {
-      source: "./images/film.png"
-      width: 40
-      height: 40
+      source: "./images/camera.png"
+      width: 25
+      height: 25
       anchors.verticalCenter: parent.verticalCenter
       anchors.right: parent.right
-      anchors.rightMargin: 10
+      anchors.rightMargin: 20
     }
 
     MouseArea {
@@ -95,9 +98,10 @@ Rectangle {
     Text {
       text: "ou glissez votre fichier ici"
       anchors.horizontalCenter: parent.horizontalCenter
-      anchors.top: parent.top
+      anchors.top: importButton.top
       anchors.topMargin: 70
       font.pixelSize: 20
+      color: "white"
     }
 
     FileDialog {

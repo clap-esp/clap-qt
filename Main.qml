@@ -9,6 +9,7 @@ Window {
   height: 1080
   visible: true
   title: "Clap - Main Window"
+  color: "#484848"
 
   ImportWindow {
     id: import_window
