@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="/clap_v1">/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug/clap_v1</file>
+
+  </qresource>
+</RCC>

@@ -1,0 +1,10 @@
+-I
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug
+-I
+/home/vagrant/qt6/6.7.2/gcc_64/./qml
+--resource
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug/.qt/rcc/qmake_clap_v1.qrc
+--resource
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug/.qt/rcc/appclap_v1_raw_qml_0.qrc
+--module
+clap_v1

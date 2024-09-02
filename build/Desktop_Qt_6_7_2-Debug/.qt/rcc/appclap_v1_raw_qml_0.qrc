@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="/clap_v1/">
+    <file alias="Main.qml">/home/vagrant/clap/clap_v1/Main.qml</file>
+    <file alias="TextButton.qml">/home/vagrant/clap/clap_v1/TextButton.qml</file>
+  </qresource>
+</RCC>
+

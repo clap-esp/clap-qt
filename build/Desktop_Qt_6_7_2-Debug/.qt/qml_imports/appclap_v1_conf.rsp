@@ -1,0 +1,14 @@
+-rootPath
+/home/vagrant/clap/clap_v1
+-cmake-output
+-output-file
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug/.qt/qml_imports/appclap_v1_conf.cmake
+-importPath
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug/clap_v1
+-importPath
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug
+-importPath
+/home/vagrant/qt6/6.7.2/gcc_64/./qml
+-qrcFiles
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug/.qt/rcc/qmake_clap_v1.qrc
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug/.qt/rcc/appclap_v1_raw_qml_0.qrc

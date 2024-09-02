@@ -1,0 +1,6 @@
+--resource
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug/.qt/rcc/qmake_clap_v1.qrc
+--resource
+/home/vagrant/clap/clap_v1/build/Desktop_Qt_6_7_2-Debug/.qt/rcc/appclap_v1_raw_qml_0.qrc
+/clap_v1/Main.qml
+/clap_v1/TextButton.qml
