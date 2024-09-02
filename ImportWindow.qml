@@ -1,10 +1,46 @@
 import QtQuick
+import QtCore
+import QtQuick.Dialogs
 
 Rectangle {
+  id: root
   anchors.centerIn: parent
-  width: 300
-  height: 300
+  width: 700
+  height: 320
   color: "transparent"
+
+  property string loadedFilePath: ""
+
+  // Permet d'avoir la zone de drag and drop en pointillet
+  Canvas {
+    id: dottedBorderCanvas
+    anchors.fill: parent
+    onPaint: {
+      var ctx = getContext("2d");
+      ctx.clearRect(0, 0, width, height); // Effacer le canvas
+      ctx.setLineDash([5, 5]); // Définit le motif des pointillés : 5px trait, 5px espace
+      ctx.strokeStyle = "black"; // Couleur de la bordure
+      ctx.lineWidth = 5; // Largeur de la bordure
+      ctx.radius = 10;
+      ctx.strokeRect(0, 0, width, height); // Dessine le rectangle avec une bordure en pointillé
+    }
+  }
+
+  // Zone de drag and drop
+  DropArea {
+    anchors.fill: parent
+    onEntered: (drag) => {
+      root.color = "#cccccc";
+      drag.accept(Qt.LinkAction);
+    }
+    onDropped: (drop) => {
+      import_file(drop.urls[0]);
+      root.color = "transparent";
+    }
+    onExited: {
+      root.color = "transparent";
+    }
+  }
 
   // Icone de la caméra
   Image {
@@ -44,9 +80,7 @@ Rectangle {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: {
-        console.log("Bouton cliqué - Fonction d'importation à implémenter ici")
-      }
+      onClicked: fileDialog.open()
 
       onPressed: {
         importButton.color = "#bbbbbb";
@@ -65,10 +99,18 @@ Rectangle {
       anchors.topMargin: 70
       font.pixelSize: 20
     }
+
+    FileDialog {
+      id: fileDialog
+      currentFolder: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
+      onAccepted: import_file(fileDialog.selectedFile)
+    }
   }
 
-  function import_file() {
+  function import_file(file_path) {
     // TODO
+    loadedFilePath = file_path
+    console.log(`Path file : ${loadedFilePath}`)
   }
 }
 
