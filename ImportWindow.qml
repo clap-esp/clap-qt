@@ -116,4 +116,3 @@ Rectangle {
     console.log(`Path file : ${loadedFilePath}`)
   }
 }
-
