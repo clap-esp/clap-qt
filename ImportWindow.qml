@@ -21,7 +21,6 @@ Rectangle {
       ctx.setLineDash([5, 5]); // Définit le motif des pointillés : 5px trait, 5px espace
       ctx.strokeStyle = "black"; // Couleur de la bordure
       ctx.lineWidth = 5; // Largeur de la bordure
-      ctx.radius = 10;
       ctx.strokeRect(0, 0, width, height); // Dessine le rectangle avec une bordure en pointillé
     }
   }
