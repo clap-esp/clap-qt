@@ -16,7 +16,8 @@ qt_add_qml_module(appclap_v1
     URI clap_v1
     VERSION 1.0
     QML_FILES
-    Main.qml  TextButton.qml  DisplayButton.qml
+    Main.qml  TextButton.qml  PlayButton.qml  VideoWidget.qml
+    VideoSlider.qml
     RESOURCES
 )
 
