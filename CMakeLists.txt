@@ -16,7 +16,8 @@ qt_add_qml_module(appclap_v1
     URI clap_v1
     VERSION 1.0
     QML_FILES
-    Main.qml  TextButton.qml
+    Main.qml  TextButton.qml  DisplayButton.qml
+    RESOURCES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
