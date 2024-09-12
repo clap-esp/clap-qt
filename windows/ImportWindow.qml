@@ -45,7 +45,7 @@ Rectangle {
   // Icone de la caméra
   Image {
     id: cameraImage
-    source: "./images/camera.png"
+    source: "../images/camera.png"
     anchors.top: parent.top
     anchors.topMargin: 50
     anchors.left: parent.left
@@ -73,7 +73,7 @@ Rectangle {
     }
 
     Image {
-      source: "./images/camera.png"
+      source: "../images/camera.png"
       width: 25
       height: 25
       anchors.verticalCenter: parent.verticalCenter

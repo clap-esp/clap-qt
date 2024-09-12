@@ -8,8 +8,10 @@ Rectangle {
   height: 415
   color: "transparent"
 
+  property string filePath: qsTr("")
+
   Text {
-    text: qsTr("Page de paramètres : ")
+    text: qsTr("Fichier importé : " + filePath)
     anchors.centerIn: parent
     font.pixelSize: 20
     color: "black"
