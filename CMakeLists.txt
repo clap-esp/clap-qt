@@ -16,8 +16,9 @@ qt_add_qml_module(appclap_v1
     URI clap_v1
     VERSION 1.0
     QML_FILES
-    Main.qml  TextButton.qml
-    QML_FILES ImportWindow.qml
+    Main.qml TextButton.qml
+    QML_FILES
+    ImportWindow.qml ParameterWindow.qml
     RESOURCES
     RESOURCES images/camera.png
 )
