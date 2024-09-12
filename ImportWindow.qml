@@ -9,7 +9,8 @@ Rectangle {
   height: 415
   color: "transparent"
 
-  property string loadedFilePath: ""
+  property string loadedFilePath: qsTr("")
+  signal importFileEvent()
 
   // Permet d'avoir la zone de drag and drop en pointillet
   Canvas {
@@ -65,7 +66,7 @@ Rectangle {
     radius: 25
 
     Text {
-      text: "Importez une vidéo"
+      text: qsTr("Importez une vidéo")
       font.pixelSize: 20
       anchors.verticalCenter: parent.verticalCenter
       anchors.horizontalCenter: parent.horizontalCenter
@@ -95,7 +96,7 @@ Rectangle {
 
     // Texte pour glisser le fichier
     Text {
-      text: "ou glissez votre fichier ici"
+      text: qsTr("ou glissez votre fichier ici")
       anchors.horizontalCenter: parent.horizontalCenter
       anchors.top: importButton.top
       anchors.topMargin: 70
@@ -114,5 +115,6 @@ Rectangle {
     // TODO
     loadedFilePath = file_path
     console.log(`Path file : ${loadedFilePath}`)
+    importFileEvent();
   }
 }
