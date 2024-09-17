@@ -15,7 +15,7 @@ qt_add_executable(appclap_v1
 qt_add_qml_module(appclap_v1
     URI clap_v1
     VERSION 1.0
-    QML_FILES Main.qml BarMenu.qml
+    QML_FILES Main.qml BarMenu.qml PlayButton.qml VideoSlider.qml VideoWidget.qml MainWindow.qml
     RESOURCES
     RESOURCES images/camera.png
     QML_FILES

@@ -1,0 +1,53 @@
+# Ignore le dossier de build
+build/
+
+# Ignore les fichiers générés par Qt
+*.pro.user
+*.pro.user.*
+*.txt.user
+*.txt.user.*
+*.qmake.stash
+
+# Ignore les fichiers de configuration du dossier Qt Creator
+*.creator*
+*.creator.user.*
+
+# Ignore les dossiers de cache et autres fichiers générés
+.qtc_clangd/
+.qmake.cache
+.qmake.stash
+*.autosave
+*.swp
+
+# Ignore les fichiers de log et de sauvegarde
+*.log
+*.bak
+*.old
+*~
+
+# Ignore les fichiers de test coverage
+*.gcno
+*.gcda
+
+# Ignore les fichiers de compilation
+*.o
+*.a
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.app
+*.obj
+*.lib
+
+# Ignore les fichiers de documentation générés
+doc/html/
+doc/latex/
+doc/man/
+doc/refman/
+<<<<<<< HEAD
+doc/*.tag
+=======
+doc/*.tag
+>>>>>>> 65eeee9 (Add a new button for widget)
