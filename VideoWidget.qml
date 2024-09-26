@@ -17,7 +17,7 @@ Item {
             id: playButton
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 30
+            anchors.bottomMargin: 10
             width: 25
             height: 25
         }
@@ -37,7 +37,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 60
+            anchors.bottomMargin: 40
             width: parent.width
             height: 15
             value: 0
