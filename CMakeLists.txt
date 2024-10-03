@@ -4,7 +4,7 @@ project(clap_v1 VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Multimedia)
 
 qt_standard_project_setup()
 
@@ -18,6 +18,7 @@ qt_add_qml_module(appclap_v1
     QML_FILES Main.qml BarMenu.qml PlayButton.qml VideoSlider.qml VideoWidget.qml MainWindow.qml
     RESOURCES images/camera.png
     QML_FILES windows/DerushWindow.qml windows/ImportWindow.qml windows/ParameterWindow.qml
+    SOURCES ffmpeg.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -32,7 +33,7 @@ set_target_properties(appclap_v1 PROPERTIES
 )
 
 target_link_libraries(appclap_v1
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick Qt6::quickmultimedia
 )
 
 include(GNUInstallDirs)

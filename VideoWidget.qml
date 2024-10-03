@@ -1,8 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtMultimedia 6.7
 
 Item {
     id: root
+    property string videoSource: ""
+
     width: 769
     height: 448
 
@@ -20,6 +23,13 @@ Item {
             anchors.bottomMargin: 10
             width: 25
             height: 25
+            onClicked: {
+                if (mediaPlayer.playbackState === MediaPlayer.PlayingState) {
+                    mediaPlayer.pause()
+                } else {
+                    mediaPlayer.play()
+                }
+            }
         }
 
         Rectangle {
@@ -30,6 +40,12 @@ Item {
             height: 354
             color: "#242424"
             border.color: "#878787"
+
+            VideoOutput {
+                id: videoOutput
+                anchors.fill: parent
+                smooth: true
+            }
         }
 
         VideoSlider {
@@ -40,7 +56,23 @@ Item {
             anchors.bottomMargin: 40
             width: parent.width
             height: 15
-            value: 0
+            value: mediaPlayer.position
+            maximum: mediaPlayer.duration
+            onValueChanged: {
+                mediaPlayer.position = value;
+            }
+        }
+
+        MediaPlayer {
+            id: mediaPlayer
+            source: videoSource
+            videoOutput: videoOutput
+            autoPlay: true
+            playbackRate: 1.0
+
+            onPositionChanged: {
+                videoDurationBar.value = position;
+            }
         }
     }
 }
