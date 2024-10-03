@@ -30,7 +30,7 @@ Window {
       ImportWindow {
         id: import_window
         onImportFileEvent: {
-          stack_view.push(video_widget_component.createObject(stack_view, { "filePath": import_window.loadedFilePath }), StackView.Immediate)
+          stack_view.push(video_widget_component.createObject(stack_view, { "videoSource": import_window.loadedFilePath }), StackView.Immediate)
         }
       }
     }
