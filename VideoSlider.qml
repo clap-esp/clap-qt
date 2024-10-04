@@ -29,25 +29,35 @@ Item {
         MouseArea {
             id: grooveMouseArea
             anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
             drag.target: handle
+
+            // Indique si le glissement est actif
+            property bool isDragging: false
 
             // Handle clicks
             onClicked: (event) => {
-                           handleMove(event.x);  // Use event.x instead of mouse.x
+                           handleMove(event.x);
+                           mediaPlayer.position = value; // Mettre à jour la position directement après le clic
                        }
 
             // Handle dragging by checking drag active state
             onPositionChanged: (event) => {
-                                   if (drag.active) {
-                                       handleMove(event.x);  // Use event.x instead of mouse.x
+                                   if (isDragging) {
+                                       handleMove(event.x);
                                    }
                                }
 
             // Start dragging
             onPressed: (event) => {
-                           handleMove(event.x);  // Use event.x instead of mouse.x
+                           isDragging = true; // Indique que le glissement est en cours
+                           handleMove(event.x);
                        }
+
+            // Stop dragging
+            onReleased: {
+                isDragging = false; // Réinitialise l'état
+                mediaPlayer.position = value; // Mettre à jour la position finale lorsque l'utilisateur relâche
+            }
 
             // Function to handle the handle movement logic
             function handleMove(mouseX) {
