@@ -14,41 +14,41 @@ Window {
     title: "Clap - Main Window"
 
     BarMenu {
-      id: bar_menu
-      onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
+        id: bar_menu
+        onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
     }
 
     StackView {
-      id: stack_view
-      initialItem: import_window_component
-      anchors.fill: parent
+        id: stack_view
+        initialItem: import_window_component
+        anchors.fill: parent
     }
 
     Component {
-      id: import_window_component
+        id: import_window_component
 
-      ImportWindow {
-        id: import_window
-        onImportFileEvent: {
-          stack_view.push(video_widget_component.createObject(stack_view, { "videoSource": import_window.loadedFilePath }), StackView.Immediate)
+        ImportWindow {
+            id: import_window
+            onImportFileEvent: {
+                createVideoWidget(import_window.loadedFilePath);  // Appeler la fonction avec le chemin
+            }
         }
-      }
     }
 
     Component {
-      id: derush_window_component
+        id: derush_window_component
 
-      DerushWindow {
-        id: derush_window
-      }
+        DerushWindow {
+            id: derush_window
+        }
     }
 
     Component {
-      id: parameter_window_component
+        id: parameter_window_component
 
-      ParameterWindow {
-        id: parameter_window
-      }
+        ParameterWindow {
+            id: parameter_window
+        }
     }
 
     Component {
@@ -64,5 +64,12 @@ Window {
             anchors.topMargin: 10  // Marge de 10 pixels en haut
             anchors.rightMargin: 10 // Marge de 10 pixels à droite
         }
+    }
+
+    function createVideoWidget(processedVideoPath) {
+        // Créez le VideoWidget et passez le chemin de la vidéo traitée
+        let videoWidget = video_widget_component.createObject(stack_view, { "videoSource": processedVideoPath });
+        console.log(processedVideoPath)
+        stack_view.push(videoWidget, StackView.Immediate);
     }
 }
