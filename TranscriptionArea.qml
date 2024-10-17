@@ -1,41 +1,13 @@
-import QtQuick
+import QtQuick 2.15
 
-Item {
-    id: root
-
-    property color color: "grey"
-    property alias text: buttonText.text
-
-    signal clicked()
-
-    Rectangle {
-        id: background
-
-        anchors.fill: parent
-
-        color: if(mouseAreaButton.containsPress) {
-                   return Qt.lighter(root.color)
-               } else if(mouseAreaButton.containsMouse) {
-                   return Qt.darker(root.color)
-               } else {
-                   return root.color
-               }
-    }
+Rectangle {
+    width: 300
+    height: 400
+    color: "#444" // Gris pour simuler la zone grisée
 
     Text {
-        id: buttonText
-
         anchors.centerIn: parent
-    }
-
-    MouseArea {
-        id: mouseAreaButton
-
-        anchors.fill: parent
-        hoverEnabled: true
-
-        onClicked: {
-            root.clicked()
-        }
+        text: "Zone de transcription"
+        color: "#fff"
     }
 }
