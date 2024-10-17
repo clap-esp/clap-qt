@@ -70,6 +70,10 @@ Item {
             autoPlay: true
             playbackRate: 1.0
 
+            onSourceChanged: {
+                console.log("Video source changed to: " + source);
+            }
+
             onPositionChanged: {
                 videoDurationBar.value = position;
             }

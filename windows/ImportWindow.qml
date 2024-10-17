@@ -1,7 +1,6 @@
 import QtQuick
 import QtCore
 import QtQuick.Dialogs
-import FFmpegModule 1.0
 
 Rectangle {
     id: root
