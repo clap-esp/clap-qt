@@ -11,7 +11,7 @@ Window {
     color: "#242424"
     visibility: "Maximized"
     visible: true
-    title: "Clap - Main Window"
+    title: qsTr("Clap - Main Window")
 
     BarMenu {
         id: bar_menu

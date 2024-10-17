@@ -27,15 +27,6 @@ Rectangle {
         }
     }
 
-    FFmpegHandler {
-        id: ffmpegHandler
-        onProcessingFinished: (outputPath) => {
-                                  console.log("Processing finished. Video path: " + outputPath);
-                                  // Émettre le signal avec le chemin de la vidéo traitée
-                                  importFileEvent(outputPath);
-                              }
-    }
-
     // Zone de drag and drop
     DropArea {
         anchors.fill: parent
@@ -126,6 +117,5 @@ Rectangle {
         loadedFilePath = file_path
         console.log(`Path file : ${loadedFilePath}`)
         let outputDir = StandardPaths.writableLocation(StandardPaths.TempLocation);
-        ffmpegHandler.processVideo(loadedFilePath, outputDir)
     }
 }
