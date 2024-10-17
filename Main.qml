@@ -27,10 +27,11 @@ Window {
     Component {
         id: import_window_component
 
+
         ImportWindow {
             id: import_window
             onImportFileEvent: {
-                createVideoWidget(import_window.loadedFilePath);  // Appeler la fonction avec le chemin
+                stack_view.push(video_widget_component.createObject(stack_view, { "filePath": import_window.loadedFilePath }), StackView.Immediate)
             }
         }
     }
