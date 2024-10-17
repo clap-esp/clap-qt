@@ -9,7 +9,7 @@ Window {
     width: Screen.width
     height: Screen.height
     color: "#242424"
-    visibility: "Maximized"
+    visibility: Window.Maximized
     visible: true
     title: qsTr("Clap - Main Window")
 
@@ -31,7 +31,8 @@ Window {
         ImportWindow {
             id: import_window
             onImportFileEvent: {
-                stack_view.push(video_widget_component.createObject(stack_view, { "filePath": import_window.loadedFilePath }), StackView.Immediate)
+                let filePath = "file://" + import_window.loadedFilePath;
+                createVideoWidget(filePath);
             }
         }
     }
@@ -70,7 +71,7 @@ Window {
     function createVideoWidget(processedVideoPath) {
         // Créez le VideoWidget et passez le chemin de la vidéo traitée
         let videoWidget = video_widget_component.createObject(stack_view, { "videoSource": processedVideoPath });
-        console.log(processedVideoPath)
-        stack_view.push(videoWidget, StackView.Immediate);
+            console.log("Loading video from: " + processedVideoPath);
+            stack_view.push(videoWidget, StackView.Immediate);
     }
 }

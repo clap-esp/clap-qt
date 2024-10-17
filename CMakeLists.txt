@@ -18,6 +18,7 @@ qt_add_qml_module(appclap_v1
     QML_FILES Main.qml BarMenu.qml PlayButton.qml VideoSlider.qml VideoWidget.qml
     RESOURCES images/camera.png
     QML_FILES windows/DerushWindow.qml windows/ImportWindow.qml windows/ParameterWindow.qml
+    SOURCES main.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
