@@ -31,41 +31,35 @@ Item {
             anchors.fill: parent
             drag.target: handle
 
-            // Indique si le glissement est actif
-            property bool isDragging: false
-
-            // Handle clicks
-            onClicked: (event) => {
-                           handleMove(event.x);
-                           mediaPlayer.position = value; // Mettre à jour la position directement après le clic
-                       }
-
-            // Handle dragging by checking drag active state
-            onPositionChanged: (event) => {
-                                   if (isDragging) {
-                                       handleMove(event.x);
-                                   }
-                               }
-
-            // Start dragging
-            onPressed: (event) => {
-                           isDragging = true; // Indique que le glissement est en cours
-                           handleMove(event.x);
-                       }
-
-            // Stop dragging
-            onReleased: {
-                isDragging = false; // Réinitialise l'état
-                mediaPlayer.position = value; // Mettre à jour la position finale lorsque l'utilisateur relâche
-            }
-
-            // Function to handle the handle movement logic
-            function handleMove(mouseX) {
-                let newX = Math.max(0, Math.min(mouseX - handle.width / 2, groove.width - handle.width));
+            onClicked: {
+                let newX = Math.max(0, Math.min(mouse.x - handle.width / 2, groove.width - handle.width));
                 handle.x = newX;
                 value = (newX / (groove.width - handle.width)) * (maximum - minimum) + minimum;
                 // Mettre à jour la barre de progression en temps réel
                 progressBar.width = (value - minimum) / (maximum - minimum) * groove.width;
+            }
+
+            onPositionChanged: {
+                if (drag.active) {
+                    let newX = Math.max(0, Math.min(mouse.x - handle.width / 2, groove.width - handle.width));
+                    handle.x = newX;
+                    value = (newX / (groove.width - handle.width)) * (maximum - minimum) + minimum;
+                    // Mettre à jour la barre de progression en temps réel
+                    progressBar.width = (value - minimum) / (maximum - minimum) * groove.width;
+                }
+            }
+
+            onPressed: {
+                let newX = Math.max(0, Math.min(mouse.x - handle.width / 2, groove.width - handle.width));
+                handle.x = newX;
+                value = (newX / (groove.width - handle.width)) * (maximum - minimum) + minimum;
+                drag.active = true;
+                // Mettre à jour la barre de progression en temps réel
+                progressBar.width = (value - minimum) / (maximum - minimum) * groove.width;
+            }
+
+            onReleased: {
+                drag.active = false
             }
         }
     }
