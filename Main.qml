@@ -5,13 +5,15 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 600
-    title: "Transcription & Traduction"
+    title: "Transcription, Traduction & Bande de Visualisation"
 
+    // L'ancien widget transcription/traduction reste inchangé
     Rectangle {
-        width: 400
-        height: 500
+        width: parent.width / 2
+        height: parent.height / 2
         color: "#333"
-        anchors.centerIn: parent
+        anchors.top: parent.top
+        anchors.left: parent.left
         radius: 10
 
         Column {
@@ -20,15 +22,13 @@ ApplicationWindow {
             anchors.fill: parent
             anchors.margins: 10
 
-            // Header avec boutons
             Header {
                 id: header
                 width: parent.width
                 height: 50
-                contentArea: contentArea // Assurez-vous que ceci est présent
+                contentArea: contentArea
             }
 
-            // Zone de contenu avec blocs de transcription et traduction
             ContentArea {
                 id: contentArea
                 width: parent.width
@@ -37,5 +37,14 @@ ApplicationWindow {
                 anchors.bottom: parent.bottom
             }
         }
+    }
+
+    // Nouvelle zone pour la bande de visualisation vidéo qui occupe toute la moitié basse
+    VideoTimeline {
+        id: videoTimeline
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: parent.height / 2 // Prend la moitié inférieure de la page
     }
 }
