@@ -9,7 +9,7 @@ Flickable {
     clip: true
     boundsBehavior: Flickable.StopAtBounds
 
-    property bool showTranscriptionBlocks: true // Contrôle l'affichage
+    property string displayMode: "both" // Peut être "transcription", "translation", ou "both"
 
     Column {
         id: contentColumn
@@ -26,12 +26,12 @@ Flickable {
                 TranscriptionBlock {
                     width: parent.width
                     height: 100
-                    visible: flickable.showTranscriptionBlocks // Afficher si la propriété est vraie
+                    visible: flickable.displayMode === "transcription" || flickable.displayMode === "both"
                 }
                 TranslationBlock {
                     width: parent.width
                     height: 100
-                    visible: !flickable.showTranscriptionBlocks // Afficher si la propriété est fausse
+                    visible: flickable.displayMode === "translation" || flickable.displayMode === "both"
                 }
             }
         }
