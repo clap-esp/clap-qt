@@ -4,7 +4,7 @@ project(clap_v1 VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Multimedia)
 
 qt_standard_project_setup()
 
@@ -23,6 +23,9 @@ qt_add_qml_module(appclap_v1
     QML_FILES ContentArea.qml
     QML_FILES TranscriptionBlock.qml
     QML_FILES TranslationBlock.qml
+    QML_FILES
+    QML_FILES VideoTimeline.qml
+    QML_FILES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
