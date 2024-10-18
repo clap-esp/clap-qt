@@ -36,14 +36,15 @@ Item {
             id: videoContainer
             x: 8
             y: 8
-            width: 753
-            height: 354
+            width: parent.width - 18
+            height: parent.height - 73
             color: "#242424"
             border.color: "#878787"
 
             VideoOutput {
                 id: videoOutput
                 anchors.fill: parent
+                anchors.horizontalCenter: parent.horizontalCenter
                 smooth: true
             }
         }
@@ -58,6 +59,7 @@ Item {
             height: 15
             value: mediaPlayer.position
             maximum: mediaPlayer.duration
+
             onValueChanged: {
                 mediaPlayer.position = value;
             }
@@ -65,7 +67,7 @@ Item {
 
         MediaPlayer {
             id: mediaPlayer
-            source: videoSource
+            source: root.videoSource
             videoOutput: videoOutput
             autoPlay: true
             playbackRate: 1.0

@@ -29,37 +29,33 @@ Item {
         MouseArea {
             id: grooveMouseArea
             anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
             drag.target: handle
 
-            onClicked: {
-                let newX = Math.max(0, Math.min(mouse.x - handle.width / 2, groove.width - handle.width));
-                handle.x = newX;
-                value = (newX / (groove.width - handle.width)) * (maximum - minimum) + minimum;
-                // Mettre à jour la barre de progression en temps réel
-                progressBar.width = (value - minimum) / (maximum - minimum) * groove.width;
+            // Handle clicks
+            onClicked: (event) => {
+                handleMove(event.x);  // Use event.x instead of mouse.x
             }
 
-            onPositionChanged: {
+            // Handle dragging by checking drag active state
+            onPositionChanged: (event) => {
                 if (drag.active) {
-                    let newX = Math.max(0, Math.min(mouse.x - handle.width / 2, groove.width - handle.width));
-                    handle.x = newX;
-                    value = (newX / (groove.width - handle.width)) * (maximum - minimum) + minimum;
-                    // Mettre à jour la barre de progression en temps réel
-                    progressBar.width = (value - minimum) / (maximum - minimum) * groove.width;
+                    handleMove(event.x);  // Use event.x instead of mouse.x
                 }
             }
 
-            onPressed: {
-                let newX = Math.max(0, Math.min(mouse.x - handle.width / 2, groove.width - handle.width));
-                handle.x = newX;
-                value = (newX / (groove.width - handle.width)) * (maximum - minimum) + minimum;
-                drag.active = true;
-                // Mettre à jour la barre de progression en temps réel
-                progressBar.width = (value - minimum) / (maximum - minimum) * groove.width;
+            // Start dragging
+            onPressed: (event) => {
+                handleMove(event.x);  // Use event.x instead of mouse.x
             }
 
-            onReleased: {
-                drag.active = false
+            // Function to handle the handle movement logic
+            function handleMove(mouseX) {
+                let newX = Math.max(0, Math.min(mouseX - handle.width / 2, groove.width - handle.width));
+                handle.x = newX;
+                value = (newX / (groove.width - handle.width)) * (maximum - minimum) + minimum;
+                // Mettre à jour la barre de progression en temps réel
+                progressBar.width = (value - minimum) / (maximum - minimum) * groove.width;
             }
         }
     }

@@ -115,6 +115,6 @@ Rectangle {
         // TODO
         loadedFilePath = file_path
         console.log(`Path file : ${loadedFilePath}`)
-        let outputDir = StandardPaths.writableLocation(StandardPaths.TempLocation);
+        importFileEvent(loadedFilePath);
     }
 }
