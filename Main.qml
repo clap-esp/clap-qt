@@ -32,6 +32,7 @@ Window {
             id: import_window
             onImportFileEvent: {
                 let filePath = "file://" + import_window.loadedFilePath;
+                console.log("before create Video Widget");
                 createVideoWidget(filePath);
             }
         }
@@ -71,7 +72,7 @@ Window {
     function createVideoWidget(processedVideoPath) {
         // Créez le VideoWidget et passez le chemin de la vidéo traitée
         let videoWidget = video_widget_component.createObject(stack_view, { "videoSource": processedVideoPath });
-            console.log("Loading video from: " + processedVideoPath);
-            stack_view.push(videoWidget, StackView.Immediate);
+        console.log("Loading video from: " + processedVideoPath);
+        stack_view.push(videoWidget, StackView.Immediate);
     }
 }
