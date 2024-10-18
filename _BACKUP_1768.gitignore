@@ -46,4 +46,8 @@ doc/html/
 doc/latex/
 doc/man/
 doc/refman/
+<<<<<<< HEAD
 doc/*.tag
+=======
+doc/*.tag
+>>>>>>> 65eeee9 (Add a new button for widget)
