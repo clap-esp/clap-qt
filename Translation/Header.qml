@@ -49,7 +49,7 @@ Row {
 
     Button {
         id: bothButton
-        text: "Les deux"
+        text: qsTr("Les deux")
         width: parent.width / 3 - 10
         height: 40
         background: Rectangle {
