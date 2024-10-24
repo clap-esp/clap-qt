@@ -22,9 +22,10 @@ Item {
         border.color: "#2e2e2e"
         anchors.fill: parent
 
-        color: mouseAreaButton.pressed ? Qt.lighter(root.color) :
-                                         mouseAreaButton.containsMouse ? Qt.darker(root.color) :
-                                                                         root.color
+        // Correction : utilisation de playPauseButton.color au lieu de root.color
+        color: mouseAreaButton.pressed ? Qt.lighter(playPauseButton.color) :
+                                         mouseAreaButton.containsMouse ? Qt.darker(playPauseButton.color) :
+                                                                         playPauseButton.color
     }
 
     Text {
