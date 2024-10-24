@@ -32,8 +32,8 @@ Window {
             id: import_window
             onImportFileEvent: {
                 let filePath = import_window.loadedFilePath;
-                console.log("before create Video Widget");
-                createVideoWidget(filePath);
+                console.log("before create Main Widget");
+                createMainWidget(filePath);
             }
         }
     }
@@ -55,24 +55,24 @@ Window {
     }
 
     Component {
-        id: video_widget_component
+        id: main_widget_component
 
-        VideoWidget {
-            id: video_widget
+        MainWidget {
+            id: main_widget
 
-            width: parent.width * 0.5 // Taille fixe pour le widget
-            height: parent.height * 0.5 // Taille fixe pour le widget
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.topMargin: 10  // Marge de 10 pixels en haut
-            anchors.rightMargin: 10 // Marge de 10 pixels à droite
+            width: parent.width
+            height: parent.height
         }
     }
 
-    function createVideoWidget(processedVideoPath) {
+    function createMainWidget(processedVideoPath) {
         // Créez le VideoWidget et passez le chemin de la vidéo traitée
-        let videoWidget = video_widget_component.createObject(stack_view, { "videoSource": processedVideoPath });
+        let mainWidget = main_widget_component.createObject(stack_view, {
+                                                                "videoSourcePath": processedVideoPath,
+                                                                "width": stack_view.width,
+                                                                "height": stack_view.height
+                                                            });
         console.log("Loading video from: " + processedVideoPath);
-        stack_view.push(videoWidget, StackView.Immediate);
+        stack_view.push(mainWidget, StackView.Immediate);
     }
 }
