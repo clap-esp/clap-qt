@@ -1,6 +1,0 @@
-module clap_v1
-typeinfo appclap_v1.qmltypes
-prefer :/clap_v1/
-Main 1.0 Main.qml
-TextButton 1.0 TextButton.qml
-

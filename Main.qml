@@ -1,41 +1,78 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Dialogs
 
-ApplicationWindow {
+Window {
+    id: root
+
+    width: Screen.width
+    height: Screen.height
+    color: "#242424"
+    visibility: Window.Maximized
     visible: true
-    width: 800
-    height: 600
-    title: "Transcription & Traduction"
+    title: qsTr("Clap - Main Window")
 
-    Rectangle {
-        width: 400
-        height: 500
-        color: "#333"
-        anchors.centerIn: parent
-        radius: 10
+    BarMenu {
+        id: bar_menu
+        onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
+    }
 
-        Column {
-            width: parent.width
-            height: parent.height
-            anchors.fill: parent
-            anchors.margins: 10
+    StackView {
+        id: stack_view
+        initialItem: import_window_component
+        anchors.fill: parent
+    }
 
-            // Header avec boutons
-            Header {
-                id: header
-                width: parent.width
-                height: 50
-                contentArea: contentArea // Assurez-vous que ceci est présent
-            }
+    Component {
+        id: import_window_component
 
-            // Zone de contenu avec blocs de transcription et traduction
-            ContentArea {
-                id: contentArea
-                width: parent.width
-                height: parent.height - header.height - 20
-                anchors.top: header.bottom
-                anchors.bottom: parent.bottom
+
+        ImportWindow {
+            id: import_window
+            onImportFileEvent: {
+                let filePath = import_window.loadedFilePath;
+                console.log("before create Video Widget");
+                createVideoWidget(filePath);
             }
         }
+    }
+
+    Component {
+        id: derush_window_component
+
+        DerushWindow {
+            id: derush_window
+        }
+    }
+
+    Component {
+        id: parameter_window_component
+
+        ParameterWindow {
+            id: parameter_window
+        }
+    }
+
+    Component {
+        id: video_widget_component
+
+        VideoWidget {
+            id: video_widget
+
+            width: parent.width * 0.5 // Taille fixe pour le widget
+            height: parent.height * 0.5 // Taille fixe pour le widget
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.topMargin: 10  // Marge de 10 pixels en haut
+            anchors.rightMargin: 10 // Marge de 10 pixels à droite
+        }
+    }
+
+    function createVideoWidget(processedVideoPath) {
+        // Créez le VideoWidget et passez le chemin de la vidéo traitée
+        let videoWidget = video_widget_component.createObject(stack_view, { "videoSource": processedVideoPath });
+        console.log("Loading video from: " + processedVideoPath);
+        stack_view.push(videoWidget, StackView.Immediate);
     }
 }
