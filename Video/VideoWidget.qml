@@ -45,8 +45,8 @@ Item {
                 id: videoOutput
                 anchors.fill: parent
                 smooth: true
-                width: parent.width
-                height: parent.height
+                width: parent.width - 8
+                height: parent.height - 8
             }
         }
 
