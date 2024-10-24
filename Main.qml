@@ -31,7 +31,7 @@ Window {
         ImportWindow {
             id: import_window
             onImportFileEvent: {
-                let filePath = "file://" + import_window.loadedFilePath;
+                let filePath = import_window.loadedFilePath;
                 console.log("before create Video Widget");
                 createVideoWidget(filePath);
             }

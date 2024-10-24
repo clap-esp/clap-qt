@@ -4,7 +4,7 @@ import QtMultimedia 6.7
 
 Item {
     id: root
-    property string videoSource: ""
+    property string videoSource: ""  // Propriété pour le chemin de la vidéo
 
     width: 769
     height: 448
@@ -37,14 +37,13 @@ Item {
             x: 8
             y: 8
             width: parent.width - 18
-            height: parent.height - 73
+            height: parent.height - 76
             color: "#242424"
             border.color: "#878787"
 
             VideoOutput {
                 id: videoOutput
                 anchors.fill: parent
-                anchors.horizontalCenter: parent.horizontalCenter
                 smooth: true
             }
         }
@@ -57,28 +56,23 @@ Item {
             anchors.bottomMargin: 40
             width: parent.width
             height: 15
-            value: mediaPlayer.position
-            maximum: mediaPlayer.duration
-
+            value: mediaPlayer.position / mediaPlayer.duration // Keep slider in sync with video position
+            maximum: mediaPlayer.duration // Maximum set to media duration
             onValueChanged: {
-                mediaPlayer.position = value;
+                mediaPlayer.position = value; // Seek the video when slider is dragged
             }
         }
 
         MediaPlayer {
             id: mediaPlayer
-            source: root.videoSource
-            videoOutput: videoOutput
-            autoPlay: true
+            source: videoSource  // Le chemin de la vidéo est passé ici
+            videoOutput: videoOutput  // Liaison entre MediaPlayer et VideoOutput
             playbackRate: 1.0
+            autoPlay: true
 
-            onSourceChanged: {
-                console.log("Video source changed to: " + source);
-            }
-
-            onPositionChanged: {
-                videoDurationBar.value = position;
-            }
+            // onPositionChanged: {
+            //     videoDurationBar.value = position; // Update slider when video plays
+            // }
         }
     }
 }
