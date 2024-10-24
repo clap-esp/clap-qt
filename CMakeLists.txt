@@ -15,19 +15,14 @@ qt_add_executable(appclap_v1
 qt_add_qml_module(appclap_v1
     URI clap_v1
     VERSION 1.0
-    QML_FILES TranscriptionArea.qml
-    QML_FILES TranslationArea.qml
-    QML_FILES ScrollBar.qml
-    QML_FILES Header.qml
-    QML_FILES ContentArea.qml
-    QML_FILES TranscriptionBlock.qml
-    QML_FILES TranslationBlock.qml
-    QML_FILES VideoTimeline.qml
-    QML_FILES Main.qml BarMenu.qml PlayButton.qml VideoSlider.qml VideoWidget.qml
+    QML_FILES Main.qml BarMenu.qml VideoTimeline.qml ScrollBar.qml
     RESOURCES images/camera.png
     QML_FILES windows/DerushWindow.qml windows/ImportWindow.qml windows/ParameterWindow.qml
     SOURCES main.cpp
     RESOURCES images/logo-no-background.png
+    QML_FILES Video/PlayButton.qml Video/VideoSlider.qml Video/VideoWidget.qml
+    QML_FILES Translation/TranscriptionArea.qml Translation/TranscriptionBlock.qml Translation/TranslationArea.qml Translation/TranslationBlock.qml Translation/TranslationWidget.qml Translation/Header.qml Translation/ContentArea.qml
+    QML_FILES MainWidget.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

@@ -106,41 +106,6 @@ Rectangle {
             }
         }
 
-        // Affichage du temps de début et de fin
-        Text {
-            text: cursorPositionStart >= 0 && cursorPositionEnd > cursorPositionStart ?
-                "Début: " + Math.round(cursorPositionStart) + " sec | Fin: " + Math.round(cursorPositionEnd) + " sec"
-                : "Cliquez pour commencer la sélection"
-            color: "#fff"
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-
-        // Barre de temps avec curseur
-        Rectangle {
-            id: timeBar
-            width: parent.width - 60
-            height: 20
-            color: "#444"
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            Slider {
-                id: timeSlider
-                width: parent.width - 60
-                anchors.horizontalCenter: parent.horizontalCenter
-                from: 0
-                to: 100
-                value: 50
-            }
-
-            // Affichage du temps en dessous du curseur
-            Text {
-                anchors.top: timeSlider.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "Temps: " + Math.round(timeSlider.value) + " sec"
-                color: "#fff"
-            }
-        }
-
         // Boutons d'action (placés en bas)
         Row {
             width: parent.width - 60

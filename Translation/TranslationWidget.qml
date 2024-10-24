@@ -1,20 +1,18 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-ApplicationWindow {
-    visible: true
-    width: 800
-    height: 600
-    title: "Transcription, Traduction & Bande de Visualisation"
-
+Item {
+    width: parent.width
+    height: parent.height
     // L'ancien widget transcription/traduction reste inchangé
     Rectangle {
-        width: parent.width / 2
-        height: parent.height / 2
+        id: translationScreen
+
         color: "#333"
+        width: parent.width
+        height: parent.height
         anchors.top: parent.top
         anchors.left: parent.left
-        radius: 10
 
         Column {
             width: parent.width
@@ -37,14 +35,5 @@ ApplicationWindow {
                 anchors.bottom: parent.bottom
             }
         }
-    }
-
-     // Nouvelle zone pour la bande de visualisation vidéo qui occupe toute la moitié basse
-    VideoTimeline {
-        id: videoTimeline
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        height: parent.height / 2 // Prend la moitié inférieure de la page
     }
 }
