@@ -6,8 +6,8 @@ Item {
     id: root
     property string videoSource: ""  // Propriété pour le chemin de la vidéo
 
-    width: 769
-    height: 448
+    width: parent.width
+    height: parent.height
 
     Rectangle {
         id: screenContainer
@@ -45,6 +45,8 @@ Item {
                 id: videoOutput
                 anchors.fill: parent
                 smooth: true
+                width: parent.width
+                height: parent.height
             }
         }
 
@@ -56,7 +58,7 @@ Item {
             anchors.bottomMargin: 40
             width: parent.width
             height: 15
-            value: mediaPlayer.position / mediaPlayer.duration // Keep slider in sync with video position
+            value: videoDurationBar.position / mediaPlayer.duration // Keep slider in sync with video position
             maximum: mediaPlayer.duration // Maximum set to media duration
             onValueChanged: {
                 mediaPlayer.position = value; // Seek the video when slider is dragged
@@ -69,10 +71,6 @@ Item {
             videoOutput: videoOutput  // Liaison entre MediaPlayer et VideoOutput
             playbackRate: 1.0
             autoPlay: true
-
-            // onPositionChanged: {
-            //     videoDurationBar.value = position; // Update slider when video plays
-            // }
         }
     }
 }
