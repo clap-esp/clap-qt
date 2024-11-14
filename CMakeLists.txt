@@ -23,6 +23,7 @@ qt_add_qml_module(appclap_v1
     QML_FILES Video/PlayButton.qml Video/VideoSlider.qml Video/VideoWidget.qml
     QML_FILES Translation/TranscriptionArea.qml Translation/TranscriptionBlock.qml Translation/TranslationArea.qml Translation/TranslationBlock.qml Translation/TranslationWidget.qml Translation/Header.qml Translation/ContentArea.qml
     QML_FILES MainWidget.qml
+    QML_FILES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
