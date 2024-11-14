@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "Elements"
 
 Rectangle {
     id: videoTimeline
@@ -30,7 +31,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             anchors.bottomMargin: 20
-            spacing: 10
+            spacing: 20
 
             // Case à cocher pour activer/désactiver la sélection de zone
             Row {
@@ -39,9 +40,9 @@ Rectangle {
                 spacing: 10
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                CheckBox {
+                CheckBoxCustom {
                     id: selectionCheckBox
-                    text: "Activer la sélection de zone"
+                    boxText: "Activer la sélection de zone"
                     checked: false
                     onCheckedChanged: selectionEnabled = checked  // Activer/désactiver la sélection
                 }
@@ -51,7 +52,7 @@ Rectangle {
             Rectangle {
                 id: firstVideoProcessingArea
                 width: parent.width - 60
-                height: 35
+                height: 45
                 color: "#6b3b7e"
                 radius: 10
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -81,7 +82,7 @@ Rectangle {
             Rectangle {
                 id: secondVideoProcessingArea
                 width: parent.width - 60
-                height: 35
+                height: 45
                 color: "#847ca2"
                 radius: 10
                 anchors.horizontalCenter: parent.horizontalCenter
