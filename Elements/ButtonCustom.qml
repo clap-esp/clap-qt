@@ -13,16 +13,16 @@ Item {
 
     // Etat du survol et du clic
     property bool hovered: false
-    property bool pressed: false
+    property bool isPressed: false
 
     // Signal pour le clic
-    signal clicked()
+    signal buttonClicked()
 
     Rectangle {
         id: buttonBackground
         anchors.fill: parent
         radius: 8
-        color: pressed ? pressedColor : (hovered ? hoverColor : normalColor)
+        color: isPressed ? pressedColor : (hovered ? hoverColor : normalColor)
 
         Behavior on color {
             ColorAnimation { duration: 200 }
@@ -31,15 +31,13 @@ Item {
         MouseArea {
             id: buttonArea
             anchors.fill: parent
-            onClicked: console.log("Button clicked !")
-
-            onPressed: pressed = true
-            onReleased: {
-                pressed = false
-                if (containsMouse) {
-                    clicked()
-                }
+            onClicked: {
+                isPressed = false
+                buttonClicked();
             }
+
+            onPressed: isPressed = true
+            onReleased: isPressed = false
 
             onEntered: hovered = true
             onExited: hovered = false
@@ -51,7 +49,7 @@ Item {
             anchors.centerIn: parent
             color: "#ffffff"
             font.pixelSize: 16
-            text: "Button"
+            text: qsTr("Button")
         }
     }
 }

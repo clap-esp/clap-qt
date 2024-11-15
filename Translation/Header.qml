@@ -12,49 +12,49 @@ Row {
 
     ButtonCustom {
         id: transcriptionButton
-        text: "Transcription"
+        text: qsTr("Transcription")
         width: parent.width / 3 - 10
         height: 40
 
-        onClicked: {
+        normalColor: "#878787"
+        hoverColor: "#767676"
+        pressedColor: "#484848"
+
+        onButtonClicked: {
             if (contentArea) {
                 contentArea.displayMode = "transcription"; // Affiche transcription
             }
         }
     }
 
-    Button {
+    ButtonCustom {
         id: translationButton
-        text: "Traduction"
+        text: qsTr("Traduction")
         width: parent.width / 3 - 10
         height: 40
-        background: Rectangle {
-            color: translationButton.down ? "#555" : "#333"
-            radius: 10
-            border.color: "#888"
-            border.width: 2
-        }
 
-        onClicked: {
+        normalColor: "#878787"
+        hoverColor: "#767676"
+        pressedColor: "#484848"
+
+        onButtonClicked: {
             if (contentArea) {
                 contentArea.displayMode = "translation"; // Affiche traduction
             }
         }
     }
 
-    Button {
+    ButtonCustom {
         id: bothButton
         text: qsTr("Les deux")
         width: parent.width / 3 - 10
         height: 40
-        background: Rectangle {
-            color: bothButton.down ? "#555" : "#333"
-            radius: 10
-            border.color: "#888"
-            border.width: 2
-        }
 
-        onClicked: {
+        normalColor: "#878787"
+        hoverColor: "#767676"
+        pressedColor: "#484848"
+
+        onButtonClicked: {
             if (contentArea) {
                 contentArea.displayMode = "both"; // Affiche les deux
             }
