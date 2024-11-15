@@ -40,13 +40,13 @@ Item {
             height: parent.height - 76
             color: "#242424"
             border.color: "#878787"
+            clip: true
 
             VideoOutput {
                 id: videoOutput
                 anchors.fill: parent
+                anchors.margins: 3
                 smooth: true
-                width: parent.width - 8
-                height: parent.height - 8
             }
         }
 

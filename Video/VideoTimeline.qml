@@ -1,13 +1,13 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import "Elements"
+import "../Elements"
 
 Rectangle {
     id: videoTimeline
     width: parent.width
     height: parent.height
-    color: "#484848"
-    border.color: "#878787"
+    color: "#1c1c1c"
+    radius: 10
 
     property real cursorPositionStart: -1  // Position du premier clic (-1 signifie non défini)
     property real cursorPositionEnd: -1  // Position du deuxième clic
@@ -18,12 +18,10 @@ Rectangle {
     Rectangle {
         id: timelineContainer
 
-        x: 8
-        y: 8
-        width: parent.width - 18
-        height: parent.height - 60
+        width: parent.width
+        height: parent.height
         color: "#242424"
-        border.color: "#878787"
+        radius: 10
 
         Column {
             width: parent.width - 40
@@ -53,7 +51,7 @@ Rectangle {
                 id: firstVideoProcessingArea
                 width: parent.width - 60
                 height: 45
-                color: "#6b3b7e"
+                color: "#484848"
                 radius: 10
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -62,7 +60,7 @@ Rectangle {
                     id: videoCursor
                     width: 3
                     height: parent.height
-                    color: "yellow"
+                    color: "#ffffff"
                     anchors.verticalCenter: parent.verticalCenter
                     x: cursorPositionStart >= 0 ? cursorPositionStart / totalDuration * firstVideoProcessingArea.width : 0
                 }
@@ -83,7 +81,7 @@ Rectangle {
                 id: secondVideoProcessingArea
                 width: parent.width - 60
                 height: 45
-                color: "#847ca2"
+                color: "#93a0e6"
                 radius: 10
                 anchors.horizontalCenter: parent.horizontalCenter
 

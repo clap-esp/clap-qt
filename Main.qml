@@ -2,13 +2,14 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Dialogs
+import "windows"
 
 Window {
     id: root
 
     width: Screen.width
     height: Screen.height
-    color: "#242424"
+    color: "#484848"
     visibility: Window.Maximized
     visible: true
     title: qsTr("Clap - Main Window")
@@ -39,14 +40,6 @@ Window {
     }
 
     Component {
-        id: derush_window_component
-
-        DerushWindow {
-            id: derush_window
-        }
-    }
-
-    Component {
         id: parameter_window_component
 
         ParameterWindow {
@@ -57,7 +50,7 @@ Window {
     Component {
         id: main_widget_component
 
-        MainWidget {
+        DerushWindow {
             id: main_widget
 
             width: parent.width
@@ -73,6 +66,7 @@ Window {
                                                                 "height": stack_view.height
                                                             });
         console.log("Loading video from: " + processedVideoPath);
+        root.color = "#000000";
         stack_view.push(mainWidget, StackView.Immediate);
     }
 }

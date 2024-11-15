@@ -8,7 +8,7 @@ Item {
 
     // La valeur de la checkbox
     property bool checked: false
-    property string boxText: "Cochez-moi !"
+    property string boxText: qsTr("Cochez-moi !")
 
     // Conteneur de la checkbox et du texte
     RowLayout {

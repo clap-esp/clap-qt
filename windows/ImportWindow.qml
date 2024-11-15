@@ -7,7 +7,7 @@ Rectangle {
     anchors.centerIn: parent
     width: 700
     height: 415
-    color: "transparent"
+    color: "#484848"
 
     property string loadedFilePath: qsTr("")
     signal importFileEvent(string processedVideoPath)
