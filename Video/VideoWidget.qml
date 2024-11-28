@@ -13,8 +13,8 @@ Item {
         id: screenContainer
         width: parent.width
         height: parent.height
-        color: "#484848"
-        border.color: "#878787"
+        color: "#242424"
+        radius: 10
 
         PlayButton {
             id: playButton
@@ -39,7 +39,7 @@ Item {
             width: parent.width - 18
             height: parent.height - 76
             color: "#242424"
-            border.color: "#878787"
+            radius: 10
             clip: true
 
             VideoOutput {
@@ -56,6 +56,8 @@ Item {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 40
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
             width: parent.width
             height: 15
             value: videoDurationBar.position / mediaPlayer.duration // Keep slider in sync with video position

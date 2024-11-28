@@ -35,12 +35,12 @@ Item {
 
     Image {
         id: buttonImage
-        width: 35
-        height: 35
+        width: 16
+        height: 16
         anchors.centerIn: parent
 
         // Change l'image en fonction de l'état isPlaying
-        // source: playPauseButton.isPlaying ? "pause_icon.png" : "play_icon.png"
+        source: playPauseButton.isPlaying ? "../images/pause.png" : "../images/play.png"
     }
 
     MouseArea {
