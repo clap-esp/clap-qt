@@ -9,22 +9,22 @@ Item {
     Rectangle {
         id: translationScreen
 
-        color: "#484848"
-        border.color: "#878787"
+        color: "#242424"
         width: parent.width
         height: parent.height
         anchors.top: parent.top
         anchors.left: parent.left
+        radius: 10
 
         Rectangle {
             id: timelineContainer
 
-            x: 8
-            y: 8
-            width: parent.width - 18
-            height: parent.height - 18
+            // x: 8
+            // y: 8
+            width: parent.width
+            height: parent.height
             color: "#242424"
-            border.color: "#878787"
+            radius: 10
             Column {
                 width: parent.width
                 height: parent.height
