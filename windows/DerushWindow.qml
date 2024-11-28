@@ -1,41 +1,46 @@
 import QtQuick
+import QtQuick.Window
 import QtQuick.Controls
+import QtQuick.Dialogs
+import "../Translation"
+import "../Video"
 
-Rectangle {
-  id: root
-  anchors.centerIn: parent
-  width: 700
-  height: 415
-  color: "transparent"
+Item {
+    id: root
+    property string videoSourcePath: ""
 
-  property string filePath: qsTr("")
+    VideoWidget {
+        id: video_widget
 
-  Text {
-    text: qsTr("Fichier importé : " + filePath)
-    anchors.centerIn: parent
-    font.pixelSize: 20
-    color: "black"
-  }
+        width: (parent.width * 0.5) - 15 // Taille fixe pour le widget
+        height: parent.height * 0.5 // Taille fixe pour le widget
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 30  // Marge de 10 pixels en haut
+        anchors.rightMargin: 10 // Marge de 10 pixels à droite
 
-  Rectangle {
-    width: 100
-    height: 40
-    color: "lightgray"
-    radius: 10
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: 50
-
-    Text {
-      text: qsTr("Retour")
-      anchors.centerIn: parent
+        videoSource: root.videoSourcePath
     }
 
-    MouseArea {
-      anchors.fill: parent
-      onClicked: {
-        stack_view.pop(StackView.Immediate);
-      }
+    TranslationWidget {
+        id: translation_widget
+
+        width: (parent.width * 0.5) - 15// Taille fixe pour le widget
+        height: parent.height * 0.5 // Taille fixe pour le widget
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: 30  // Marge de 10 pixels en haut
+        anchors.leftMargin: 10 // Marge de 10 pixels à gauche
     }
-  }
+
+    // Nouvelle zone pour la bande de visualisation vidéo qui occupe toute la moitié basse
+    VideoTimeline {
+        id: video_timeline_widget
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        height: (parent.height * 0.5) - 40 // Prend la moitié inférieure de la page
+    }
 }
