@@ -22,6 +22,7 @@ qt_add_qml_module(appclap_v1
         windows/ParameterWindow.qml
         windows/MainWindow.qml
         Settings/WindowSettingsView.qml
+        Settings/SettingsView.qml
         Video/VideoWidget.qml
         Video/VideoTimeline.qml
         Video/ButtonPlayer.qml
