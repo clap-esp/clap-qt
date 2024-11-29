@@ -41,7 +41,10 @@ MenuBar {
   Menu {
     title: qsTr("Help")
 
-    Action { text: qsTr("About") }
+    Action {
+      text: qsTr("About")
+      onTriggered: Qt.openUrlExternally("https://github.com/clap-esp/clap-qt");
+    }
 
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
   }
