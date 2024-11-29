@@ -4,9 +4,19 @@ import QtQuick.Dialogs
 
 MenuBar {
   id: root
+  contentWidth: parent.width
+  focus: true
+
   signal openParameterEvent()
 
+  Keys.onReleased: function(event) {
+    if (event.key === Qt.Key_Escape) {
+      fichierMenu.open()
+    }
+  }
+
   Menu {
+    id: fichierMenu
     title: qsTr("Fichier")
 
     Action { text: qsTr("Nouveau...") }
