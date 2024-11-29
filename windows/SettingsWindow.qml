@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../Elements"
 import "../Settings"
 
 Dialog {
@@ -21,7 +22,7 @@ Dialog {
   }
 
   header: Rectangle {
-    color: Material.Dark
+    color: "#D9D9D9"
     height: 30
     width: parent.width
 
@@ -53,11 +54,16 @@ Dialog {
       anchors.leftMargin: 15
       anchors.verticalCenter: parent.verticalCenter
 
-      Button {
+      ButtonCustom {
+        height: 35
         text: qsTr("Aide")
+        normalColor: "#226BD7"
+        pressedColor: "#484848"
+        onButtonClicked: Qt.openUrlExternally("https://github.com/clap-esp/clap-qt")
       }
 
-      Button {
+      ButtonCustom {
+        height: 35
         text: qsTr("Réinitialiser")
       }
     }
@@ -68,13 +74,19 @@ Dialog {
       anchors.rightMargin: 15
       anchors.verticalCenter: parent.verticalCenter
 
-      Button {
+      ButtonCustom {
+        height: 35
         text: qsTr("Annuler")
-        onClicked: root.close()
+        normalColor: "#226BD7"
+        pressedColor: "#484848"
+        onButtonClicked: root.close()
       }
 
-      Button {
+      ButtonCustom {
+        height: 35
         text: qsTr("OK")
+        normalColor: "#226BD7"
+        pressedColor: "#484848"
       }
     }
   }
