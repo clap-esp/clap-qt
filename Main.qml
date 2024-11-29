@@ -16,13 +16,17 @@ Window {
 
     BarMenu {
         id: bar_menu
-        onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
+        onOpenParameterEvent: settings_window.open()
     }
 
     StackView {
         id: stack_view
         initialItem: import_window_component
         anchors.fill: parent
+    }
+
+    SettingsWindow {
+        id: settings_window
     }
 
     Component {
@@ -36,14 +40,6 @@ Window {
                 console.log("before create Main Widget");
                 createMainWidget(filePath);
             }
-        }
-    }
-
-    Component {
-        id: parameter_window_component
-
-        ParameterWindow {
-            id: parameter_window
         }
     }
 
