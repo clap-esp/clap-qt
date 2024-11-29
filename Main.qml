@@ -27,7 +27,7 @@ Window {
 
     // BarMenu {
     //     id: bar_menu
-    //     onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
+    //     onOpenParameterEvent: settings_window.open()
     // }
 
 
@@ -62,6 +62,10 @@ Window {
         anchors.fill: parent
     }
 
+    SettingsWindow {
+        id: settings_window
+    }
+
     Component {
         id: import_window_component
 
@@ -80,14 +84,6 @@ Window {
     LoadingWidget{
         id:loadingPopup
         textToDisplay: messages.video_importation
-    }
-
-    Component {
-        id: parameter_window_component
-
-        ParameterWindow {
-            id: parameter_window
-        }
     }
 
     Component {
