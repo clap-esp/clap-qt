@@ -55,13 +55,11 @@ Window {
     }
 
     function createMainWidget(processedVideoPath) {
-        // Créez le VideoWidget et passez le chemin de la vidéo traitée
         let mainWidget = main_widget_component.createObject(stack_view, {
                                                                 "videoSourcePath": processedVideoPath,
                                                                 "width": stack_view.width,
                                                                 "height": stack_view.height
                                                             });
-        console.log("Loading video from: " + processedVideoPath);
         root.color = "#000000";
         stack_view.push(mainWidget, StackView.Immediate);
     }

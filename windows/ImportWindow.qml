@@ -12,7 +12,6 @@ Rectangle {
     property string loadedFilePath: qsTr("")
     signal importFileEvent(string processedVideoPath)
 
-    // Permet d'avoir la zone de drag and drop en pointillet
     Canvas {
         id: dottedBorderCanvas
         anchors.fill: parent
@@ -26,7 +25,6 @@ Rectangle {
         }
     }
 
-    // Zone de drag and drop
     DropArea {
         anchors.fill: parent
         onEntered: (drag) => {
@@ -42,7 +40,6 @@ Rectangle {
         }
     }
 
-    // Icone de la caméra
     Image {
         id: cameraImage
         source: "../images/camera.png"
@@ -54,7 +51,6 @@ Rectangle {
         height: 170
     }
 
-    // Bouton pour importer une vidéo
     Rectangle {
         id: importButton
         width: 300
@@ -94,7 +90,6 @@ Rectangle {
             }
         }
 
-        // Texte pour glisser le fichier
         Text {
             text: qsTr("ou glissez votre fichier ici")
             anchors.horizontalCenter: parent.horizontalCenter
@@ -112,9 +107,7 @@ Rectangle {
     }
 
     function import_file(file_path) {
-        // TODO
         loadedFilePath = file_path
-        console.log(`Path file : ${loadedFilePath}`)
         importFileEvent(loadedFilePath);
     }
 }
