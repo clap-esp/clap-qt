@@ -5,6 +5,8 @@ import QtMultimedia 6.7
 Item {
     id: root
     property string videoSource: ""  // Propriété pour le chemin de la vidéo
+    property real startTime: 0
+    property real endTime: 0
 
     width: parent.width
     height: parent.height
@@ -24,11 +26,7 @@ Item {
             width: 25
             height: 25
             onClicked: {
-                if (mediaPlayer.playbackState === MediaPlayer.PlayingState) {
-                    mediaPlayer.pause()
-                } else {
-                    mediaPlayer.play()
-                }
+                togglePlayback();
             }
         }
 
@@ -62,9 +60,7 @@ Item {
             height: 15
             value: videoDurationBar.position / mediaPlayer.duration // Keep slider in sync with video position
             maximum: mediaPlayer.duration // Maximum set to media duration
-            onValueChanged: {
-                mediaPlayer.position = value; // Seek the video when slider is dragged
-            }
+            onValueChanged: handleSliderValueChanged(value)
         }
 
         MediaPlayer {
@@ -73,6 +69,32 @@ Item {
             videoOutput: videoOutput  // Liaison entre MediaPlayer et VideoOutput
             playbackRate: 1.0
             autoPlay: true
+
+            onPositionChanged: stopVideoAtEndTime();
+
+            onDurationChanged: printDuration();
         }
+    }
+
+    function handleSliderValueChanged(newValue) {
+        mediaPlayer.position = newValue;
+    }
+
+    function togglePlayback() {
+        if (mediaPlayer.playbackState === MediaPlayer.PlayingState) {
+            mediaPlayer.pause();
+        } else {
+            mediaPlayer.play();
+        }
+    }
+
+    function stopVideoAtEndTime() {
+        if (mediaPlayer.position >= endTime) {
+            mediaPlayer.pause();  // Arrête la lecture à la fin de l'intervalle
+        }
+    }
+
+    function printDuration() {
+        console.log("Duration loaded :", mediaPlayer.duration);
     }
 }

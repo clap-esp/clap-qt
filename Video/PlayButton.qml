@@ -40,7 +40,7 @@ Item {
         anchors.centerIn: parent
 
         // Change l'image en fonction de l'état isPlaying
-        source: playPauseButton.isPlaying ? "../images/pause.png" : "../images/play.png"
+        source: playPauseButton.isPlaying ? "../images/play.png" : "../images/pause.png"
     }
 
     MouseArea {

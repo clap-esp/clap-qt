@@ -11,7 +11,7 @@ Rectangle {
 
     property real cursorPositionStart: -1  // Position du premier clic (-1 signifie non défini)
     property real cursorPositionEnd: -1  // Position du deuxième clic
-    property real totalDuration: 100  // Durée totale simulée de la vidéo
+    property real totalDuration: 0  // Durée totale simulée de la vidéo
     property bool isSelecting: false  // État de la sélection (entre le premier et deuxième clic)
     property bool selectionEnabled: false  // Activer ou désactiver la sélection de zone
 

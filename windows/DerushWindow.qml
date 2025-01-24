@@ -42,5 +42,8 @@ Item {
         anchors.leftMargin: 10
         anchors.rightMargin: 10
         height: (parent.height * 0.5) - 40 // Prend la moitié inférieure de la page
+
+        cursorPositionStart: video_widget.mediaPlayer.position / video_widget.mediaPlayer.duration * video_widget.mediaPlayer.duration
+        cursorPositionEnd: cursorPositionStart
     }
 }
