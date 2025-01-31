@@ -1,11 +1,15 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include "pythonexecutor.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    qmlRegisterType<PythonExecutor>("MyApp", 1, 0, "PythonExecutor");
+
     const QUrl url(QStringLiteral("qrc:/clap_v1/Main.qml"));
     QObject::connect(
         &engine,
