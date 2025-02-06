@@ -18,7 +18,7 @@ qt_add_qml_module(appclap_v1
     QML_FILES Main.qml BarMenu.qml
     RESOURCES images/camera.png images/logo-no-background.png images/pause.png images/play.png
     QML_FILES  windows/ImportWindow.qml windows/ParameterWindow.qml windows/DerushWindow.qml
-    SOURCES main.cpp
+    SOURCES main.cpp projectmanager.h projectmanager.cpp
     QML_FILES Video/PlayButton.qml Video/VideoSlider.qml Video/VideoWidget.qml Video/VideoTimeline.qml
     QML_FILES Translation/TranscriptionArea.qml Translation/TranscriptionBlock.qml Translation/TranslationArea.qml Translation/TranslationBlock.qml Translation/TranslationWidget.qml Translation/Header.qml Translation/ContentArea.qml
     QML_FILES Elements/CheckBoxCustom.qml Elements/ButtonCustom.qml
@@ -36,7 +36,7 @@ set_target_properties(appclap_v1 PROPERTIES
 )
 
 target_link_libraries(appclap_v1
-    PRIVATE Qt6::Quick Qt6::quickmultimedia
+    PRIVATE Qt6::Quick Qt6::Multimedia
 )
 
 include(GNUInstallDirs)

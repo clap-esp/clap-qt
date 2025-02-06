@@ -1,6 +1,7 @@
 import QtQuick
 import QtCore
 import QtQuick.Dialogs
+import QtQuick.Controls
 
 Rectangle {
     id: root
@@ -34,8 +35,20 @@ Rectangle {
                        drag.accept(Qt.LinkAction);
                    }
         onDropped: (drop) => {
-                       import_file(drop.urls[0]);
-                       root.color = "transparent";
+                       if (drop.urls.length > 0 && drop.urls[0] !== undefined) {
+                           let filePath = drop.urls[0].toString();
+
+                           if(!filePath.match(/\.(mp4|avi|mov|m4a|mkv)$/i)) {
+                               fileNotAVideoDialog.open();
+                               console.log("Error: Le fichier sélectionné n'est pas une vidéo.");
+                               root.color = "transparent";
+                               return;
+                           }
+
+                           root.color = "transparent";
+                           fileDialog.close();
+                           openProjectDialog(filePath)
+                       }
                    }
         onExited: {
             root.color = "transparent";
@@ -106,15 +119,100 @@ Rectangle {
 
         FileDialog {
             id: fileDialog
+            nameFilters: ["Fichiers vidéo (*.mp4 *.avi *.mov *.m4a *.mkv)"]
             currentFolder: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
-            onAccepted: import_file(fileDialog.selectedFile)
+            onAccepted: {
+                fileDialog.close();
+                openProjectDialog(fileDialog.currentFile)
+            }
+
+            onRejected: {
+                fileDialog.close();
+            }
         }
     }
 
-    function import_file(file_path) {
-        // TODO
-        loadedFilePath = file_path
-        console.log(`Path file : ${loadedFilePath}`)
-        importFileEvent(loadedFilePath);
+    Dialog {
+        id: projectExistsDialog
+        title: "Erreur"
+        parent: root
+        modal: true
+        dim: true
+        standardButtons: Dialog.Ok
+        anchors.centerIn: parent
+        closePolicy: Popup.NoAutoClose
+
+        Text {
+            id: projectExistsText
+            text: qsTr("Un projet avec ce nom existe déjà. Veuillez choisir un autre nom.")
+        }
+    }
+
+    Dialog {
+        id: fileNotAVideoDialog
+        title: "Erreur"
+        parent: root
+        modal: true
+        dim: true
+        standardButtons: Dialog.Ok
+        anchors.centerIn: parent
+        closePolicy: Popup.NoAutoClose
+
+        Text {
+            id: fileNotAVideoText
+            text: qsTr("Ce fichier n'est pas dans format valable. Veuillez choisir un fichier vidéo.")
+        }
+    }
+
+    Dialog {
+        id: projectDialog
+        title: "Nom du projet"
+        parent: root
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        anchors.centerIn: parent
+        modal: true
+        dim: true
+        visible: false
+        width: 300
+        height: 150
+        closePolicy: Popup.NoAutoClose
+
+        property string selectedFilePath: ""
+
+        Column {
+            spacing: 10
+            anchors.centerIn: parent
+
+            TextField {
+                id: projectNameInput
+                placeholderText: "Entrez un nom de projet"
+            }
+        }
+
+        onAccepted: {
+            if (selectedFilePath !== "" && selectedFilePath !== undefined) {
+                let cleanedFilePath = selectedFilePath.replace("file:///", "");
+                cleanedFilePath = cleanedFilePath.replace(/%20/g, " ");
+
+                let projectPath = projectManager.createProject(cleanedFilePath, projectNameInput.text)
+                if (projectPath.startsWith("Error")) {
+                    console.log(projectPath)
+
+                    if(projectPath === "Error: Project name already exists.") {
+                        projectExistsDialog.open();
+                    }
+                } else {
+                    console.log("Project créé dans : " + projectPath)
+                    createMainWidget(selectedFilePath)
+                }
+            } else {
+                console.log("Error: No file selected.");
+            }
+        }
+    }
+
+    function openProjectDialog(filePath) {
+        projectDialog.selectedFilePath = filePath;
+        projectDialog.open();
     }
 }
