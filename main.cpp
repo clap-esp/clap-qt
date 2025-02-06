@@ -1,11 +1,18 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include "projectmanager.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    projectManager projectManager;
+
+    engine.rootContext()->setContextProperty("projectManager", &projectManager);
+
     const QUrl url(QStringLiteral("qrc:/clap_v1/Main.qml"));
     QObject::connect(
         &engine,
@@ -14,6 +21,9 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.load(url);
+
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
     return app.exec();
 }
