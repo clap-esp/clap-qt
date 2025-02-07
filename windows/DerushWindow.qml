@@ -34,13 +34,15 @@ Item {
     }
 
     // Nouvelle zone pour la bande de visualisation vidéo qui occupe toute la moitié basse
-    VideoTimeline {
+    TimelineView {
         id: video_timeline_widget
+        width: parent.width - 20
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.leftMargin: 10
         anchors.rightMargin: 10
         height: (parent.height * 0.5) - 40 // Prend la moitié inférieure de la page
+        externalVideoPlayer: video_widget.videoPlayer
     }
 }

@@ -5,6 +5,7 @@ import QtMultimedia 6.7
 Item {
     id: root
     property string videoSource: ""  // Propriété pour le chemin de la vidéo
+    property alias videoPlayer: mediaPlayer
 
     width: parent.width
     height: parent.height
@@ -47,23 +48,6 @@ Item {
                 anchors.fill: parent
                 anchors.margins: 3
                 smooth: true
-            }
-        }
-
-        VideoSlider {
-            id: videoDurationBar
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 40
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
-            width: parent.width
-            height: 15
-            value: videoDurationBar.position / mediaPlayer.duration // Keep slider in sync with video position
-            maximum: mediaPlayer.duration // Maximum set to media duration
-            onValueChanged: {
-                mediaPlayer.position = value; // Seek the video when slider is dragged
             }
         }
 
