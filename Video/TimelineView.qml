@@ -64,7 +64,7 @@ Item {
     ScrollableTimeline {
         id: scrollableTimeline
         width: parent.width
-        height: parent.height
+        height: parent.height * 0.5
         anchors.top: timeline.bottom
         anchors.topMargin: 10
         clip: true
