@@ -23,12 +23,11 @@ Window {
         id: stack_view
         initialItem: import_window_component
         anchors.fill: parent
+        clip: true
     }
 
     Component {
         id: import_window_component
-
-
         ImportWindow {
             id: import_window
             onImportFileEvent: {
@@ -53,8 +52,10 @@ Window {
         DerushWindow {
             id: main_widget
 
-            width: parent.width
-            height: parent.height
+            width: stack_view.width
+            height: stack_view.height
+
+            anchors.fill: undefined
         }
     }
 
@@ -67,6 +68,7 @@ Window {
                                                             });
         console.log("Loading video from: " + processedVideoPath);
         root.color = "#000000";
+        stack_view.clear()
         stack_view.push(mainWidget, StackView.Immediate);
     }
 }

@@ -5,7 +5,7 @@ import QtMultimedia
 Item {
     id: timelineView
 
-    property MediaPlayer externalVideoPlayer
+    property MediaPlayer videoPlayer
     property bool sliderPressed: false
 
     width: parent.width - 20
@@ -24,16 +24,6 @@ Item {
         radius: 10
     }
 
-    MediaPlayer {
-        id: player
-        source: externalVideoPlayer ? externalVideoPlayer.source : ""
-        onPositionChanged: {
-            if(!sliderPressed) {
-                playhead.x = (externalVideoPlayer.position / externalVideoPlayer.duration) * timeline.width
-            }
-        }
-    }
-
     Rectangle {
         id: timeline
         width: parent.width - 20
@@ -49,8 +39,8 @@ Item {
             width: 4
             height: parent.height
             color: "red"
-            x: (externalVideoPlayer && externalVideoPlayer.duration > 0) ?
-                   (externalVideoPlayer.position / externalVideoPlayer.duration) * timeline.width : 0
+            x: (videoPlayer && videoPlayer.duration > 0) ?
+                   (videoPlayer.position / videoPlayer.duration) * timeline.width : 0
             Behavior on x {
                 NumberAnimation { duration: 100; easing.type: Easing.Linear }
             }
@@ -61,37 +51,39 @@ Item {
             onPressed: sliderPressed = true
             onReleased: sliderPressed = false
             onClicked: (mouse) => {
-                if (externalVideoPlayer) {
-                    let newTime = (mouse.x / timeline.width) * externalVideoPlayer.duration;
-                               if (Math.abs(newTime - externalVideoPlayer.position) > 500) { // Empêche les micro-ajustements
-                                                       externalVideoPlayer.position = newTime;
-                                                   }
-                }
-            }
+                           if (videoPlayer) {
+                               let newTime = (mouse.x / timeline.width) * videoPlayer.duration;
+                               if (Math.abs(newTime - videoPlayer.position) > 500) {
+                                   videoPlayer.position = newTime;
+                               }
+                           }
+                       }
         }
     }
 
     ScrollableTimeline {
         id: scrollableTimeline
-        Component.onCompleted: scrollableTimeline.externalVideoPlayer = externalVideoPlayer
-        width: parent.width - 20
-        height: 70
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
+        width: parent.width
+        height: parent.height
+        anchors.top: timeline.bottom
+        anchors.topMargin: 10
+        clip: true
+        Component.onCompleted: {
+            console.log("[DEBUG] Assigning externalVideoPlayer in ScrollableTimeline...");
+            scrollableTimeline.externalVideoPlayer = videoPlayer;
+            console.log("[DEBUG] ScrollableTimeline.externalVideoPlayer: " + scrollableTimeline.externalVideoPlayer);
+        }
     }
 
     Connections {
-        target: externalVideoPlayer
+        target: videoPlayer
         function onPositionChanged() {
             if (!sliderPressed) {
-                            let newX = (externalVideoPlayer.position / externalVideoPlayer.duration) * timeline.width;
-                            if (Math.abs(newX - playhead.x) > 2) {
-                                playhead.x = newX;
-                            }
-                        }
+                let newX = (videoPlayer.position / videoPlayer.duration) * timeline.width;
+                if (Math.abs(newX - playhead.x) > 2) {
+                    playhead.x = newX;
+                }
+            }
         }
     }
 }
-
-

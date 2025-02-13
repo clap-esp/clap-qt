@@ -5,10 +5,8 @@ Item {
     width: parent.width
     height: parent.height
 
-    // L'ancien widget transcription/traduction reste inchangé
     Rectangle {
         id: translationScreen
-
         color: "#242424"
         width: parent.width
         height: parent.height
@@ -16,35 +14,25 @@ Item {
         anchors.left: parent.left
         radius: 10
 
-        Rectangle {
-            id: timelineContainer
-
-            // x: 8
-            // y: 8
+        Column {
             width: parent.width
             height: parent.height
-            color: "#242424"
-            radius: 10
-            Column {
+            anchors.fill: parent
+            anchors.margins: 10
+
+            Header {
+                id: header
                 width: parent.width
-                height: parent.height
-                anchors.fill: parent
-                anchors.margins: 10
+                height: 50
+                contentArea: contentArea
+            }
 
-                Header {
-                    id: header
-                    width: parent.width
-                    height: 50
-                    contentArea: contentArea
-                }
-
-                ContentArea {
-                    id: contentArea
-                    width: parent.width
-                    height: parent.height - header.height - 20
-                    anchors.top: header.bottom
-                    anchors.bottom: parent.bottom
-                }
+            ContentArea {
+                id: contentArea
+                width: parent.width
+                height: parent.height - header.height - 20
+                anchors.top: header.bottom
+                anchors.bottom: parent.bottom
             }
         }
     }

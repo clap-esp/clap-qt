@@ -57,6 +57,11 @@ Item {
             videoOutput: videoOutput  // Liaison entre MediaPlayer et VideoOutput
             playbackRate: 1.0
             autoPlay: true
+            onPositionChanged: {
+                if (root.parent && root.parent.scrollableTimeline) {
+                    root.parent.scrollableTimeline.updatePosition(mediaPlayer.position, mediaPlayer.duration);
+                }
+            }
         }
     }
 }
