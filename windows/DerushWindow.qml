@@ -11,29 +11,25 @@ Item {
 
     VideoWidget {
         id: video_widget
-
-        width: (parent.width * 0.5) - 15 // Taille fixe pour le widget
-        height: parent.height * 0.5 // Taille fixe pour le widget
+        width: (parent.width * 0.5) - 15
+        height: parent.height * 0.5
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 30  // Marge de 10 pixels en haut
-        anchors.rightMargin: 10 // Marge de 10 pixels à droite
-
+        anchors.topMargin: 30
+        anchors.rightMargin: 10
         videoSource: root.videoSourcePath
     }
 
     TranslationWidget {
         id: translation_widget
-
-        width: (parent.width * 0.5) - 15// Taille fixe pour le widget
-        height: parent.height * 0.5 // Taille fixe pour le widget
+        width: (parent.width * 0.5) - 15
+        height: parent.height * 0.5
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 30  // Marge de 10 pixels en haut
-        anchors.leftMargin: 10 // Marge de 10 pixels à gauche
+        anchors.topMargin: 30
+        anchors.leftMargin: 10
     }
 
-    // Nouvelle zone pour la bande de visualisation vidéo qui occupe toute la moitié basse
     TimelineView {
         id: video_timeline_widget
         width: parent.width - 20
@@ -42,7 +38,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.leftMargin: 10
         anchors.rightMargin: 10
-        height: (parent.height * 0.5) - 40 // Prend la moitié inférieure de la page
-        externalVideoPlayer: video_widget.videoPlayer
+        height: (parent.height * 0.5) - 40
+        videoPlayer: video_widget.videoPlayer
     }
 }
