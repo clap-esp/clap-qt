@@ -10,6 +10,7 @@ Flickable {
     boundsBehavior: Flickable.StopAtBounds
 
     property string displayMode: "both" // Peut être "transcription", "translation", ou "both"
+    property var transcriptionList: []
 
     Column {
         id: contentColumn
@@ -19,7 +20,7 @@ Flickable {
 
         // Ajouter des paires de blocs de transcription et de traduction
         Repeater {
-            model: 5
+            model: flickable.transcriptionList
             Column {
                 width: parent.width
                 spacing: 5
@@ -27,6 +28,7 @@ Flickable {
                     width: parent.width
                     height: 100
                     visible: flickable.displayMode === "transcription" || flickable.displayMode === "both"
+                    transcriptionText: (modelData && modelData.words) ? modelData.words.join(" ") : ""
                 }
                 TranslationBlock {
                     width: parent.width

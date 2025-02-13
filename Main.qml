@@ -54,9 +54,16 @@ Window {
         }
     }
 
+    function startPythonScript() {
+      pythonExecutor.executeScript("/home/hamza/script.py")
+      return pythonExecutor.resultList
+    }
+
     function createMainWidget(processedVideoPath) {
+        let transcriptionList = startPythonScript()
         let mainWidget = main_widget_component.createObject(stack_view, {
                                                                 "videoSourcePath": processedVideoPath,
+                                                                "transcriptionList": transcriptionList,
                                                                 "width": stack_view.width,
                                                                 "height": stack_view.height
                                                             });

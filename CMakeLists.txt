@@ -18,7 +18,7 @@ qt_add_qml_module(appclap_v1
     QML_FILES Main.qml BarMenu.qml
     RESOURCES images/camera.png images/logo-no-background.png images/pause.png images/play.png
     QML_FILES  windows/ImportWindow.qml  windows/DerushWindow.qml windows/SettingsWindow.qml
-    SOURCES main.cpp
+    SOURCES main.cpp PythonExecutor.h PythonExecutor.cpp
     QML_FILES Video/PlayButton.qml Video/VideoSlider.qml Video/VideoWidget.qml Video/VideoTimeline.qml
     QML_FILES Translation/TranscriptionArea.qml Translation/TranscriptionBlock.qml Translation/TranslationArea.qml Translation/TranslationBlock.qml Translation/TranslationWidget.qml Translation/Header.qml Translation/ContentArea.qml
     QML_FILES Elements/CheckBoxCustom.qml Elements/ButtonCustom.qml

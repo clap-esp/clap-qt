@@ -5,6 +5,8 @@ Item {
     width: parent.width
     height: parent.height
 
+    property var transcriptionList: []
+
     // L'ancien widget transcription/traduction reste inchangé
     Rectangle {
         id: translationScreen
@@ -44,6 +46,8 @@ Item {
                     height: parent.height - header.height - 20
                     anchors.top: header.bottom
                     anchors.bottom: parent.bottom
+
+                    transcriptionList: root.transcriptionList
                 }
             }
         }

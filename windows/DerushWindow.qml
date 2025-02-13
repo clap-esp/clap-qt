@@ -8,6 +8,7 @@ import "../Video"
 Item {
     id: root
     property string videoSourcePath: ""
+    property var transcriptionList: []
 
     VideoWidget {
         id: video_widget
@@ -31,6 +32,8 @@ Item {
         anchors.left: parent.left
         anchors.topMargin: 30  // Marge de 10 pixels en haut
         anchors.leftMargin: 10 // Marge de 10 pixels à gauche
+
+        transcriptionList: root.transcriptionList
     }
 
     // Nouvelle zone pour la bande de visualisation vidéo qui occupe toute la moitié basse
