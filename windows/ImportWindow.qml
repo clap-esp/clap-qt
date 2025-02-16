@@ -1,36 +1,46 @@
 import QtQuick
 import QtCore
 import QtQuick.Dialogs
+import '../Utils'
+import '../Utils/Notification'
 
+/**
+  * IMPORT WINDOW
+**/
 Rectangle {
+
+    readonly property var constants: Constants { }
+    readonly property var errors: Error {}
+    property string loadedFilePath: qsTr("")
+
     id: root
     anchors.centerIn: parent
-    width: 700
-    height: 415
-    color: "#484848"
+    width: parent.width
+    height: parent.height
+    color: constants.default_widget_background_color
 
-    property string loadedFilePath: qsTr("")
+
     signal importFileEvent(string processedVideoPath)
 
-    // Permet d'avoir la zone de drag and drop en pointillet
     Canvas {
         id: dottedBorderCanvas
-        anchors.fill: parent
+        width: parent.width/2
+        height: parent.height/2
+        anchors.centerIn: parent
         onPaint: {
             var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height); // Effacer le canvas
-            ctx.setLineDash([5, 5]); // Définit le motif des pointillés : 5px trait, 5px espace
-            ctx.strokeStyle = "black"; // Couleur de la bordure
-            ctx.lineWidth = 5; // Largeur de la bordure
-            ctx.strokeRect(0, 0, width, height); // Dessine le rectangle avec une bordure en pointillé
+            ctx.clearRect(0, 0, width, height);
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 5;
+            ctx.strokeRect(0, 0, width, height);
         }
     }
 
-    // Zone de drag and drop
     DropArea {
         anchors.fill: parent
         onEntered: (drag) => {
-                       root.color = "#cccccc";
+                       root.color = constants.on_drag_background_color;
                        drag.accept(Qt.LinkAction);
                    }
         onDropped: (drop) => {
@@ -42,26 +52,23 @@ Rectangle {
         }
     }
 
-    // Icone de la caméra
     Image {
         id: cameraImage
         source: "../images/camera.png"
-        anchors.top: parent.top
-        anchors.topMargin: 50
-        anchors.left: parent.left
-        anchors.leftMargin: 255
-        width: 200
-        height: 170
+        anchors.top: dottedBorderCanvas.top
+        anchors.horizontalCenter: dottedBorderCanvas.horizontalCenter
+        anchors.topMargin: 20
+        width: parent.width/8
+        height: parent.height/5
     }
 
-    // Bouton pour importer une vidéo
     Rectangle {
         id: importButton
-        width: 300
+        width: parent.width/4
         height: 45
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: cameraImage.top
-        anchors.topMargin: 195
+        anchors.top: cameraImage.bottom
+        anchors.topMargin: 30
         color: "#dddddd"
         radius: 25
 
@@ -70,31 +77,24 @@ Rectangle {
             font.pixelSize: 20
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-        }
+            wrapMode: Text.Wrap
 
-        Image {
-            source: "../images/camera.png"
-            width: 25
-            height: 25
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 20
         }
 
         MouseArea {
             anchors.fill: parent
             onClicked: fileDialog.open()
+            cursorShape: Qt.PointingHandCursor
 
             onPressed: {
-                importButton.color = "#bbbbbb";
+                importButton.color = constants.active_button;;
             }
 
             onReleased: {
-                importButton.color = "#dddddd";
+                importButton.color = constants.normal_button;
             }
         }
 
-        // Texte pour glisser le fichier
         Text {
             text: qsTr("ou glissez votre fichier ici")
             anchors.horizontalCenter: parent.horizontalCenter
@@ -102,19 +102,29 @@ Rectangle {
             anchors.topMargin: 70
             font.pixelSize: 20
             color: "white"
+            MouseArea {
+                cursorShape: Qt.PointingHandCursor
+                anchors.fill: parent
+
+            }
         }
 
         FileDialog {
             id: fileDialog
+            nameFilters: constants.accepted_extension
             currentFolder: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
             onAccepted: import_file(fileDialog.selectedFile)
         }
     }
 
     function import_file(file_path) {
-        // TODO
-        loadedFilePath = file_path
-        console.log(`Path file : ${loadedFilePath}`)
-        importFileEvent(loadedFilePath);
+        const extension=String(file_path).split('.')[1]
+        if(extension && constants.valid_extension.includes(extension)){
+            loadedFilePath = file_path
+            console.log(`Path file : ${loadedFilePath}`)
+            importFileEvent(loadedFilePath);
+        }else{
+            console.log('notification error')
+        }
     }
 }

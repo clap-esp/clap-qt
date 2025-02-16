@@ -11,6 +11,7 @@ Window {
     height: Screen.height
     color: "#484848"
     visibility: Window.Maximized
+    minimumWidth: Screen.width/2
     visible: true
     title: qsTr("Clap - Main Window")
 
@@ -50,7 +51,7 @@ Window {
     Component {
         id: main_widget_component
 
-        DerushWindow {
+        MainWindow {
             id: main_widget
 
             width: parent.width
@@ -59,13 +60,12 @@ Window {
     }
 
     function createMainWidget(processedVideoPath) {
-        // Créez le VideoWidget et passez le chemin de la vidéo traitée
+        stack_view.clear()
         let mainWidget = main_widget_component.createObject(stack_view, {
                                                                 "videoSourcePath": processedVideoPath,
                                                                 "width": stack_view.width,
                                                                 "height": stack_view.height
                                                             });
-        console.log("Loading video from: " + processedVideoPath);
         root.color = "#000000";
         stack_view.push(mainWidget, StackView.Immediate);
     }
