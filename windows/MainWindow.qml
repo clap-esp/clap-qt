@@ -5,6 +5,7 @@ import QtQuick.Dialogs
 import "../Translation"
 import "../Video"
 
+
 Item {
     id: root
     property string videoSourcePath: ""
