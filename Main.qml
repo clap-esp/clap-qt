@@ -13,12 +13,12 @@ Window {
     visibility: Window.Maximized
     minimumWidth: Screen.width/2
     visible: true
-    title: qsTr("Clap - Main Window")
+    title: qsTr("Clap")
 
-    BarMenu {
-        id: bar_menu
-        onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
-    }
+    // BarMenu {
+    //     id: bar_menu
+    //     onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
+    // }
 
     StackView {
         id: stack_view

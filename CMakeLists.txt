@@ -25,13 +25,12 @@ qt_add_qml_module(appclap_v1
         Video/VideoSlider.qml
         Video/VideoWidget.qml
         Video/VideoTimeline.qml
-        Translation/TranscriptionArea.qml
-        Translation/TranscriptionBlock.qml
-        Translation/TranslationArea.qml
-        Translation/TranslationBlock.qml
-        Translation/TranslationWidget.qml
-        Translation/Header.qml
-        Translation/ContentArea.qml
+        # SpeechConversion/TranscriptionArea.qml
+        # SpeechConversion/TranscriptionBlock.qml
+        # SpeechConversion/TranslationArea.qml
+        SpeechConversion/TextBlock.qml
+        SpeechConversion/SpeechConversionWidget.qml
+        SpeechConversion/Header.qml
         Elements/CheckBoxCustom.qml
         Elements/ButtonCustom.qml
         Utils/Notification/Error.qml
@@ -43,6 +42,7 @@ qt_add_qml_module(appclap_v1
         Widgets/MediaPlayer/VideoSliderWidget.qml
         Widgets/SpeechConversion/Header.qml
         Widgets/SpeechConversion/TextBlockWidget.qml
+        Data/transcription.json
 
     RESOURCES
         images/camera.png
