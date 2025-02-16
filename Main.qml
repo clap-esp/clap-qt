@@ -3,13 +3,16 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Dialogs
 import "windows"
+import 'Utils'
 
 Window {
+    readonly property var constants: Constants { }
+
     id: root
 
     width: Screen.width
     height: Screen.height
-    color: "#484848"
+    color:  constants.default_background_color
     visibility: Window.Maximized
     minimumWidth: Screen.width/2
     visible: true
@@ -53,18 +56,14 @@ Window {
 
         MainWindow {
             id: main_widget
-
-            width: parent.width
-            height: parent.height
         }
     }
 
     function createMainWidget(processedVideoPath) {
         stack_view.clear()
         let mainWidget = main_widget_component.createObject(stack_view, {
-                                                                "videoSourcePath": processedVideoPath,
-                                                                "width": stack_view.width,
-                                                                "height": stack_view.height
+                                                                "videoSourcePath": processedVideoPath
+
                                                             });
         root.color = "#000000";
         stack_view.push(mainWidget, StackView.Immediate);

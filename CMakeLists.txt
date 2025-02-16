@@ -21,13 +21,11 @@ qt_add_qml_module(appclap_v1
         windows/ImportWindow.qml
         windows/ParameterWindow.qml
         windows/MainWindow.qml
-        Video/PlayButton.qml
-        Video/VideoSlider.qml
         Video/VideoWidget.qml
         Video/VideoTimeline.qml
-        # SpeechConversion/TranscriptionArea.qml
-        # SpeechConversion/TranscriptionBlock.qml
-        # SpeechConversion/TranslationArea.qml
+        Video/ButtonPlayer.qml
+        Video/VideoSlider.qml
+        Video/TimeCode.qml
         SpeechConversion/TextBlock.qml
         SpeechConversion/SpeechConversionWidget.qml
         SpeechConversion/Header.qml
@@ -36,12 +34,6 @@ qt_add_qml_module(appclap_v1
         Utils/Notification/Error.qml
         Utils/Notification/Success.qml
         Utils/Constants.qml
-        Widgets/MediaPlayer/ButtonPlayerWidget.qml
-        Widgets/MediaPlayer/TimeCodeWidget.qml
-        Widgets/MediaPlayer/VideoPlayerWidget.qml
-        Widgets/MediaPlayer/VideoSliderWidget.qml
-        Widgets/SpeechConversion/Header.qml
-        Widgets/SpeechConversion/TextBlockWidget.qml
         Data/transcription.json
 
     RESOURCES
@@ -55,6 +47,7 @@ qt_add_qml_module(appclap_v1
         Utils/Icons/play.png
         Utils/Icons/rewind.png
     SOURCES main.cpp
+    QML_FILES Widgets/VideoPlayerWidget.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
