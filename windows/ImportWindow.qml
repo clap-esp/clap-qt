@@ -1,9 +1,10 @@
+import notification.type 1.0
 import QtQuick
 import QtCore
 import QtQuick.Dialogs
 import '../Utils'
 import '../Utils/Notification'
-
+import "../Notification"
 /**
   * IMPORT WINDOW
 **/
@@ -22,6 +23,9 @@ Rectangle {
 
     signal importFileEvent(string processedVideoPath)
 
+    NotificationComponent{
+        id: notification
+    }
     Canvas {
         id: dottedBorderCanvas
         width: parent.width/2
@@ -125,6 +129,8 @@ Rectangle {
             importFileEvent(loadedFilePath);
         }else{
             console.log('notification error')
+            notification.openNotification( errors.error_extension_video, NotificationTypeClass.Error)
+            root.color=constants.default_widget_background_color
         }
     }
 }
