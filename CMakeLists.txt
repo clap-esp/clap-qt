@@ -34,6 +34,7 @@ qt_add_qml_module(appclap_v1
         Utils/Notification/Error.qml
         Utils/Notification/Success.qml
         Utils/Constants.qml
+        Notification/NotificationComponent.qml
         Data/transcription.json
 
     RESOURCES
@@ -46,7 +47,14 @@ qt_add_qml_module(appclap_v1
         Utils/Icons/pause.png
         Utils/Icons/play.png
         Utils/Icons/rewind.png
-    SOURCES main.cpp
+        Notification/Icons/erreur.png
+        Notification/Icons/error.png
+        Notification/Icons/success.png
+        Notification/Icons/warning.png
+    SOURCES
+        main.cpp
+        notificationType.cpp
+        notificationType.h
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
