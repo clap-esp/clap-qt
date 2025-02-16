@@ -58,8 +58,8 @@ Rectangle {
         anchors.top: dottedBorderCanvas.top
         anchors.horizontalCenter: dottedBorderCanvas.horizontalCenter
         anchors.topMargin: 20
-        width: parent.width/8
-        height: parent.height/5
+        width: parent.width/9
+        height: parent.height/7
     }
 
     Rectangle {
