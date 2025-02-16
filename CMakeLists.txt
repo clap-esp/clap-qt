@@ -47,7 +47,6 @@ qt_add_qml_module(appclap_v1
         Utils/Icons/play.png
         Utils/Icons/rewind.png
     SOURCES main.cpp
-    QML_FILES Widgets/VideoPlayerWidget.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
