@@ -34,7 +34,7 @@ qt_add_qml_module(appclap_v1
         Utils/Notification/Error.qml
         Utils/Notification/Success.qml
         Utils/Constants.qml
-        Notification/NotificationComponent.qml
+        Notification/NotificationWidget.qml
         Scripts/app_derush.py
         Scripts/app_transcription.py
         Scripts/app_translation.py
@@ -47,6 +47,7 @@ qt_add_qml_module(appclap_v1
         Scripts/utils/srt_functions.py
         Scripts/utils/stt_functions.py
         Data/transcription.json
+        Loading/LoadingWidget.qml
         requirements.txt
 
     RESOURCES
@@ -72,6 +73,10 @@ qt_add_qml_module(appclap_v1
 
 )
 
+
+find_package(Qt6 REQUIRED COMPONENTS Quick Concurrent)
+target_link_libraries(appclap_v1 PRIVATE Qt6::Quick Qt6::Concurrent)
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
@@ -83,7 +88,7 @@ set_target_properties(appclap_v1 PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-set(ENV{QML_XHR_ALLOW_FILE_READ} 1)
+# file(COPY ${CMAKE_SOURCE_DIR}/Data DESTINATION ${CMAKE_BINARY_DIR})
 
 target_link_libraries(appclap_v1
     PRIVATE Qt6::Quick Qt6::quickmultimedia
@@ -95,3 +100,4 @@ install(TARGETS appclap_v1
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+

@@ -7,13 +7,13 @@ import "../SpeechConversion"
 import "../Video"
 import "../Utils"
 
-
 RowLayout{
     id: root
     property string videoSourcePath: ""
     readonly property var constants: Constants{}
     Layout.fillWidth: true
     Layout.fillHeight: true
+
 
     ColumnLayout {
         Layout.margins: 10
@@ -32,8 +32,7 @@ RowLayout{
                 SpeechConversionWidget {
                     id: translation_widget
                     Component.onCompleted: {
-                        translation_widget.readJsonFile()
-
+                        translation_widget.readFile('transcription')
                     }
                 }
 
