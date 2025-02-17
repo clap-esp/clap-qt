@@ -1,6 +1,42 @@
-# CLAP Interface
 
-Voici le repo pour l'UI de l'application CLAP.
+# 🎬 CLAP
+CLAP est un projet permettant le dérush intelligent de vidéos, basé sur Qt et un moteur d’analyse en Python.
+
+# 📁 Prérequis
+Avant d'exécuter ce projet, assure-toi que le répertoire clap_ai_core est placé dans le même dossier que clap-qt.
+
+## 🐍 Configuration de l’environnement Python
+
+
+1. Créer un environnement virtuel :
+
+
+    ```python -m venv venv```
+
+2. Activer l’environnement virtuel :
+
+    Sur Ubuntu
+
+    ``` source venv\Scripts\activate\```
+
+    Sur Windows
+
+    ``` venv\Scripts\activate\```
+
+3. Installer les dépendances :
+
+
+    ``` pip install -r requirements.txt```
+
+
+## 🔨 Compilation et exécution du projet
+
+1. Ouvrir le projet dans Qt Creator.
+2. Compiler le projet avec le kit Qt approprié.
+3. Exécuter l'application depuis Qt Creator.
+
+
+
 
 ## Explications
 
