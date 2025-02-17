@@ -2,13 +2,18 @@ import os
 import numpy as np
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
-output_audio_path = os.path.join(os.path.dirname(__file__), '..', 'audio_before_derush', 'audio_extrait.wav')
 
+output_audio_path = os.path.join(project_root, 'audio_before_derush')
+
+print('output audio path', output_audio_path)
 def extract_audio_from_video(video_path):
     video = VideoFileClip(video_path)
     audio = video.audio
-    audio.write_audiofile(output_audio_path, codec='pcm_s16le')  # WAV format
+    if output_audio_path and not os.path.exists(output_audio_path):
+        os.makedirs(output_audio_path)
+    audio.write_audiofile(output_audio_path + '/audio_extrait.wav', codec='pcm_s16le')  # WAV format
     video.close()
     audio.close()
 
