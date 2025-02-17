@@ -7,6 +7,7 @@ Avant d'exécuter ce projet, assure-toi que le répertoire clap_ai_core est plac
 
 ## 🐍 Configuration de l’environnement Python
 
+Se placer dans le dossier clap-qt
 
 1. Créer un environnement virtuel :
 
