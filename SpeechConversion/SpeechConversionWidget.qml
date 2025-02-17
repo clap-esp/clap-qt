@@ -2,6 +2,10 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts
 import QtQuick.Controls.Material
+import "../Notification"
+import '../Utils/Notification'
+import '../Utils'
+import notification.type 1.0
 
 Item {
     anchors.fill: parent
@@ -14,9 +18,14 @@ Item {
     property bool isProcessing: false
     property int interval: 10000
     property bool stopValue:false
+
+    readonly property var constants: Constants { }
+    readonly property var errors: Error {}
     Material.theme: Material.Dark
 
-
+    NotificationWidget{
+        id: notification
+    }
     ColumnLayout{
         id: speechConversionLayout
         anchors.fill: parent
@@ -25,7 +34,7 @@ Item {
                 z:3
                 onTranscriptionEnableEvent: (enable)=>{
                     enableTranscription=enable
-                    readJsonFile()
+                    readFile()
                 }
 
                 onTranslationEnableEvent: (enable)=>{
@@ -75,14 +84,13 @@ Item {
                  if (index < jsonData.length) {
                      if(!stopValue){
                          let element = jsonData[index];
-                         let sentences = element.words.join(" ");
                          listView.model.append({
-                                                text: sentences + " ",
-                                                timeCode: formatSeconds(element.start_time)
+                                                text: element.text,
+                                                timeCode: formatSeconds(element.time_start)
                                             });
                          listView.currentIndex = listView.count - 1;
                          listView.forceLayout()
-                         interval= element.duration * 1000
+                         interval= (element.time_end - element.time_start) * 1000
                          index++;
 
                     }
@@ -119,10 +127,15 @@ Item {
 
     /**
     * Method to read JSON file
+    * fileType is transcription or tarduction
     **/
-    function readJsonFile() {
+    function readFile(fileType) {
         if(!jsonData.length){
-            var jsonPath = Qt.resolvedUrl("../Data/transcription.json");
+            let file= fileType === 'transcription' ? "/app_stt_output.json" : '/app_subtitle_fr.srt'
+
+            const jsonPath= 'file:///'+dataDirectoryPath+file
+
+            console.log(jsonPath)
             var xhr = new XMLHttpRequest();
             xhr.open("GET", jsonPath, false);
             xhr.send();
@@ -136,7 +149,8 @@ Item {
                 }
             } else {
                 //@TODO ouvrir popup notification error
-                console.log("Erreur de chargement :", xhr.statusText);
+                notification.openNotification(errors.error_extension_video, NotificationTypeClass.Error)
+                console.log("Erreur de chargement :", xhr.status);
             }
         }
     }
@@ -156,25 +170,4 @@ Item {
 
         return hrs > 0 ? `${hrs}:${formattedMins}:${formattedSecs}` : `${formattedMins}:${formattedSecs}`;
     }
-
-    // Rectangle {
-    //     id: translationScreen
-
-    //     color: "#242424"
-    //     width: parent.width
-    //     height: parent.height
-    //     anchors.top: parent.top
-    //     anchors.left: parent.left
-    //     radius: 10
-
-    //     Rectangle {
-    //         id: timelineContainer
-
-    //         // x: 8
-    //         // y: 8
-    //         width: parent.width
-    //         height: parent.height
-    //         color: "#242424"
-    //         radius: 10
-
 }
