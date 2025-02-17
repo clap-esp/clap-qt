@@ -10,8 +10,8 @@ Popup {
     Material.theme: Material.Dark
     padding: 0
     anchors.centerIn: parent
-    width: parent.width/4
-    height: parent.height/4
+    width: parent.width < Screen.width ? parent.width/2 : parent.width/4
+    height: parent.width < Screen.width ? parent.height/2 : parent.height/4
     modal: true
     focus: true
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -66,9 +66,10 @@ Popup {
                font.pixelSize: 16
                Layout.fillWidth: true
                Layout.alignment: Qt.AlignHCenter
+
                // Layout.margins: 20
                wrapMode: Text.Wrap
-               horizontalAlignment: Text.AlignHCenter
+               horizontalAlignment: Text.AlignJustify
 
            }
 
