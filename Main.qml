@@ -4,9 +4,14 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import "windows"
 import 'Utils'
+import 'Utils/Notification'
+import "Loading"
+import python.executor 1.0
 
 Window {
     readonly property var constants: Constants { }
+    readonly property var messages: Success{}
+    property string file_path: ''
 
     id: root
 
@@ -23,6 +28,22 @@ Window {
     //     onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
     // }
 
+    PythonExecutor {
+           id: pythonExec
+           onScriptStarted: {
+               loadingPopup.open()
+           }
+
+           onScriptFinished:{
+               loadingPopup.close();
+               createMainWidget(file_path)
+
+           }
+           onScriptError: (error)=>{
+              console.log("Python Error:", error)
+            }
+    }
+
     StackView {
         id: stack_view
         initialItem: import_window_component
@@ -37,10 +58,15 @@ Window {
             id: import_window
             onImportFileEvent: {
                 let filePath = import_window.loadedFilePath;
-                console.log("before create Main Widget");
-                createMainWidget(filePath);
+                file_path= filePath
+                runTranscriptionScript(filePath)
             }
         }
+    }
+
+    LoadingWidget{
+        id:loadingPopup
+        textToDisplay: messages.video_importation
     }
 
     Component {
@@ -59,11 +85,23 @@ Window {
         }
     }
 
+
+    /**
+    * Run transcription script
+    **/
+    function runTranscriptionScript(filePath){
+        pythonExec.executeTranscription([filePath])
+    }
+
+
+    /**
+    *
+    **/
+
     function createMainWidget(processedVideoPath) {
         stack_view.clear()
         let mainWidget = main_widget_component.createObject(stack_view, {
                                                                 "videoSourcePath": processedVideoPath
-
                                                             });
         root.color = "#000000";
         stack_view.push(mainWidget, StackView.Immediate);

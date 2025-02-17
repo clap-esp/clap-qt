@@ -1,10 +1,13 @@
 import notification.type 1.0
 import QtQuick
 import QtCore
+import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Dialogs
 import '../Utils'
 import '../Utils/Notification'
 import "../Notification"
+import python.executor 1.0
 /**
   * IMPORT WINDOW
 **/
@@ -21,9 +24,11 @@ Rectangle {
     color: constants.default_widget_background_color
 
 
+
+
     signal importFileEvent(string processedVideoPath)
 
-    NotificationComponent{
+    NotificationWidget{
         id: notification
     }
     Canvas {
@@ -125,10 +130,8 @@ Rectangle {
         const extension=String(file_path).split('.')[1]
         if(extension && constants.valid_extension.includes(extension)){
             loadedFilePath = file_path
-            console.log(`Path file : ${loadedFilePath}`)
             importFileEvent(loadedFilePath);
         }else{
-            console.log('notification error')
             notification.openNotification( errors.error_extension_video, NotificationTypeClass.Error)
             root.color=constants.default_widget_background_color
         }
