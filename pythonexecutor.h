@@ -13,7 +13,7 @@ public:
 
     Q_INVOKABLE QString executeScript(const QString &scriptPath);
 
-    Q_INVOKABLE QString executeTranscription(const QString &scriptName, const QStringList &args = {});
+    Q_INVOKABLE void executeTranscription(const QStringList &args = {});
 
     // Q_INVOKABLE QString executeDerush(const QString &scriptName, const QStringList &args = {});
 
@@ -23,6 +23,8 @@ public:
 signals:
     void scriptOutput(const QString &output);
     void scriptError(const QString &error);
+    void scriptFinished();
+    void scriptStarted();
 
 private:
     QProcess *process;
