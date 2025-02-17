@@ -35,7 +35,19 @@ qt_add_qml_module(appclap_v1
         Utils/Notification/Success.qml
         Utils/Constants.qml
         Notification/NotificationComponent.qml
+        Scripts/app_derush.py
+        Scripts/app_transcription.py
+        Scripts/app_translation.py
+        Scripts/utils/audio_extractor.py
+        Scripts/utils/common_functions.py
+        Scripts/utils/compact_json_encoder.py
+        Scripts/utils/format_functions.py
+        Scripts/utils/lang_functions.py
+        Scripts/utils/ner_functions.py
+        Scripts/utils/srt_functions.py
+        Scripts/utils/stt_functions.py
         Data/transcription.json
+        requirements.txt
 
     RESOURCES
         images/camera.png
@@ -55,6 +67,9 @@ qt_add_qml_module(appclap_v1
         main.cpp
         notificationType.cpp
         notificationType.h
+        pythonexecutor.cpp
+        pythonexecutor.h
+
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -67,6 +82,8 @@ set_target_properties(appclap_v1 PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
+set(ENV{QML_XHR_ALLOW_FILE_READ} 1)
 
 target_link_libraries(appclap_v1
     PRIVATE Qt6::Quick Qt6::quickmultimedia

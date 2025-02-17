@@ -1,6 +1,13 @@
 # Ignore le dossier de build
 build/
 
+# Ignore le dossier de venv
+venv/
+
+# Ingore le dossier pycache
+Scripts/utils/__pycache__/
+
+
 # Ignore les fichiers générés par Qt
 *.pro.user
 *.pro.user.*
