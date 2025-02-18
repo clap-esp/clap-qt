@@ -46,7 +46,7 @@ OUTPUT_STT_PATH=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..','
 subtitles = json_to_srt_transcription(stt_result)
 with open(srt_path, "w", encoding="utf-8") as f:
     f.write(subtitles)
-print(f"\nSRT output saved in {str_path}")
+print(f"\nSRT output saved in {srt_path}")
 
 # ↓
 # Save STT output in JSON
