@@ -4,6 +4,9 @@ build/
 # Ignore le dossier de venv
 venv/
 
+# Ignore le dossier Data
+Data/
+
 # Ingore le dossier pycache
 Scripts/utils/__pycache__/
 
