@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import "../Translation"
 import "../Video"
+import "../Timeline"
 
 Item {
     id: root
