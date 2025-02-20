@@ -4,10 +4,10 @@ import "../Elements"
 
 Rectangle {
     id: videoTimeline
-    width: parent.width
-    height: parent.height
+    anchors.fill: parent
     color: "#1c1c1c"
     radius: 10
+    anchors.top: parent.top
 
     property real cursorPositionStart: -1  // Position du premier clic (-1 signifie non défini)
     property real cursorPositionEnd: -1  // Position du deuxième clic
@@ -18,14 +18,15 @@ Rectangle {
     Rectangle {
         id: timelineContainer
 
+        anchors.top: parent.top
         width: parent.width
         height: parent.height
         color: "#242424"
         radius: 10
 
         Column {
-            width: parent.width - 40
-            height: parent.height * 0.6
+
+            anchors.fill: parent
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             anchors.bottomMargin: 20
@@ -35,7 +36,7 @@ Rectangle {
             Row {
                 width: parent.width - 60
                 height: 30
-                spacing: 10
+                // spacing: 10
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 CheckBoxCustom {
