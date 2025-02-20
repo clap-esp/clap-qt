@@ -86,4 +86,16 @@ Item {
             }
         }
     }
+
+    function addVideoClip(videoPath) {
+        console.log("[DEBUG] Ajout du clip vidéo :", videoPath);
+        scrollableTimeline.addClip(videoPath);
+    }
+
+    onVideoPlayerChanged: {
+        if (videoPlayer && videoPlayer.source) {
+            console.log("[DEBUG] Vidéo détectée dans TimelineView :", videoPlayer.source);
+            addVideoClip(videoPlayer.source);
+        }
+    }
 }
