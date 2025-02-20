@@ -1,12 +1,12 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include "projectmanager.h"
 #include "notificationType.h"
 #include "pythonexecutor.h"
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QQmlContext>
-
-
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +15,11 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    projectManager projectManager;
+
+    engine.rootContext()->setContextProperty("projectManager", &projectManager);
+
     const QUrl url(QStringLiteral("qrc:/clap_v1/Main.qml"));
     qmlRegisterUncreatableType<NotificationTypeClass>("notification.type", 1, 0, "NotificationTypeClass", "Not creatable as it is an enum type");
     qmlRegisterType<PythonExecutor>("python.executor", 1, 0, "PythonExecutor");
@@ -30,6 +35,9 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.load(url);
+
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
     return app.exec();
 }
