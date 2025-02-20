@@ -70,7 +70,8 @@ qt_add_qml_module(appclap_v1
         notificationType.h
         pythonexecutor.cpp
         pythonexecutor.h
-
+        projectmanager.cpp
+        projectmanager.h
 )
 
 
@@ -91,7 +92,7 @@ set_target_properties(appclap_v1 PROPERTIES
 # file(COPY ${CMAKE_SOURCE_DIR}/Data DESTINATION ${CMAKE_BINARY_DIR})
 
 target_link_libraries(appclap_v1
-    PRIVATE Qt6::Quick Qt6::quickmultimedia
+    PRIVATE Qt6::Quick Qt6::Multimedia
 )
 
 include(GNUInstallDirs)
