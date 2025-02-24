@@ -13,8 +13,6 @@ Rectangle {
     Row{
         width: parent.width
         height: parent.height
-        // leftPadding: 15
-        // rightPadding: 30
         Text{
             text: timeCode
             color: "#fff"
