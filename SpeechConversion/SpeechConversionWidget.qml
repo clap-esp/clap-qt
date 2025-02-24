@@ -9,7 +9,6 @@ import notification.type 1.0
 
 Item {
     anchors.fill: parent
-    anchors.margins: 10
     property bool enableTranslation : false
     property bool enableTranscription: true
     property string textToDisplay: 'wow'
@@ -21,90 +20,158 @@ Item {
 
     readonly property var constants: Constants { }
     readonly property var errors: Error {}
-    Material.theme: Material.Dark
 
     NotificationWidget{
         id: notification
     }
-    ColumnLayout{
-        id: speechConversionLayout
-        anchors.fill: parent
-        Header{
-                id: header
-                z:3
-                onTranscriptionEnableEvent: (enable)=>{
-                    enableTranscription=enable
-                    readFile()
+
+
+    ColumnLayout {
+            anchors.fill: parent
+            spacing: 5
+
+            TabBar {
+                id: tabBar
+                Layout.fillWidth: true
+                background: Rectangle {
+                    color: "#1E1B26"
+                }
+                TabButton {
+                    text: "Sous-titre"
+                    font.pixelSize: 14
+                    checkable: true
+                    width: 100
+                    Material.foreground: 'white'
+                    background: Rectangle {
+                        color: tabBar.currentIndex === 1 ?  "#383149" :  "#3A3245"
+                        radius:8
+
+                        Rectangle{
+                            y: parent.height/2
+                            height: parent.height/2
+                            radius: 0
+                            width: parent.width
+                            color: tabBar.currentIndex === 1 ?  "#383149":  "#3A3245"
+                        }
+                    }
                 }
 
-                onTranslationEnableEvent: (enable)=>{
-                    enableTranslation=enable
+                TabButton {
+                    text: "Traduction"
+                    font.pixelSize: 14
+                    checkable: true
+                    width: 100
+                    Material.foreground: 'white'
+                    background: Rectangle {
+                        color: tabBar.currentIndex === 0 ?  "#383149": "#3A3245"
+                        radius:8
+
+                        Rectangle{
+                            y: parent.height/2
+                            height: parent.height/2
+                            radius: 0
+                            width: parent.width
+                            color: tabBar.currentIndex ===0 ?  "#383149"  :"#3A3245"
+                        }
+                    }
                 }
+
             }
 
-        ListView {
-            id: listView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.topMargin: 50
-            spacing:10
-              model: ListModel {}
-              z:2
-              delegate: Item {
-                  height: 100
-                  width: parent?.width
-                  TextBlock{
-                      id: textBlock
-                      textToDisplay: model.text
-                      timeCode: model.timeCode
-                  }
-              }
+            StackLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                currentIndex: tabBar.currentIndex
+                Rectangle {
+                    color: "#383149"
+                    radius: 10
+                    ColumnLayout {
+                        anchors.fill: parent
+                        spacing: 10
 
-              ScrollBar.vertical: ScrollBar {
-                  anchors.right: parent.right
-                  policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-                  active: hovered || pressed
-                  contentItem: Rectangle {
-                             color: "white"
-                             radius: 4
+                        Rectangle {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            color: "#383149"
+                            radius: 10
+                            clip: true
+
+                            ListView {
+                                         id: listView
+                                         anchors.fill: parent
+                                         anchors.top: parent.top
+                                         anchors.topMargin: 50
+                                         spacing:10
+                                           model: ListModel {}
+                                           z:2
+                                           delegate: Item {
+                                               height: 50
+                                               width: parent?.width
+                                               TextBlock{
+                                                   id: textBlock
+                                                   textToDisplay: model.text
+                                                   timeCode: model.timeCode
+                                               }
+                                           }
+
+                                           ScrollBar.vertical: ScrollBar {
+                                               anchors.right: parent.right
+                                               policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                               active: hovered || pressed
+                                               contentItem: Rectangle {
+                                                          color: "white"
+                                                          radius: 4
+                                                 }
+                                               snapMode: ScrollBar.SnapOnRelease
+                                           }
+
+                                     }
+
+                        }
                     }
-                  snapMode: ScrollBar.SnapOnRelease
-              }
+                }
 
+
+                Rectangle {
+                    color: "#383149"
+                    radius:10
+                    Text {
+                        anchors.centerIn: parent
+                        text: "Files content"
+                        color: "white"
+                        font.pixelSize: 18
+                    }
+                }
+
+            }
         }
 
+    Timer {
+                 id: processTimer
+                 interval: interval
+                 repeat: false
+                 onTriggered: {
+                     if (index < jsonData.length) {
+                         if(!stopValue){
+                             let element = jsonData[index];
+                             listView.model.append({
+                                                    text: element.text,
+                                                    timeCode: formatSeconds(element.time_start)
+                                                });
+                             listView.currentIndex = listView.count - 1;
+                             listView.forceLayout()
+                             interval= (element.time_end - element.time_start) * 1000
+                             index++;
 
-
-
-        Timer {
-             id: processTimer
-             interval: interval
-             repeat: false
-             onTriggered: {
-                 if (index < jsonData.length) {
-                     if(!stopValue){
-                         let element = jsonData[index];
-                         listView.model.append({
-                                                text: element.text,
-                                                timeCode: formatSeconds(element.time_start)
-                                            });
-                         listView.currentIndex = listView.count - 1;
-                         listView.forceLayout()
-                         interval= (element.time_end - element.time_start) * 1000
-                         index++;
-
-                    }
-                      processTimer.start();
-                 } else {
-                     console.log("done !");
-                     isProcessing = false;
+                        }
+                          processTimer.start();
+                     } else {
+                         console.log("done !");
+                         isProcessing = false;
+                     }
                  }
              }
-         }
 
-
-
-}
 
     /**
     * Method to display correct test in TextBlockWidget
@@ -145,7 +212,7 @@ Item {
                 index = 0;
                 isProcessing = true;
                 if (jsonData.length > 0) {
-                    processTimer.start();
+                     processTimer.start();
                 }
             } else {
                 //@TODO ouvrir popup notification error
