@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Layouts
 
 Rectangle {
     width: parent.width
@@ -7,12 +8,22 @@ Rectangle {
     property string textToDisplay:''
     property string timeCode: ''
     radius: 5
-    anchors.leftMargin:  50
-    anchors.rightMargin:  50
+    // anchors.leftMargin:  200
 
-    Row{
-        width: parent.width
-        height: parent.height
+
+    RowLayout{
+
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        Rectangle{
+            Layout.leftMargin: 20
+            color: "#D593E8"
+            width:3
+            height: 45
+            radius: 10
+        }
+
         Text{
             text: timeCode
             color: "#fff"
@@ -21,7 +32,7 @@ Rectangle {
         }
 
         Text {
-            topPadding: 8
+            topPadding: 0
             text: textToDisplay
             color: "#fff"
             font.pixelSize: 15
