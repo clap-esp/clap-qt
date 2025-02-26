@@ -17,6 +17,13 @@ Item {
     property bool isProcessing: false
     property int interval: 10000
     property bool stopValue:false
+    property string currentLanguage: 'en'
+    property var translation: {
+        'fr': 'français',
+        'en': 'anglais',
+        'es': 'espagnol'
+    }
+    property bool translation_loading:false
 
     readonly property var constants: Constants { }
     readonly property var errors: Error {}
@@ -135,12 +142,86 @@ Item {
                 Rectangle {
                     color: "#383149"
                     radius:10
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Files content"
-                        color: "white"
-                        font.pixelSize: 18
+                    ColumnLayout{
+                        anchors.fill: parent
+                        spacing: 5
+                        Row{
+                            id:container
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 10
+                            Layout.leftMargin: 20
+                            spacing: parent.width/2
+
+                            Text{
+                                color: 'white'
+                                text: 'Traduit en '+ translation[currentLanguage]
+                                font.pixelSize: 12
+                                width:50
+                            }
+
+                            Image{
+                                id: settings
+                                source: '../images/settings.png'
+                                width:16
+                                height:16
+                                anchors.right: parent.right
+                                anchors.rightMargin: 20
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: languageMenu.open()
+
+                                }
+                            }
+
+
+
+                        }
+
+
+                        Menu {
+                            id: languageMenu
+                            x: settings.x-width+10
+                            y: settings.y+ settings.height
+                            Material.theme: Material.Dark
+                            Material.background: '#E7DDFF'//
+                            Material.foreground: Material.DeepPurple
+                            MenuItem {
+                                text: "Français";
+                                onTriggered: setLanguage("fr");
+                                icon.source: '../images/flag/france.png'
+                                icon.color: 'transparent'
+                            }
+
+                            MenuItem {
+                                text: "Anglais";
+                                onTriggered: setLanguage("en");
+                                icon.source: '../images/flag/england.png'
+                                icon.color: 'transparent'}
+                            MenuItem {
+                                text: "Espagnol";
+                                onTriggered: setLanguage("es");
+                                icon.source: '../images/flag/spain.png'
+                                icon.color: 'transparent'}
+                        }
+
+                        Rectangle{
+                            Layout.fillWidth:  parent
+                            Layout.preferredHeight: 100
+                            color: 'transparent'
+
+                            BusyIndicator{
+                                running: translation_loading
+                                anchors.centerIn: parent
+                            }
+
+                        }
+
+
                     }
+
+
                 }
 
             }
@@ -236,5 +317,10 @@ Item {
         const formattedSecs = String(secs).padStart(2, "0");
 
         return hrs > 0 ? `${hrs}:${formattedMins}:${formattedSecs}` : `${formattedMins}:${formattedSecs}`;
+    }
+
+    function setLanguage(lang){
+        currentLanguage=lang
+        translation_loading=true
     }
 }
