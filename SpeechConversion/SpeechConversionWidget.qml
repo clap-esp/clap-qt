@@ -9,6 +9,7 @@ import notification.type 1.0
 
 Item {
     anchors.fill: parent
+    property bool hasError: false
     property bool enableTranslation : false
     property bool enableTranscription: true
     property string textToDisplay: 'wow'
@@ -18,15 +19,11 @@ Item {
     property int interval: 10000
     property bool stopValue:false
     property string currentLanguage: 'en'
-    property var translation: {
-        'fr': 'français',
-        'en': 'anglais',
-        'es': 'espagnol'
-    }
     property bool translation_loading:false
 
     readonly property var constants: Constants { }
     readonly property var errors: Error {}
+    readonly property var codeIso: IsoLanguageCode { }
 
     NotificationWidget{
         id: notification
@@ -41,16 +38,21 @@ Item {
                 id: tabBar
                 Layout.fillWidth: true
                 background: Rectangle {
-                    color: "#1E1B26"
+                    color: constants.panel_background_color
                 }
+                Material.theme: Material.Light
+                Material.accent: Material.Purple
+
                 TabButton {
                     text: "Sous-titre"
                     font.pixelSize: 14
                     checkable: true
                     width: 100
+                    Material.theme: Material.Light
                     Material.foreground: 'white'
+                    Material.accent: Material.Purple
                     background: Rectangle {
-                        color: tabBar.currentIndex === 1 ?  "#383149" :  "#3A3245"
+                        color: tabBar.currentIndex === 1 ? constants.default_widget_background_color : constants.default_widget_background_color
                         radius:8
 
                         Rectangle{
@@ -58,7 +60,7 @@ Item {
                             height: parent.height/2
                             radius: 0
                             width: parent.width
-                            color: tabBar.currentIndex === 1 ?  "#383149":  "#3A3245"
+                            color: tabBar.currentIndex === 1 ? constants.default_widget_background_color : constants.default_widget_background_color
                         }
                     }
                 }
@@ -68,9 +70,11 @@ Item {
                     font.pixelSize: 14
                     checkable: true
                     width: 100
+                    Material.theme: Material.Light
                     Material.foreground: 'white'
+                    Material.accent: Material.Purple
                     background: Rectangle {
-                        color: tabBar.currentIndex === 0 ?  "#383149": "#3A3245"
+                        color: tabBar.currentIndex === 0 ? constants.default_widget_background_color : constants.default_widget_background_color
                         radius:8
 
                         Rectangle{
@@ -78,7 +82,7 @@ Item {
                             height: parent.height/2
                             radius: 0
                             width: parent.width
-                            color: tabBar.currentIndex ===0 ?  "#383149"  :"#3A3245"
+                            color: tabBar.currentIndex === 0 ? constants.default_widget_background_color: constants.default_widget_background_color
                         }
                     }
                 }
@@ -90,7 +94,7 @@ Item {
                 Layout.fillHeight: true
                 currentIndex: tabBar.currentIndex
                 Rectangle {
-                    color: "#383149"
+                    color: constants.default_widget_background_color
                     radius: 10
                     ColumnLayout {
                         anchors.fill: parent
@@ -99,15 +103,25 @@ Item {
                         Rectangle {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            color: "#383149"
+                            color: constants.default_widget_background_color
                             radius: 10
                             clip: true
+
+                            Text{
+                                text: 'SOUS-TITRE INDISPONIBLE'
+                                anchors.centerIn: parent
+                                visible: hasError
+                                color: 'white'
+                                font.pixelSize: 20
+                                font.bold: true
+                            }
 
                             ListView {
                                          id: listView
                                          anchors.fill: parent
                                          anchors.top: parent.top
                                          anchors.topMargin: 50
+                                         visible: !hasError
                                          spacing:10
                                            model: ListModel {}
                                            z:2
@@ -140,8 +154,9 @@ Item {
 
 
                 Rectangle {
-                    color: "#383149"
+                    color: constants.default_widget_background_color
                     radius:10
+
                     ColumnLayout{
                         anchors.fill: parent
                         spacing: 5
@@ -150,13 +165,13 @@ Item {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 10
                             Layout.leftMargin: 20
-                            spacing: parent.width/2
-
+                            spacing: parent.width - (choosen_language.width + settings.width +40)
+                            visible: !hasError
                             Text{
+                                id: choosen_language
                                 color: 'white'
-                                text: 'Traduit en '+ translation[currentLanguage]
+                                text: findLanguage(currentLanguage)
                                 font.pixelSize: 12
-                                width:50
                             }
 
                             Image{
@@ -164,7 +179,7 @@ Item {
                                 source: '../images/settings.png'
                                 width:16
                                 height:16
-                                anchors.right: parent.right
+
                                 anchors.rightMargin: 20
 
                                 MouseArea{
@@ -185,31 +200,37 @@ Item {
                             x: settings.x-width+10
                             y: settings.y+ settings.height
                             Material.theme: Material.Dark
-                            Material.background: '#E7DDFF'//
-                            Material.foreground: Material.DeepPurple
-                            MenuItem {
-                                text: "Français";
-                                onTriggered: setLanguage("fr");
-                                icon.source: '../images/flag/france.png'
-                                icon.color: 'transparent'
+                            Material.background: constants.default_widget_background_color //'#E7DDFF'//
+                            Material.foreground: 'white' //Material.DeepPurple
+
+
+                            Repeater{
+                                model: codeIso.codeIso
+
+                                MenuItem {
+                                    required property var modelData
+
+                                    text:modelData.lang;
+                                    onTriggered: setLanguage(modelData.code);
+                                }
+
                             }
 
-                            MenuItem {
-                                text: "Anglais";
-                                onTriggered: setLanguage("en");
-                                icon.source: '../images/flag/england.png'
-                                icon.color: 'transparent'}
-                            MenuItem {
-                                text: "Espagnol";
-                                onTriggered: setLanguage("es");
-                                icon.source: '../images/flag/spain.png'
-                                icon.color: 'transparent'}
                         }
 
                         Rectangle{
                             Layout.fillWidth:  parent
                             Layout.preferredHeight: 100
                             color: 'transparent'
+
+                            Text{
+                                text: 'TRADUCTION INDISPONIBLE'
+                                anchors.centerIn: parent
+                                visible: hasError
+                                color: 'white'
+                                font.pixelSize: 20
+                                font.bold: true
+                            }
 
                             BusyIndicator{
                                 running: translation_loading
@@ -280,10 +301,7 @@ Item {
     function readFile(fileType) {
         if(!jsonData.length){
             let file= fileType === 'transcription' ? "/app_stt_output.json" : '/app_subtitle_fr.srt'
-
             const jsonPath= 'file:///'+dataDirectoryPath+file
-
-            console.log(jsonPath)
             var xhr = new XMLHttpRequest();
             xhr.open("GET", jsonPath, false);
             xhr.send();
@@ -296,9 +314,7 @@ Item {
                      processTimer.start();
                 }
             } else {
-                //@TODO ouvrir popup notification error
                 notification.openNotification(errors.error_extension_video, NotificationTypeClass.Error)
-                console.log("Erreur de chargement :", xhr.status);
             }
         }
     }
@@ -312,15 +328,30 @@ Item {
         const hrs = Math.floor(seconds / 3600);
         const mins = Math.floor((seconds % 3600) / 60);
         const secs = Math.floor(seconds % 60);
-
         const formattedMins = hrs > 0 ? String(mins).padStart(2, "0") : mins;
         const formattedSecs = String(secs).padStart(2, "0");
-
         return hrs > 0 ? `${hrs}:${formattedMins}:${formattedSecs}` : `${formattedMins}:${formattedSecs}`;
     }
 
+    /**
+    * Choose language for translation
+    **/
     function setLanguage(lang){
         currentLanguage=lang
         translation_loading=true
     }
+
+    /**
+    * Update
+    **/
+
+    function findLanguage(lang){
+       const iso= codeIso.codeIso.find(iso=> iso['code']===lang)
+        if(iso){
+            return `Traduit en ${iso['lang']}`
+        }else{
+            return ''
+        }
+    }
+
 }
