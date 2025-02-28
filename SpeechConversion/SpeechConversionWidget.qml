@@ -176,7 +176,7 @@ Item {
 
                             Image{
                                 id: settings
-                                source: '../images/settings.png'
+                                source: '../images/translate.png'
                                 width:16
                                 height:16
 
