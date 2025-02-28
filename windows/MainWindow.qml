@@ -10,6 +10,7 @@ import "../Utils"
 RowLayout{
     id: root
     property string videoSourcePath: ""
+    property bool hasTranscriptionError: false
     readonly property var constants: Constants{}
     Layout.fillWidth: true
     Layout.fillHeight: true
@@ -19,18 +20,22 @@ RowLayout{
         Layout.margins: 10
         Layout.fillWidth: true
         Layout.fillHeight: true
+        spacing: 15
 
         RowLayout{
-
-            height:2
+            height:2.5
+            Layout.leftMargin:  15
+            Layout.rightMargin: 15
+            spacing: 15
             Rectangle{
-                color:constants.background_color
+                color: constants.default_widget_background_color//'#383149'
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 radius:10
 
                 SpeechConversionWidget {
                     id: translation_widget
+                    hasError: hasTranscriptionError
                     Component.onCompleted: {
                         translation_widget.readFile('transcription')
                     }
@@ -39,15 +44,19 @@ RowLayout{
             }
 
             Rectangle{
-                color: constants.background_color
+                id: video_container
+                color: 'transparent'
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 radius:10
 
-
                 VideoWidget{
                     id: video_widget
+                    anchors.top:video_container.top
                     videoSource: root.videoSourcePath
+                    onManagePlayer: (value)=>{
+                                        translation_widget.stopValue=value
+                                    }
 
                 }
             }
@@ -60,7 +69,7 @@ RowLayout{
             Layout.fillWidth: true
             Layout.fillHeight: true
             radius:10
-            VideoTimeline{}
+            // VideoTimeline{}
         }
     }
 }

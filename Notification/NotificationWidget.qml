@@ -66,8 +66,6 @@ Popup {
                font.pixelSize: 16
                Layout.fillWidth: true
                Layout.alignment: Qt.AlignHCenter
-
-               // Layout.margins: 20
                wrapMode: Text.Wrap
                horizontalAlignment: Text.AlignJustify
 
