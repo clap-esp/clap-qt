@@ -2,22 +2,42 @@ import os
 import numpy as np
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..' ))
+OUTPUT_AUDIO_DIR=os.path.join(project_root,'API', 'tmp', 'audio_before_derush')
 
+print(f'\n output audio directory => {OUTPUT_AUDIO_DIR}')
 
-output_audio_path = os.path.join(project_root, 'audio_before_derush')
-
-print('output audio path', output_audio_path)
 def extract_audio_from_video(video_path):
-    video = VideoFileClip(video_path)
-    audio = video.audio
-    if output_audio_path and not os.path.exists(output_audio_path):
-        os.makedirs(output_audio_path)
-    audio.write_audiofile(output_audio_path + '/audio_extrait.wav', codec='pcm_s16le')  # WAV format
-    video.close()
-    audio.close()
+    # Path
+    print(f"\nProcessing extraction in progress...")
+
+    if OUTPUT_AUDIO_DIR and not os.path.exists(OUTPUT_AUDIO_DIR):
+        os.makedirs(OUTPUT_AUDIO_DIR, exist_ok=True)
+    output_audio_path = os.path.join(OUTPUT_AUDIO_DIR, 'audio_extrait.wav')
+    # Extract audio
+    clip = VideoFileClip(video_path)
+    audio = clip.audio
+    # Save WAV
+    audio.write_audiofile(output_audio_path, codec='pcm_s16le')
+    print(f'\naudio extracted in ===>, {output_audio_path}')
+    clip.close()
 
 
+
+# project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+
+
+# output_audio_path = os.path.join(project_root, 'audio_before_derush')
+
+# print('output audio path', output_audio_path)
+# def extract_audio_from_video(video_path):
+#     video = VideoFileClip(video_path)
+#     audio = video.audio
+#     if output_audio_path and not os.path.exists(output_audio_path):
+#         os.makedirs(output_audio_path)
+#     audio.write_audiofile(output_audio_path + '/audio_extrait.wav', codec='pcm_s16le')  # WAV format
+#     video.close()
+#     audio.close()
 
 # import librosa
 # from moviepy.editor import VideoFileClip
