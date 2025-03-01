@@ -19,43 +19,6 @@ PythonExecutor::PythonExecutor(QObject *parent) : QObject(parent) {
     });
 }
 
-QString PythonExecutor::executeScript(const QString &scriptName) {
-
-    QString scriptPath = QUrl(scriptName).toLocalFile();
-
-    scriptPath=QCoreApplication::applicationDirPath() + "/sweet_cacao/Scripts/" + scriptName;
-
-    qDebug() << "Chemin final utilisé pour le script Python :" << scriptPath;
-
-    QString pythonExecutable = QCoreApplication::applicationDirPath() + "/sweet_cacao/venv/Scripts/python.exe";
-
-    qDebug() << "python executable :" << pythonExecutable;
-
-    if (!QFile::exists(pythonExecutable)) {
-        return "Error: Python executable not found in virtual environment.";
-    }
-
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-
-    env.insert("PATH", QCoreApplication::applicationDirPath() + "/sweet_cacao/venv/Scripts");
-
-    process->setProcessEnvironment(env);
-
-
-    if (!QFile::exists(scriptPath)) {
-        emit scriptError("Error: Script file not found!");
-    }
-
-    if(!process->waitForStarted()) {
-        emit scriptError("Error: Could not start process.");
-    }
-
-    return process->readAllStandardOutput();
-}
-
-
-
-
 void PythonExecutor::executeTranscription(const QStringList &args ) {
 
     QString scriptName="app_transcription.py";
@@ -64,7 +27,7 @@ void PythonExecutor::executeTranscription(const QStringList &args ) {
     QUrl videoUrl(videoFile);
     QString videoPath= videoUrl.toLocalFile();
 
-    scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/Scripts/" + scriptName;
+    scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/API/" + scriptName;
 
     qDebug() << "Chemin final utilisé pour le script Python :" << scriptPath;
 
@@ -83,6 +46,44 @@ void PythonExecutor::executeTranscription(const QStringList &args ) {
     process->setProcessEnvironment(env);
 
     process->start(pythonExecutable, QStringList() << scriptPath << videoPath );
+
+    if (!QFile::exists(scriptPath)) {
+        emit scriptError("Error: Script file not found!");
+    }
+
+    if(!process->waitForStarted()) {
+        emit scriptError("Error: Could not start process.");
+    }
+
+    emit scriptStarted();
+}
+
+void PythonExecutor::executeTranslation(const QStringList &args ) {
+
+    QString scriptName="app_translation.py";
+    QString scriptPath = QUrl(scriptName).toLocalFile();
+    QString lang = args[0];
+
+
+    scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/API/" + scriptName;
+
+    qDebug() << "Chemin final utilisé pour le script Python :" << scriptPath;
+
+    QString pythonExecutable = QDir::cleanPath(QCoreApplication::applicationDirPath()) + "/../../venv/Scripts/python.exe";
+
+    qDebug() << "python executable :" << pythonExecutable;
+
+    if (!QFile::exists(pythonExecutable)) {
+        qDebug() <<"Error: Python executable not found in virtual environment.";
+    }
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+    env.insert("PATH", QDir::cleanPath(QCoreApplication::applicationDirPath()) + "/../../venv/Scripts/");
+
+    process->setProcessEnvironment(env);
+
+    process->start(pythonExecutable, QStringList() << scriptPath << lang );
 
     if (!QFile::exists(scriptPath)) {
         emit scriptError("Error: Script file not found!");

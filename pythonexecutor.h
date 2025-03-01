@@ -11,9 +11,9 @@ class PythonExecutor : public QObject
 public:
     explicit PythonExecutor(QObject *parent = nullptr);
 
-    Q_INVOKABLE QString executeScript(const QString &scriptPath);
-
     Q_INVOKABLE void executeTranscription(const QStringList &args = {});
+
+    Q_INVOKABLE void executeTranslation(const QStringList &args = {});
 
     // Q_INVOKABLE QString executeDerush(const QString &scriptName, const QStringList &args = {});
 
