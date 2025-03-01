@@ -1,5 +1,2 @@
-API/models/whisper-base/model/model.safetensors filter=lfs diff=lfs merge=lfs -text
-API/models/m2m100_418M/model.safetensors filter=lfs diff=lfs merge=lfs -text
-API/models/bert-base-multilingual-cased/tf_model.h5 filter=lfs diff=lfs merge=lfs -text
 *.h5 filter=lfs diff=lfs merge=lfs -text
 *.safetensors filter=lfs diff=lfs merge=lfs -text
