@@ -36,7 +36,7 @@ qt_add_qml_module(appclap_v1
         Utils/IsoLanguageCode.qml
         Notification/NotificationWidget.qml
         Loading/LoadingWidget.qml
-        API/utils/.gitignore API/utils/__init__.py
+        API/utils/__init__.py
         API/utils/audio_extractor.py
         API/utils/common_functions.py
         API/utils/compact_json_encoder.py
@@ -58,6 +58,7 @@ qt_add_qml_module(appclap_v1
         images/pause.png images/play.png
         images/video.png
         images/translate.png
+        images/exportation.png
         Utils/Icons/camera.png
         Utils/Icons/fast-forward.png
         Utils/Icons/logo.png

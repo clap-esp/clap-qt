@@ -50,6 +50,45 @@ RowLayout{
                 Layout.fillHeight: true
                 radius:10
 
+
+                Rectangle{
+                    radius:35
+                    width:150
+                    height: 30
+                    color: 'white'
+                    anchors.topMargin: 20
+                    anchors.bottomMargin: 20
+                    anchors.right: parent.right
+
+
+                    Row{
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 10
+
+                        Image{
+                            source: '../images/exportation.png'
+                            width:16
+                            height: 16
+                            anchors.leftMargin: 20
+                        }
+
+                        Text{
+                            text: 'Exporter'
+
+                        }
+                    }
+
+
+                    MouseArea{
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                    }
+
+
+
+                }
+
                 VideoWidget{
                     id: video_widget
                     anchors.top:video_container.top
