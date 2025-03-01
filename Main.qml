@@ -38,15 +38,19 @@ Window {
                loadingPopup.open()
            }
 
+           onScriptOutput: (output)=>{
+                               console.log(output)
+                }
+
            onScriptFinished:{
                loadingPopup.close();
                createMainWidget(file_path)
 
            }
            onScriptError: (error)=>{
-                console.log('error')
+                // console.log('error')
                 hasError= true
-                console.log("Python Error:", error)
+                console.log(error)
             }
     }
 

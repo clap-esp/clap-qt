@@ -6,6 +6,7 @@ import "../Notification"
 import '../Utils/Notification'
 import '../Utils'
 import notification.type 1.0
+import python.executor 1.0
 
 Item {
     anchors.fill: parent
@@ -13,13 +14,15 @@ Item {
     property bool enableTranslation : false
     property bool enableTranscription: true
     property string textToDisplay: 'wow'
-    property var jsonData: []
+    property var transcriptionData: []
+    property var translationData: []
     property int index: 0
     property bool isProcessing: false
     property int interval: 10000
     property bool stopValue:false
-    property string currentLanguage: 'en'
+    property string currentLanguage: ''
     property bool translation_loading:false
+    property bool translation_done:false
 
     readonly property var constants: Constants { }
     readonly property var errors: Error {}
@@ -29,6 +32,27 @@ Item {
         id: notification
     }
 
+    PythonExecutor {
+           id: scriptExec
+           onScriptStarted: {
+               translation_loading=true
+           }
+
+           onScriptOutput: (output)=>{
+                console.log(output)
+            }
+
+           onScriptFinished:{
+               translation_loading=false
+               translation_done=true
+               readFile('translation')
+
+           }
+           onScriptError: (error)=>{
+                hasError= true
+                console.log(error)
+            }
+    }
 
     ColumnLayout {
             anchors.fill: parent
@@ -52,7 +76,7 @@ Item {
                     Material.foreground: 'white'
                     Material.accent: Material.Purple
                     background: Rectangle {
-                        color: tabBar.currentIndex === 1 ? constants.default_widget_background_color : constants.default_widget_background_color
+                        color: tabBar.currentIndex === 0 ? constants.default_widget_background_color : constants.default_widget_background_color
                         radius:8
 
                         Rectangle{
@@ -60,7 +84,7 @@ Item {
                             height: parent.height/2
                             radius: 0
                             width: parent.width
-                            color: tabBar.currentIndex === 1 ? constants.default_widget_background_color : constants.default_widget_background_color
+                            color: tabBar.currentIndex === 0 ? constants.default_widget_background_color : constants.default_widget_background_color
                         }
                     }
                 }
@@ -74,7 +98,7 @@ Item {
                     Material.foreground: 'white'
                     Material.accent: Material.Purple
                     background: Rectangle {
-                        color: tabBar.currentIndex === 0 ? constants.default_widget_background_color : constants.default_widget_background_color
+                        color: tabBar.currentIndex === 1 ? constants.default_widget_background_color : constants.default_widget_background_color
                         radius:8
 
                         Rectangle{
@@ -82,7 +106,7 @@ Item {
                             height: parent.height/2
                             radius: 0
                             width: parent.width
-                            color: tabBar.currentIndex === 0 ? constants.default_widget_background_color: constants.default_widget_background_color
+                            color: tabBar.currentIndex === 1 ? constants.default_widget_background_color: constants.default_widget_background_color
                         }
                     }
                 }
@@ -117,7 +141,7 @@ Item {
                             }
 
                             ListView {
-                                         id: listView
+                                         id: listViewTranscription
                                          anchors.fill: parent
                                          anchors.top: parent.top
                                          anchors.topMargin: 50
@@ -129,7 +153,7 @@ Item {
                                                height: 50
                                                width: parent?.width
                                                TextBlock{
-                                                   id: textBlock
+                                                   id: textBlockTranscription
                                                    textToDisplay: model.text
                                                    timeCode: model.timeCode
                                                }
@@ -137,10 +161,10 @@ Item {
 
                                            ScrollBar.vertical: ScrollBar {
                                                anchors.right: parent.right
-                                               policy: listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                               policy: listViewTranscription.contentHeight > listViewTranscription.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
                                                active: hovered || pressed
                                                contentItem: Rectangle {
-                                                          color: "white"
+                                                          color: constants.scrollbar_color
                                                           radius: 4
                                                  }
                                                snapMode: ScrollBar.SnapOnRelease
@@ -165,6 +189,7 @@ Item {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 10
                             Layout.leftMargin: 20
+                            Layout.topMargin: 20
                             spacing: parent.width - (choosen_language.width + settings.width +40)
                             visible: !hasError
                             Text{
@@ -200,16 +225,12 @@ Item {
                             x: settings.x-width+10
                             y: settings.y+ settings.height
                             Material.theme: Material.Dark
-                            Material.background: constants.default_widget_background_color //'#E7DDFF'//
-                            Material.foreground: 'white' //Material.DeepPurple
-
-
+                            Material.background: constants.default_widget_background_color
+                            Material.foreground: 'white'
                             Repeater{
                                 model: codeIso.codeIso
-
                                 MenuItem {
                                     required property var modelData
-
                                     text:modelData.lang;
                                     onTriggered: setLanguage(modelData.code);
                                 }
@@ -219,8 +240,9 @@ Item {
                         }
 
                         Rectangle{
-                            Layout.fillWidth:  parent
-                            Layout.preferredHeight: 100
+                            Layout.fillWidth:  true
+                            Layout.preferredHeight: parent.height-120
+                            // Layout.preferredHeight: parent.height-10
                             color: 'transparent'
 
                             Text{
@@ -235,16 +257,43 @@ Item {
                             BusyIndicator{
                                 running: translation_loading
                                 anchors.centerIn: parent
+                                Material.background: Material.Purple
+                                Material.accent: Material.DeepPurple
                             }
 
+                            ListView {
+                                         id: listViewTranslation
+                                         anchors.fill: parent
+                                         anchors.top: parent.top
+                                         anchors.topMargin: 25
+                                         visible: translation_done
+                                         spacing:10
+                                           model: ListModel {}
+                                           z:2
+                                           delegate: Item {
+                                               height: 50
+                                               width: parent?.width
+                                               TextBlock{
+                                                   id: textBlockTranslation
+                                                   textToDisplay: model.text
+                                                   timeCode: model.timeCode
+                                               }
+                                           }
+
+                                           ScrollBar.vertical: ScrollBar {
+                                               anchors.right: parent.right
+                                               policy: listViewTranslation.contentHeight > listViewTranslation.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                               active: hovered || pressed
+                                               contentItem: Rectangle {
+                                                          color: constants.scrollbar_color
+                                                          radius: 4
+                                                 }
+                                               snapMode: ScrollBar.SnapOnRelease
+                                           }
+                                }
                         }
-
-
                     }
-
-
                 }
-
             }
         }
 
@@ -253,45 +302,39 @@ Item {
                  interval: interval
                  repeat: false
                  onTriggered: {
-                     if (index < jsonData.length) {
+                     if (index < transcriptionData.length || index < translationData.length) {
                          if(!stopValue){
-                             let element = jsonData[index];
-                             listView.model.append({
-                                                    text: element.text,
-                                                    timeCode: formatSeconds(element.time_start)
-                                                });
-                             listView.currentIndex = listView.count - 1;
-                             listView.forceLayout()
-                             interval= (element.time_end - element.time_start) * 1000
-                             index++;
+                             let element = transcriptionData[index];
+                             // listViewTranscription.model.append({
+                             //                        text: element.text,
+                             //                        timeCode: formatSeconds(element.time_start)
+                             //                    });
+                             // listViewTranscription.currentIndex = listViewTranscription.count - 1;
+                             // listViewTranscription.forceLayout()
+                             // interval= (element.time_end - element.time_start) * 1000
+                             // index++;
 
                         }
                           processTimer.start();
-                     } else {
-                         console.log("done !");
-                         isProcessing = false;
+                     }
+
+                     if(index < translationData.length){
+                         if(!stopValue){
+                             let element = translationData[index];
+                             // listViewTranslation.model.append({
+                             //                        text: element.text,
+                             //                        timeCode: formatSeconds(element.time_start)
+                             //                    });
+                             // listViewTranslation.currentIndex = listViewTranslation.count - 1;
+                             // 0listViewTranslation.forceLayout()
+                             // interval= (element.time_end - element.time_start) * 1000
+                             // index++;
+
+                        }
+                          processTimer.start();
                      }
                  }
              }
-
-
-    /**
-    * Method to display correct test in TextBlockWidget
-    **/
-    function displayText(){
-        if(enableTranscription && enableTranslation){
-            text.textToDisplay='Bloc de traduction'
-
-        }else if(enableTranscription){
-            text.textToDisplay='Bloc de transcription'
-
-        }else if(enableTranslation){
-            text.textToDisplay='Bloc de traduction'
-        }else{
-            text.textToDisplay='Bloc'
-
-        }
-    }
 
 
     /**
@@ -299,24 +342,51 @@ Item {
     * fileType is transcription or tarduction
     **/
     function readFile(fileType) {
-        if(!jsonData.length){
-            let file= fileType === 'transcription' ? "/app_stt_output.json" : '/app_subtitle_fr.srt'
-            const jsonPath= 'file:///'+dataDirectoryPath+file
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", jsonPath, false);
-            xhr.send();
 
-            if (xhr.status === 200) {
-                jsonData = JSON.parse(xhr.responseText);
+        let file= fileType === 'transcription' ? "/app_output_stt.json" : `/app_subtitles_${currentLanguage}.json`
+        const jsonPath= 'file:///'+dataDirectoryPath+file
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", jsonPath, false);
+        xhr.send();
+
+        if (xhr.status === 200) {
+            if(fileType==='transcription'){
+                transcriptionData = JSON.parse(xhr.responseText);
                 index = 0;
                 isProcessing = true;
-                if (jsonData.length > 0) {
+
+
+                if (transcriptionData.length > 0) {
+
+                    for(const transcription of transcriptionData){
+                        listViewTranscription.model.append({
+                                               text: transcription.text,
+                                               timeCode: formatSeconds(transcription.time_start)
+                                           });
+                    }
+
                      processTimer.start();
                 }
-            } else {
-                notification.openNotification(errors.error_extension_video, NotificationTypeClass.Error)
+            }else{
+                translationData = JSON.parse(xhr.responseText);
+                if(translationData.length >0 ){
+                    for(const translation of translationData){
+                        listViewTranslation.model.append({
+                                               text: translation.text,
+                                               timeCode: formatSeconds(translation.time_start)
+                                           });
+                    }
+                }
+
+                processTimer.start();
             }
+
+
+        } else {
+            hasError=true
+            // notification.openNotification(errors.error_extension_video, NotificationTypeClass.Error)
         }
+
     }
 
     /**
@@ -338,7 +408,7 @@ Item {
     **/
     function setLanguage(lang){
         currentLanguage=lang
-        translation_loading=true
+        scriptExec.executeTranslation(lang)
     }
 
     /**
@@ -346,12 +416,19 @@ Item {
     **/
 
     function findLanguage(lang){
-       const iso= codeIso.codeIso.find(iso=> iso['code']===lang)
-        if(iso){
-            return `Traduit en ${iso['lang']}`
+        if(lang===''){
+            return 'Traduire'
+
         }else{
-            return ''
+            const iso= codeIso.codeIso.find(iso=> iso['code']===lang)
+             if(iso){
+                 return `Traduit en ${iso['lang']}`
+             }else{
+                 return ''
+             }
         }
+
+
     }
 
 }

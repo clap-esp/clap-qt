@@ -35,19 +35,20 @@ qt_add_qml_module(appclap_v1
         Utils/Constants.qml
         Utils/IsoLanguageCode.qml
         Notification/NotificationWidget.qml
-        API/app_derush.py
-        API/app_transcription.py
-        API/app_translation.py
+        Loading/LoadingWidget.qml
+        API/utils/.gitignore API/utils/__init__.py
         API/utils/audio_extractor.py
         API/utils/common_functions.py
         API/utils/compact_json_encoder.py
         API/utils/format_functions.py
         API/utils/lang_functions.py
+        API/utils/lang_map.py
         API/utils/ner_functions.py
         API/utils/srt_functions.py
         API/utils/stt_functions.py
-        Data/transcription.json
-        Loading/LoadingWidget.qml
+        API/app_derush.py
+        API/app_transcription.py
+        API/app_translation.py
         requirements.txt
 
     RESOURCES
@@ -67,6 +68,9 @@ qt_add_qml_module(appclap_v1
         Notification/Icons/error.png
         Notification/Icons/success.png
         Notification/Icons/warning.png
+
+
+
     SOURCES
         main.cpp
         notificationType.cpp
