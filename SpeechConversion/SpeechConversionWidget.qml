@@ -9,6 +9,7 @@ import notification.type 1.0
 import python.executor 1.0
 
 Item {
+    id: speech
     anchors.fill: parent
     property bool hasError: false
     property bool enableTranslation : false
@@ -227,6 +228,7 @@ Item {
                             Material.theme: Material.Dark
                             Material.background: constants.default_widget_background_color
                             Material.foreground: 'white'
+                            contentHeight: speech.height-10
                             Repeater{
                                 model: codeIso.codeIso
                                 MenuItem {
