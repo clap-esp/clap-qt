@@ -2,7 +2,7 @@ import os
 import json
 from langdetect import detect
 from utils.lang_map import get_m2m100_code
-from utils.srt_functions import json_to_srt_transcription 
+from utils.srt_functions import json_to_srt_transcription
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 
 debug_mode = True
@@ -31,11 +31,11 @@ def translate_str_and_json(input_path, srt_output_path, json_output_path, src_la
     tokenizer = M2M100Tokenizer.from_pretrained("../../API/models/m2m100_418M")
     model = M2M100ForConditionalGeneration.from_pretrained("../../API/models/m2m100_418M")
     model.to("cpu")
-    
+
     # Configuring source and target languages ​​in the tokenizer
     tokenizer.src_lang = src_lang
     tokenizer.tgt_lang = dest_lang
-    
+
     # Retrieve the ID of the forced token corresponding to the target language
     forced_bos_token_id = tokenizer.get_lang_id(dest_lang)
 
@@ -66,7 +66,7 @@ def translate_str_and_json(input_path, srt_output_path, json_output_path, src_la
 
     # Converting translated JSON to SRT format using the json_to_srt_transcription function
     srt_result = json_to_srt_transcription(json_input)
-    
+
     # Saving SRT result to output file
     with open(srt_output_path, 'w', encoding='utf-8') as srt_file:
         srt_file.write(srt_result)
@@ -94,7 +94,7 @@ def detect_lang(input_path):
         if os.path.getsize(input_path) == 0:
             print(f"The file {input_path} is empty. Please regenerate the transcription")
             exit(1)
-    
+
     with open(input_path, "r", encoding="utf-8") as f:
         json_data = json.load(f)
 
