@@ -71,7 +71,8 @@ Window {
             onImportFileEvent: {
                 let filePath = import_window.loadedFilePath;
                 file_path= filePath
-                runTranscriptionScript(filePath)
+                let lang= import_window.selectedLanguageCode
+                runTranscriptionScript(filePath, lang)
             }
         }
     }
@@ -101,8 +102,8 @@ Window {
     /**
     * Run transcription script
     **/
-    function runTranscriptionScript(filePath){
-        pythonExec.executeTranscription([filePath])
+    function runTranscriptionScript(filePath, spokenLang){
+        pythonExec.executeTranscription([filePath, spokenLang])
     }
 
 
