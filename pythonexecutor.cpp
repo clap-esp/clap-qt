@@ -41,7 +41,10 @@ void PythonExecutor::executeTranscription(const QStringList &args ) {
 
     process->setProcessEnvironment(env);
 
-    process->start(pythonExecutable, QStringList() << scriptPath << videoPath );
+
+    QString lang="fr";
+
+    process->start(pythonExecutable, QStringList() << scriptPath << videoPath << lang);
 
     if (!QFile::exists(scriptPath)) {
         emit scriptError("Error: Script file not found!");

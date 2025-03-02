@@ -46,6 +46,8 @@ qt_add_qml_module(appclap_v1
         API/utils/ner_functions.py
         API/utils/srt_functions.py
         API/utils/stt_functions.py
+        API/utils/speech_to_text.py
+        API/utils/logger.py
         API/app_derush.py
         API/app_transcription.py
         API/app_translation.py

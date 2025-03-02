@@ -266,9 +266,10 @@ Item {
                                          anchors.fill: parent
                                          anchors.top: parent.top
                                          anchors.topMargin: 25
-                                         visible: translation_done
+                                         visible: !translation_loading
                                          spacing:10
-                                           model: ListModel {}
+                                           model: ListModel {
+                                           id: translationListModel}
                                            z:2
                                            delegate: Item {
                                                height: 50
@@ -370,12 +371,16 @@ Item {
             }else{
                 translationData = JSON.parse(xhr.responseText);
                 if(translationData.length >0 ){
+                    index = 0;
+                    translationListModel.clear()
                     for(const translation of translationData){
                         listViewTranslation.model.append({
                                                text: translation.text,
                                                timeCode: formatSeconds(translation.time_start)
                                            });
                     }
+                }else{
+                    console.log('no translation')
                 }
 
                 processTimer.start();
@@ -408,6 +413,7 @@ Item {
     **/
     function setLanguage(lang){
         currentLanguage=lang
+        // console.log("current_language")
         scriptExec.executeTranslation(lang)
     }
 
