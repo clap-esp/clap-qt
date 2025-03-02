@@ -4,6 +4,8 @@ import QtCore
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Dialogs
+import QtQuick.Layouts
+import QtQuick.Effects
 import '../Utils'
 import '../Utils/Notification'
 import "../Notification"
@@ -17,6 +19,8 @@ Rectangle {
     readonly property var constants: Constants { }
     readonly property var errors: Error {}
     property string loadedFilePath: qsTr("")
+    readonly property var codeIso: IsoLanguageCode { }
+    property string selectedLanguageCode: "fr"
 
     id: root
     anchors.centerIn: parent
@@ -25,10 +29,71 @@ Rectangle {
     color: '#1E1B26'
 
 
-    signal importFileEvent(string processedVideoPath)
+    signal importFileEvent(string processedVideoPath, string lang)
 
     NotificationWidget{
         id: notification
+    }
+
+
+
+    RowLayout{
+        id:container
+        width: parent.width/2
+        height: 50
+
+        y:100
+        x: dottedBorderCanvas.x
+        spacing: 10
+
+        Image{
+            id: settings_icon
+            source: '../images/translate.png'
+            Layout.preferredWidth: 18
+            Layout.preferredHeight: 18
+
+            MouseArea{
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: selectMenu.open()
+
+            }
+        }
+
+        Text{
+            id: select_language
+            color: 'white'
+            text: displayLanguage()
+            font.pixelSize: 18
+        }
+
+
+
+
+
+    }
+
+
+    Menu {
+        id: selectMenu
+        x: dottedBorderCanvas.x+5
+        topMargin: container.y+35
+        Material.theme: Material.Dark
+        Material.background: constants.default_widget_background_color
+        Material.foreground: 'white'
+        contentHeight: 300
+        Repeater{
+            model: codeIso.codeIso
+            MenuItem {
+                required property var modelData
+                text:modelData.lang;
+                onTriggered:{
+                    selectedLanguageCode=modelData.code
+                }
+            }
+
+        }
+
     }
 
     Canvas {
@@ -36,7 +101,7 @@ Rectangle {
         width: parent.width/2
         height: parent.height/2
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 100
+        y: 165
         onPaint: {
             var ctx = getContext("2d");
                     ctx.clearRect(0, 0, width, height);
@@ -241,11 +306,18 @@ Rectangle {
     //     projectDialog.selectedFilePath = filePath;
     //     projectDialog.open();
 
+
+
+    function displayLanguage(){
+        const iso= codeIso.codeIso.find(iso=> iso['code']===selectedLanguageCode)
+        return 'Langue parlée dans la vidéo: '+ iso['lang']
+    }
+
     function import_file(file_path) {
         const extension=String(file_path).split('.')[1]
         if(extension && constants.valid_extension.includes(extension)){
             loadedFilePath = file_path
-            importFileEvent(loadedFilePath);
+            importFileEvent(loadedFilePath, selectedLanguageCode);
         }else{
             notification.openNotification( errors.error_extension_video, NotificationTypeClass.Error)
             root.color=constants.default_widget_background_color

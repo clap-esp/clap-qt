@@ -24,6 +24,7 @@ void PythonExecutor::executeTranscription(const QStringList &args ) {
     QString scriptName="app_transcription.py";
     QString scriptPath = QUrl(scriptName).toLocalFile();
     QString videoFile = args[0];
+    QString spokenLang= args[1];
     QUrl videoUrl(videoFile);
     QString videoPath= videoUrl.toLocalFile();
 
@@ -41,10 +42,7 @@ void PythonExecutor::executeTranscription(const QStringList &args ) {
 
     process->setProcessEnvironment(env);
 
-
-    QString lang="fr";
-
-    process->start(pythonExecutable, QStringList() << scriptPath << videoPath << lang);
+    process->start(pythonExecutable, QStringList() << scriptPath << videoPath << spokenLang);
 
     if (!QFile::exists(scriptPath)) {
         emit scriptError("Error: Script file not found!");

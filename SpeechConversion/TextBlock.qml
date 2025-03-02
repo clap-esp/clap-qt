@@ -39,6 +39,8 @@ Rectangle {
             wrapMode: Text.Wrap
             Layout.preferredWidth: parent.width/3*2
             horizontalAlignment: Qt.AlignLeft
+
+
         }
     }
 
