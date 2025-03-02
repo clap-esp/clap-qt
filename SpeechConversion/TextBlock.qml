@@ -8,15 +8,14 @@ Rectangle {
     property string textToDisplay:''
     property string timeCode: ''
     radius: 5
-    // anchors.leftMargin:  200
-
 
     RowLayout{
 
-        Layout.fillHeight: true
-        Layout.fillWidth: true
+        width: parent.width
+        height: parent.height
 
         Rectangle{
+            id: borderElem
             Layout.leftMargin: 20
             color: "#D593E8"
             width:3
@@ -25,6 +24,7 @@ Rectangle {
         }
 
         Text{
+            id: timeCodeText
             text: timeCode
             color: "#fff"
             padding: 10
@@ -37,7 +37,7 @@ Rectangle {
             color: "#fff"
             font.pixelSize: 15
             wrapMode: Text.Wrap
-            width: parent.width - 100
+            Layout.preferredWidth: parent.width/3*2
             horizontalAlignment: Qt.AlignLeft
         }
     }
@@ -49,7 +49,6 @@ Rectangle {
         cursorShape: Qt.PointingHandCursor
         anchors.fill: parent
         onClicked: {
-            console.log("Bloc de transcription cliqué")
         }
     }
 }
