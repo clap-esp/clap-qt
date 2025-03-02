@@ -29,11 +29,7 @@ void PythonExecutor::executeTranscription(const QStringList &args ) {
 
     scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/API/" + scriptName;
 
-    qDebug() << "Chemin final utilisé pour le script Python :" << scriptPath;
-
     QString pythonExecutable = QDir::cleanPath(QCoreApplication::applicationDirPath()) + "/../../venv/Scripts/python.exe";
-
-    qDebug() << "python executable :" << pythonExecutable;
 
     if (!QFile::exists(pythonExecutable)) {
         qDebug() <<"Error: Python executable not found in virtual environment.";
@@ -67,11 +63,9 @@ void PythonExecutor::executeTranslation(const QStringList &args ) {
 
     scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/API/" + scriptName;
 
-    qDebug() << "Chemin final utilisé pour le script Python :" << scriptPath;
 
     QString pythonExecutable = QDir::cleanPath(QCoreApplication::applicationDirPath()) + "/../../venv/Scripts/python.exe";
 
-    qDebug() << "python executable :" << pythonExecutable;
 
     if (!QFile::exists(pythonExecutable)) {
         qDebug() <<"Error: Python executable not found in virtual environment.";
