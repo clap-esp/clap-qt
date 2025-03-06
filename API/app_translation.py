@@ -2,6 +2,11 @@ import os
 import sys
 import time
 from utils.lang_functions import translate_str_and_json
+from utils.logger import build_logger
+
+logger=build_logger('START SCRIPT TRANSLATION', level=20)
+
+logger.info('starting translation script')
 
 # TRANSLATION process - app
 # This program is used to translate into a target language
