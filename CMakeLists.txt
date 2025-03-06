@@ -28,32 +28,39 @@ qt_add_qml_module(appclap_v1
         Video/TimeCode.qml
         SpeechConversion/TextBlock.qml
         SpeechConversion/SpeechConversionWidget.qml
-        SpeechConversion/Header.qml
         Elements/CheckBoxCustom.qml
         Elements/ButtonCustom.qml
         Utils/Notification/Error.qml
         Utils/Notification/Success.qml
         Utils/Constants.qml
+        Utils/IsoLanguageCode.qml
         Notification/NotificationWidget.qml
-        Scripts/app_derush.py
-        Scripts/app_transcription.py
-        Scripts/app_translation.py
-        Scripts/utils/audio_extractor.py
-        Scripts/utils/common_functions.py
-        Scripts/utils/compact_json_encoder.py
-        Scripts/utils/format_functions.py
-        Scripts/utils/lang_functions.py
-        Scripts/utils/ner_functions.py
-        Scripts/utils/srt_functions.py
-        Scripts/utils/stt_functions.py
-        Data/transcription.json
         Loading/LoadingWidget.qml
+        API/utils/__init__.py
+        API/utils/audio_extractor.py
+        API/utils/common_functions.py
+        API/utils/compact_json_encoder.py
+        API/utils/format_functions.py
+        API/utils/lang_functions.py
+        API/utils/lang_map.py
+        API/utils/ner_functions.py
+        API/utils/srt_functions.py
+        API/utils/stt_functions.py
+        API/utils/speech_to_text.py
+        API/utils/logger.py
+        API/app_derush.py
+        API/app_transcription.py
+        API/app_translation.py
         requirements.txt
 
     RESOURCES
+        images/settings.png
         images/camera.png
         images/logo-no-background.png
         images/pause.png images/play.png
+        images/video.png
+        images/translate.png
+        images/exportation.png
         Utils/Icons/camera.png
         Utils/Icons/fast-forward.png
         Utils/Icons/logo.png
@@ -64,6 +71,9 @@ qt_add_qml_module(appclap_v1
         Notification/Icons/error.png
         Notification/Icons/success.png
         Notification/Icons/warning.png
+
+
+
     SOURCES
         main.cpp
         notificationType.cpp
@@ -72,6 +82,7 @@ qt_add_qml_module(appclap_v1
         pythonexecutor.h
         projectmanager.cpp
         projectmanager.h
+
 )
 
 

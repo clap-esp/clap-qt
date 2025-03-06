@@ -5,7 +5,7 @@ import "../Elements"
 Rectangle {
     id: videoTimeline
     anchors.fill: parent
-    color: "#1c1c1c"
+    color: "transparent"
     radius: 10
     anchors.top: parent.top
 
