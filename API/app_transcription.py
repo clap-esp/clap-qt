@@ -10,9 +10,13 @@ from transformers import WhisperForConditionalGeneration, AutoProcessor
 from utils.lang_functions import detect_lang
 from utils.stt_functions import process_stt
 from utils.srt_functions import json_to_srt_transcription
-
+from utils.logger import build_logger
 from utils.audio_extractor import extract_audio_from_video
 
+
+logger=build_logger('START SCRIPT TRANSCRIPTION', level=20)
+
+logger.info('starting transcription script')
 
 # CURRENT_SRC_LANG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'tmp', 'app_current_src_lang.txt'))
 OUTPUT_STT_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..','API','tmp', 'app_output_stt.json')
