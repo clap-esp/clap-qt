@@ -9,7 +9,7 @@ import '../Utils'
 Popup {
    id: loadingPopup
    property string textToDisplay: 'Chargement en cours...'
-   property var constants: Constants{}
+   property var colors: Constants{}
    modal: true
    focus: true
    width: parent.width/3
@@ -18,7 +18,7 @@ Popup {
    closePolicy: Popup.NoAutoClose
 
    background: Rectangle {
-       color: constants.background_color
+       color: colors.panel_background_color
        radius: 10
    }
 
@@ -42,8 +42,8 @@ Popup {
            Material.theme: Material.Light
            indeterminate: true
            Layout.alignment: Qt.AlignHCenter
-           Material.background: Material.Cyan
-           Material.accent: Material.Teal
+           Material.background: Material.Purple
+           Material.accent: Material.DeepPurple
            Layout.fillWidth: true
            height: 50
        }

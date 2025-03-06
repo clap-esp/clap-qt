@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Dialogs
 import "windows"
 import 'Utils'
@@ -12,6 +13,7 @@ Window {
     readonly property var constants: Constants { }
     readonly property var messages: Success{}
     property string file_path: ''
+    property bool hasError: false
 
     id: root
 
@@ -28,11 +30,17 @@ Window {
     //     onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
     // }
 
+
+
     PythonExecutor {
            id: pythonExec
            onScriptStarted: {
                loadingPopup.open()
            }
+
+           onScriptOutput: (output)=>{
+                               console.log(output)
+                }
 
            onScriptFinished:{
                loadingPopup.close();
@@ -40,9 +48,13 @@ Window {
 
            }
            onScriptError: (error)=>{
-              console.log("Python Error:", error)
+                // console.log('error')
+                hasError= true
+                console.log(error)
             }
     }
+
+
 
     StackView {
         id: stack_view
@@ -59,7 +71,8 @@ Window {
             onImportFileEvent: {
                 let filePath = import_window.loadedFilePath;
                 file_path= filePath
-                runTranscriptionScript(filePath)
+                let lang= import_window.selectedLanguageCode
+                runTranscriptionScript(filePath, lang)
             }
         }
     }
@@ -89,8 +102,8 @@ Window {
     /**
     * Run transcription script
     **/
-    function runTranscriptionScript(filePath){
-        pythonExec.executeTranscription([filePath])
+    function runTranscriptionScript(filePath, spokenLang){
+        pythonExec.executeTranscription([filePath, spokenLang])
     }
 
 
@@ -101,9 +114,10 @@ Window {
     function createMainWidget(processedVideoPath) {
         stack_view.clear()
         let mainWidget = main_widget_component.createObject(stack_view, {
-                                                                "videoSourcePath": processedVideoPath
+                                                                "videoSourcePath": processedVideoPath,
+                                                                "hasTranscriptionError": false
                                                             });
-        root.color = "#000000";
+        root.color = constants.panel_background_color
         stack_view.push(mainWidget, StackView.Immediate);
     }
 }
