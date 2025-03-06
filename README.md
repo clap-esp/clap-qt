@@ -18,16 +18,16 @@ Se placer dans le dossier clap-qt
 
     Sur Ubuntu
 
-    ``` source venv\Scripts\activate\```
+    ```source venv/bin/activate```
 
     Sur Windows
 
-    ``` venv\Scripts\activate\```
+    ```venv\Scripts\activate\```
 
 3. Installer les dépendances :
 
 
-    ``` pip install -r requirements.txt```
+    ```pip install -r requirements.txt```
 
 
 ## 🔨 Compilation et exécution du projet
