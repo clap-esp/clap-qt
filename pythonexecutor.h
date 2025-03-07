@@ -17,6 +17,7 @@ public:
 
     Q_INVOKABLE void executeThumbnailsGeneration(const QStringList &args = {});
 
+
     // Q_INVOKABLE QString executeDerush(const QString &scriptName, const QStringList &args = {});
 
     // Q_INVOKABLE QString executeTranslation(const QString &scriptName, const QStringList &args = {});
