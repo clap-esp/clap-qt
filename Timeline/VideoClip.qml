@@ -12,28 +12,21 @@ Item {
     property int index: 0
     property alias model: thumbnailModel
     property int totalThumbnails: 1
-
     width: Math.max(clipDuration / 10, parent.width * 1.2)
-    height: 50 //Math.max(parent.height, 100)
+    height: 50
 
     Rectangle {
         id: videoClipDisplay
         width: parent.width
         height: parent.height
-        color: "transparent"
+        color: "#201C2A"
         radius: 5
-        // Layout.topMargin: 10
-        Layout.margins: 100
-        z:1
-
         ListView {
             id: thumnailList
-            width: parent.width
-            height: parent.height
-            z:-100
+            anchors.fill: parent
             orientation: ListView.Horizontal
+            clip:true
             model: ListModel { id: thumbnailModel }
-
             delegate: Item {
                 width: videoClipDisplay.width / totalThumbnails
                 height: parent.height
@@ -45,12 +38,12 @@ Item {
 
                     Image {
                         width: 50
-                        height: parent.height
+                        height: 50
                         source: model.filePath
-                        fillMode: Image.PreserveAspectCrop
+                        fillMode: Image.Tile
                         verticalAlignment: Image.AlignLeft
                         anchors.fill: parent
-                        anchors.margins: 2
+                        anchors.rightMargin: 2
                         cache: true
                     }
                 }

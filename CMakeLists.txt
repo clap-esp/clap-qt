@@ -63,6 +63,7 @@ qt_add_qml_module(appclap_v1
         images/video.png
         images/translate.png
         images/exportation.png
+        images/wand.png
         Utils/Icons/camera.png
         Utils/Icons/fast-forward.png
         Utils/Icons/logo.png
