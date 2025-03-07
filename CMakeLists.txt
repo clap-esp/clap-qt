@@ -28,6 +28,10 @@ qt_add_qml_module(appclap_v1
         Video/TimeCode.qml
         SpeechConversion/TextBlock.qml
         SpeechConversion/SpeechConversionWidget.qml
+        SpeechConversion/Header.qml
+        Timeline/ScrollableTimeline.qml
+        Timeline/TimelineView.qml
+        Timeline/VideoClip.qml
         Elements/CheckBoxCustom.qml
         Elements/ButtonCustom.qml
         Utils/Notification/Error.qml
@@ -82,7 +86,6 @@ qt_add_qml_module(appclap_v1
         pythonexecutor.h
         projectmanager.cpp
         projectmanager.h
-
 )
 
 

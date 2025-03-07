@@ -24,6 +24,7 @@ QString projectManager::createProject(const QString &videoFilePath, const QStrin
     QDir projectDir(projectPath);
     if (!projectDir.exists()) {
         projectDir.mkpath("metadata");
+        projectDir.mkpath("thumbs");
     } else {
         return "Error: Project name already exists.";
     }

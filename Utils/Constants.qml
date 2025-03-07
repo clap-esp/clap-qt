@@ -1,6 +1,5 @@
 import QtQuick
 QtObject {
-
     readonly property string panel_background_color:'#1E1B26'
     readonly property string background_color: "#242424"
     readonly property string default_widget_background_color: '#383149'//'#484848'

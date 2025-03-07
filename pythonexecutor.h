@@ -1,6 +1,5 @@
 #ifndef PYTHONEXECUTOR_H
 #define PYTHONEXECUTOR_H
-
 #include <QObject>
 #include <QString>
 #include <QProcess>
@@ -12,6 +11,8 @@ public:
     explicit PythonExecutor(QObject *parent = nullptr);
 
     Q_INVOKABLE void executeTranscription(const QStringList &args = {});
+
+    Q_INVOKABLE void executeThumbnailsGeneration(const QStringList &args = {});
 
     Q_INVOKABLE void executeTranslation(const QStringList &args = {});
 

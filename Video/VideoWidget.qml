@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtMultimedia 6.7
 import QtQuick.Layouts
 import '../Utils'
+
 Item {
     id: root
     property var constants: Constants{}
@@ -10,6 +11,7 @@ Item {
     property string iconPlayPause:'../Utils/Icons/pause.png'
     property bool updating: false
     property  bool played:true
+    property alias mediaPlayer: mediaPlayer
     signal managePlayer(bool stop)
     width: parent.width
     height: parent.height-40

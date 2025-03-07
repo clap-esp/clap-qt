@@ -21,6 +21,7 @@ Rectangle {
     property string loadedFilePath: qsTr("")
     readonly property var codeIso: IsoLanguageCode { }
     property string selectedLanguageCode: "fr"
+    property bool projectCreated:false
 
     id: root
     anchors.centerIn: parent
@@ -104,24 +105,24 @@ Rectangle {
         y: 165
         onPaint: {
             var ctx = getContext("2d");
-                    ctx.clearRect(0, 0, width, height);
-                    var radius = 35;
-                    ctx.setLineDash([1, 1]);
-                    ctx.strokeStyle = "#CECECE";
-                    ctx.lineWidth = 5;
-                    ctx.beginPath();
-                    ctx.moveTo(radius, 0);
-                    ctx.lineTo(width - radius, 0);
-                    ctx.quadraticCurveTo(width, 0, width, radius);
-                    ctx.lineTo(width, height - radius);
-                    ctx.quadraticCurveTo(width, height, width - radius, height);
-                    ctx.lineTo(radius, height);
-                    ctx.quadraticCurveTo(0, height, 0, height - radius);
-                    ctx.lineTo(0, radius);
-                    ctx.quadraticCurveTo(0, 0, radius, 0);
-                    ctx.closePath();
-                    ctx.stroke();
-                }
+            ctx.clearRect(0, 0, width, height);
+            var radius = 35;
+            ctx.setLineDash([1, 1]);
+            ctx.strokeStyle = "#CECECE";
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(width - radius, 0);
+            ctx.quadraticCurveTo(width, 0, width, radius);
+            ctx.lineTo(width, height - radius);
+            ctx.quadraticCurveTo(width, height, width - radius, height);
+            ctx.lineTo(radius, height);
+            ctx.quadraticCurveTo(0, height, 0, height - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.stroke();
+        }
 
 
         Rectangle {
@@ -187,44 +188,44 @@ Rectangle {
                 }
             }
 
-    }
-
-    DropArea {
-        anchors.fill: parent
-        onEntered: (drag) => {
-                       root.color = constants.on_drag_background_color;
-                       drag.accept(Qt.LinkAction);
-                   }
-        onDropped: (drop) => {
-                       if (drop.urls.length > 0 && drop.urls[0] !== undefined) {
-                           let filePath = drop.urls[0].toString();
-
-                           if(!filePath.match(/\.(mp4|avi|mov|m4a|mkv)$/i)) {
-                               fileNotAVideoDialog.open();
-                               console.log("Error: Le fichier sélectionné n'est pas une vidéo.");
-                               root.color = "transparent";
-                               return;
-                           }
-
-                           root.color = "transparent";
-                           fileDialog.close();
-                           openProjectDialog(filePath)
-                       }
-                   }
-        onExited: {
-            root.color = "transparent";
         }
-    }
 
-    Image {
-        id: cameraImage
-        source: "../images/video.png"
-        anchors.top: dottedBorderCanvas.top
-        anchors.horizontalCenter: dottedBorderCanvas.horizontalCenter
-        anchors.topMargin: 20
-        width: 100
-        height: 100
-    }
+        DropArea {
+            anchors.fill: parent
+            onEntered: (drag) => {
+                           root.color = constants.on_drag_background_color;
+                           drag.accept(Qt.LinkAction);
+                       }
+            onDropped: (drop) => {
+                           if (drop.urls.length > 0 && drop.urls[0] !== undefined) {
+                               let filePath = drop.urls[0].toString();
+
+                               if(!filePath.match(/\.(mp4|avi|mov|m4a|mkv)$/i)) {
+                                   fileNotAVideoDialog.open();
+                                   console.log("Error: Le fichier sélectionné n'est pas une vidéo.");
+                                   root.color = "transparent";
+                                   return;
+                               }
+
+                               root.color = "transparent";
+                               fileDialog.close();
+                               openProjectDialog(filePath)
+                           }
+                       }
+            onExited: {
+                root.color = "transparent";
+            }
+        }
+
+        Image {
+            id: cameraImage
+            source: "../images/video.png"
+            anchors.top: dottedBorderCanvas.top
+            anchors.horizontalCenter: dottedBorderCanvas.horizontalCenter
+            anchors.topMargin: 20
+            width: 100
+            height: 100
+        }
 
 
 
@@ -235,85 +236,99 @@ Rectangle {
             id: fileDialog
             nameFilters: constants.accepted_extension
             currentFolder: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
-            onAccepted: import_file(fileDialog.selectedFile)
+            onAccepted: {
+                openProjectDialog(fileDialog.selectedFile)
+            }
         }
     }
 
-    // Dialog {
-    //     id: projectExistsDialog
-    //     title: "Erreur"
-    //     parent: root
-    //     modal: true
-    //     dim: true
-    //     standardButtons: Dialog.Ok
-    //     anchors.centerIn: parent
-    //     closePolicy: Popup.NoAutoClose
+    Dialog {
+        id: projectExistsDialog
+        title: "Erreur"
+        parent: root
+        modal: true
+        dim: true
+        width: parent.width / 4
+        height: parent.height / 5
+        standardButtons: Dialog.Ok
+        anchors.centerIn: parent
+        closePolicy: Popup.NoAutoClose
+        Material.background: constants.background_color
+        Material.foreground: "white"
 
-    //     Text {
-    //         id: projectExistsText
-    //         text: qsTr("Un projet avec ce nom existe déjà. Veuillez choisir un autre nom.")
-    //     }
-    // }
+        Text {
+            id: projectExistsText
+            text: qsTr("Un projet avec ce nom existe déjà. \nVeuillez choisir un autre nom.")
+            color: "white"
+            font.pixelSize: 14
+        }
 
-    // Dialog {
-    //     id: projectDialog
-    //     title: "Nom du projet"
-    //     parent: root
-    //     standardButtons: Dialog.Ok | Dialog.Cancel
-    //     anchors.centerIn: parent
-    //     modal: true
-    //     dim: true
-    //     visible: false
-    //     width: 300
-    //     height: 150
-    //     closePolicy: Popup.NoAutoClose
+        onAccepted: projectDialog.open()
+    }
 
-    //     property string selectedFilePath: ""
+    Dialog {
+        id: projectDialog
+        title: "Nom du projet"
+        parent: root
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        anchors.centerIn: parent
+        modal: true
+        dim: true
+        visible: false
+        width: parent.width / 4
+        height: parent.height / 5
+        closePolicy: Popup.NoAutoClose
+        Material.background: constants.background_color
+        Material.foreground: "white"
 
-    //     Column {
-    //         spacing: 10
-    //         anchors.centerIn: parent
+        property string selectedFilePath: ""
 
-    //         TextField {
-    //             id: projectNameInput
-    //             placeholderText: "Entrez un nom de projet"
-    //         }
-    //     }
+        TextField {
+            id: projectNameInput
+            width: parent.width
+            height: parent.height + 20
+            font.pixelSize: 14
+            placeholderText: "Entrez un nom de projet"
+            placeholderTextColor: "white"
+            Material.foreground: "white"
+            Material.accent: "white"
+        }
 
-    //     onAccepted: {
-    //         if (selectedFilePath !== "" && selectedFilePath !== undefined) {
-    //             let cleanedFilePath = selectedFilePath.replace("file:///", "");
-    //             cleanedFilePath = cleanedFilePath.replace(/%20/g, " ");
+        onAccepted: {
+            if (selectedFilePath !== "" && selectedFilePath !== undefined) {
+                let cleanedFilePath = selectedFilePath.replace("file:///", "");
+                cleanedFilePath = cleanedFilePath.replace(/%20/g, " ");
 
-    //             let projectPath = projectManager.createProject(cleanedFilePath, projectNameInput.text)
-    //             if (projectPath.startsWith("Error")) {
-    //                 console.log(projectPath)
+                let projectPath = projectManager.createProject(cleanedFilePath, projectNameInput.text)
+                if (projectPath.startsWith("Error")) {
+                    console.log(projectPath)
 
-    //                 if(projectPath === "Error: Project name already exists.") {
-    //                     projectExistsDialog.open();
-    //                 }
-    //             } else {
-    //                 console.log("Project créé dans : " + projectPath)
-    //                 createMainWidget(selectedFilePath)
-    //             }
-    //         } else {
-    //             console.log("Error: No file selected.");
-    //         }
-    //     }
-    // }
-
-    // function openProjectDialog(filePath) {
-    //     projectDialog.selectedFilePath = filePath;
-    //     projectDialog.open();
-
-
+                    if(projectPath === "Error: Project name already exists.") {
+                        projectExistsDialog.open();
+                    }
+                } else {
+                    console.log("Project créé dans : " + projectPath)
+                    projectCreated = true;
+                    import_file(fileDialog.selectedFile)
+                }
+            } else {
+                console.log("Error: No file selected.");
+            }
+        }
+    }
 
     function displayLanguage(){
         const iso= codeIso.codeIso.find(iso=> iso['code']===selectedLanguageCode)
         return 'Langue parlée dans la vidéo: '+ iso['lang']
     }
 
+    function openProjectDialog(filePath) {
+        projectDialog.selectedFilePath = filePath;
+        projectDialog.open();
+    }
+
     function import_file(file_path) {
+
         const extension=String(file_path).split('.')[1]
         if(extension && constants.valid_extension.includes(extension)){
             loadedFilePath = file_path
