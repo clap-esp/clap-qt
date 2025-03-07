@@ -68,7 +68,6 @@ RowLayout{
             Layout.fillWidth: true
             Layout.fillHeight: true
             radius:10
-            z:3000
             TimelineView {
                 id: timeline_widget
                 videoPlayer: video_widget.mediaPlayer
