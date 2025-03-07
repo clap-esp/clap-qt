@@ -3,20 +3,49 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Dialogs
 import "windows"
+import 'Utils'
+import 'Utils/Notification'
+import "Loading"
+import python.executor 1.0
 
 Window {
+    readonly property var constants: Constants { }
+    readonly property var messages: Success{}
+    property string file_path: ''
+
     id: root
 
     width: Screen.width
     height: Screen.height
-    color: "#484848"
+    color:  constants.default_background_color
     visibility: Window.Maximized
+    minimumWidth: Screen.width/2
     visible: true
-    title: qsTr("Clap - Main Window")
+    title: qsTr("Clap")
 
-    BarMenu {
-        id: bar_menu
-        onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
+    // BarMenu {
+    //     id: bar_menu
+    //     onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
+    // }
+
+    PythonExecutor {
+        id: pythonExec
+        onScriptStarted: {
+            loadingPopup.open()
+        }
+
+        onScriptFinished:{
+            loadingPopup.close();
+            createMainWidget(file_path)
+
+        }
+        onScriptError: (error)=>{
+                           console.log("Python Error:", error)
+                       }
+
+        onScriptOutput: (value) => {
+                            console.log(value)
+                        }
     }
 
     StackView {
@@ -32,10 +61,15 @@ Window {
             id: import_window
             onImportFileEvent: {
                 let filePath = import_window.loadedFilePath;
-                console.log("before create Main Widget");
-                createMainWidget(filePath);
+                file_path= filePath
+                runTranscriptionScript(filePath)
             }
         }
+    }
+
+    LoadingWidget{
+        id:loadingPopup
+        textToDisplay: messages.video_importation
     }
 
     Component {
@@ -49,7 +83,7 @@ Window {
     Component {
         id: main_widget_component
 
-        DerushWindow {
+        MainWindow {
             id: main_widget
 
             width: stack_view.width
@@ -59,14 +93,27 @@ Window {
         }
     }
 
+
+    /**
+    * Run transcription script
+    **/
+    function runTranscriptionScript(filePath){
+        pythonExec.executeTranscription([filePath])
+    }
+
+    // function runThumbnailsGenerationScript(filePath) {
+    //     pythonExec.executeThumbnailsGeneration([filePath])
+    // }
+
+    /**
+    *
+    **/
+
     function createMainWidget(processedVideoPath) {
-        // Créez le VideoWidget et passez le chemin de la vidéo traitée
+        stack_view.clear()
         let mainWidget = main_widget_component.createObject(stack_view, {
-                                                                "videoSourcePath": processedVideoPath,
-                                                                "width": stack_view.width,
-                                                                "height": stack_view.height
+                                                                "videoSourcePath": processedVideoPath
                                                             });
-        console.log("Loading video from: " + processedVideoPath);
         root.color = "#000000";
         stack_view.clear()
         stack_view.push(mainWidget, StackView.Immediate);

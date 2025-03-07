@@ -5,116 +5,92 @@ import QtMultimedia
 Item {
     id: videoClip
 
-    property string videoSource
+    property MediaPlayer timelineVideoPlayer
     property real clipDuration: 0
     property real interval: 3000
+    property var jsonData: []
+    property int index: 0
     property alias model: thumbnailModel
+    property int totalThumbnails: 1
 
-    Layout.fillWidth: true
-    Layout.preferredHeight: parent ? parent.height : 100
+    width: Math.max(clipDuration / 10, parent.width * 1.2)
+    height: Math.max(parent.height, 100)
 
-    width: clipDuration / 100
-    height: parent.height
-
-    ListView {
-        id: thumnailList
+    Rectangle {
+        id: videoClipDisplay
         width: parent.width
         height: parent.height
-        orientation: ListView.Horizontal
-        model: ListModel { id: thumbnailModel }
+        color: "#1c1c1c"
+        radius: 5
+        Layout.topMargin: 10
 
-        delegate: Item {
-            width: 100
+        ListView {
+            id: thumnailList
+            width: parent.width
             height: parent.height
+            orientation: ListView.Horizontal
+            model: ListModel { id: thumbnailModel }
 
-            Rectangle {
-                width: parent.width
+            delegate: Item {
+                width: videoClipDisplay.width / totalThumbnails
                 height: parent.height
-                color: "#000000"
 
-                Image {
+                Rectangle {
                     width: parent.width
                     height: parent.height
-                    source: model.filePath
-                    fillMode: Image.PreserveAspectCrop
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    cache: true
+                    color: "#1c1c1c"
+
+                    Image {
+                        width: parent.width
+                        height: parent.height
+                        source: model.filePath
+                        fillMode: Image.PreserveAspectCrop
+                        anchors.fill: parent
+                        anchors.margins: 2
+                        cache: true
+                    }
                 }
             }
         }
     }
 
-    MediaPlayer {
-        id: player
-        source: videoSource
-        videoOutput: videoOutput
-
-        onDurationChanged: {
-            console.log("[DEBUG] Durée détectée :", player.duration);
-            clipDuration = player.duration;
-            generateThumbnails();
+    Behavior on x {
+        NumberAnimation {
+            duration: 100
+            easing.type: Easing.Linear
         }
     }
 
-    VideoOutput {
-            id: videoOutput
-            anchors.fill: parent
-            width: 200
-            height: 100
-            visible: false
-        }
+    Component.onCompleted: {
+        readFile();
+    }
 
-    function generateThumbnails() {
-            if (clipDuration === 0) {
-                console.warn("[ERROR] La durée de la vidéo est 0 !");
-                return;
+    function readFile() {
+        let file = "/thumbnails.json"
+        const jsonPath= 'file:///'+thumbnailsDirectoryPath+file
+
+        console.log(jsonPath)
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", jsonPath, false);
+        xhr.send();
+
+        if (xhr.status === 200) {
+            jsonData = JSON.parse(xhr.responseText);
+            let jsonDataThumbnails = jsonData["thumbnails"];
+            index = 0
+            totalThumbnails = jsonDataThumbnails.length  // Mise à jour du total des miniatures
+            thumbnailModel.clear()
+            for (index = 0; index < jsonDataThumbnails.length; index++) {
+                let imagePath = jsonDataThumbnails[index]["path"];
+                thumbnailModel.append({
+                                          filePath: "file:///" + imagePath
+                                      })
             }
 
-            thumbnailModel.clear();
-            let numThumbnails = Math.ceil(clipDuration / interval);
-            let currentFrame = 0;
+            if (index < jsonDataThumbnails.length) {
 
-            function captureFrame() {
-                if (currentFrame >= numThumbnails) {
-                    console.log("[DEBUG] Toutes les miniatures ont été générées !");
-                    return;
-                }
-
-                let captureTime = currentFrame * interval;
-                console.log("[DEBUG] Capture de la miniature à :", captureTime, "ms");
-
-                player.position = captureTime;
-
-                Qt.callLater(() => {
-                    videoOutput.grabToImage(function (result) {
-                        if (!result) {
-                            console.warn("[WARNING] Impossible de capturer l'image !");
-                            return;
-                        }
-
-                        let imagePath = Qt.platform.os === "windows"
-                            ? "C:/Users/Jay/AppData/Local/Temp/thumb_" + currentFrame + ".png"
-                            : "/tmp/thumb_" + currentFrame + ".png";
-
-                        let success = result.saveToFile(imagePath);
-                        if (success) {
-                            thumbnailModel.append({ filePath: "file:///" + imagePath });
-                            console.log("[DEBUG] Miniature enregistrée :", imagePath);
-                        } else {
-                            console.warn("[WARNING] Échec de l'enregistrement de :", imagePath);
-                        }
-
-                        currentFrame++;
-                        Qt.callLater(captureFrame);  // Capture la suivante
-                    });
-                });
             }
-
-            captureFrame();
+            console.log(jsonData);
         }
-
-        Component.onCompleted: {
-            console.log("[DEBUG] VideoClip ajouté avec largeur :", width, " et hauteur :", height);
-        }
+    }
 }
