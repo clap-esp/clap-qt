@@ -25,10 +25,11 @@ Window {
     visible: true
     title: qsTr("Clap")
 
-    // BarMenu {
-    //     id: bar_menu
-    //     onOpenParameterEvent: settings_window.open()
-    // }
+    BarMenu {
+        id: bar_menu
+        z: 1
+        onOpenParameterEvent: settings_window.open()
+    }
 
 
 
@@ -104,8 +105,8 @@ Window {
 
 
     /**
-    *
-    **/
+     *
+     **/
 
     function createMainWidget(processedVideoPath) {
         stack_view.clear()

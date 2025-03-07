@@ -19,10 +19,11 @@ qt_add_qml_module(appclap_v1
         Main.qml
         BarMenu.qml
         windows/ImportWindow.qml
-        windows/ParameterWindow.qml
+        windows/SettingsWindow.qml
         windows/MainWindow.qml
         Settings/WindowSettingsView.qml
         Settings/SettingsView.qml
+        Settings/QuitWidget.qml
         Video/VideoWidget.qml
         Video/VideoTimeline.qml
         Video/ButtonPlayer.qml

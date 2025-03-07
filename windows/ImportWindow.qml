@@ -26,7 +26,7 @@ Rectangle {
     anchors.centerIn: parent
     width: parent.width
     height: parent.height
-    color: '#1E1B26'
+    color: constants.panel_background_color
 
 
     signal importFileEvent(string processedVideoPath, string lang)
