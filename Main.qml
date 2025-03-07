@@ -13,6 +13,7 @@ Window {
     readonly property var constants: Constants { }
     readonly property var messages: Success{}
     property string file_path: ''
+    property string lang: 'fr'
     property bool hasError: false
 
     id: root
@@ -30,28 +31,40 @@ Window {
     //     onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
     // }
 
-
-
     PythonExecutor {
-           id: pythonExec
-           onScriptStarted: {
-               loadingPopup.open()
-           }
+        id: pythonExec
 
-           onScriptOutput: (output)=>{
-                               console.log(output)
-                }
 
-           onScriptFinished:{
-               loadingPopup.close();
-               createMainWidget(file_path)
+        onScriptFinished:{
+            loadingPopup.close();
+            createMainWidget(file_path)
 
-           }
-           onScriptError: (error)=>{
-                // console.log('error')
-                hasError= true
-                console.log(error)
-            }
+        }
+        onScriptError: (error)=>{
+                           console.log("Python Error:", error)
+                       }
+
+        onScriptOutput: (value) => {
+                            console.log(value)
+                        }
+    }
+
+    PythonExecutor{
+        id: thumbnailExec
+        onScriptStarted: {
+            loadingPopup.open()
+        }
+        onScriptFinished:{
+            runTranscriptionScript(file_path, lang)
+        }
+        onScriptError: (error)=>{
+                           console.log("Python Error:", error)
+                       }
+
+        onScriptOutput: (value) => {
+                            console.log(value)
+                        }
+
     }
 
 
@@ -60,19 +73,19 @@ Window {
         id: stack_view
         initialItem: import_window_component
         anchors.fill: parent
+        clip: true
     }
 
     Component {
         id: import_window_component
 
-
         ImportWindow {
             id: import_window
             onImportFileEvent: {
-                let filePath = import_window.loadedFilePath;
-                file_path= filePath
-                let lang= import_window.selectedLanguageCode
-                runTranscriptionScript(filePath, lang)
+                file_path = import_window.loadedFilePath;
+                // runTranscriptionScript(filePath, lang)
+                runThumbnailsGenerationScript(file_path)
+                lang= import_window.selectedLanguageCode
             }
         }
     }
@@ -105,6 +118,11 @@ Window {
     function runTranscriptionScript(filePath, spokenLang){
         pythonExec.executeTranscription([filePath, spokenLang])
     }
+
+    function runThumbnailsGenerationScript(filePath) {
+        thumbnailExec.executeThumbnailsGeneration([filePath])
+    }
+
 
 
     /**

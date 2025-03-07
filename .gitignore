@@ -11,11 +11,10 @@ Data/
 API/tmp/*.json
 API/tmp/*.srt
 API/tmp/*.txt
+API/tmp/thumbnails/
 API/exports/*.json
 API/exports/*.srt
 API/exports/*.txt
-
-
 # Ingore le dossier pycache
 API/utils/__pycache__/
 API/utils/__pycache__/audio_extractor.cpython-311.pyc

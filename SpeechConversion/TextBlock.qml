@@ -31,6 +31,7 @@ Rectangle {
             font.pixelSize: 12
         }
 
+
         Text {
             topPadding: 0
             text: textToDisplay

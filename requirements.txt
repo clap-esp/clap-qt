@@ -28,6 +28,12 @@ langdetect==1.0.9
 pydub==0.25.1 
 librosa==0.10.2.post1
 moviepy==1.0.3
+opencv-python==4.9.0.80
+
+# dev tools
+# ipykernel  # provides the kernel
+
+
 
 # srt
 pysrt==1.1.2

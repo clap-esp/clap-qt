@@ -6,6 +6,7 @@ import QtQuick.Layouts
 import "../SpeechConversion"
 import "../Video"
 import "../Utils"
+import "../Timeline"
 
 RowLayout{
     id: root
@@ -51,51 +52,9 @@ RowLayout{
                 radius:10
 
 
-                // Rectangle{
-                //     radius:35
-                //     width:150
-                //     height: 30
-                //     color: 'white'
-                //     anchors.topMargin: 20
-                //     anchors.bottomMargin: 20
-                //     anchors.right: parent.right
-
-
-                //     Row{
-                //         anchors.horizontalCenter: parent.horizontalCenter
-                //         anchors.verticalCenter: parent.verticalCenter
-                //         spacing: 10
-
-                //         Image{
-                //             source: '../images/exportation.png'
-                //             width:16
-                //             height: 16
-                //             anchors.leftMargin: 20
-                //         }
-
-                //         Text{
-                //             text: 'Exporter'
-
-                //         }
-                //     }
-
-
-                //     MouseArea{
-                //         anchors.fill: parent
-                //         cursorShape: Qt.PointingHandCursor
-                //     }
-
-
-
-                // }
-
                 VideoWidget{
                     id: video_widget
-                    anchors.top:video_container.top
                     videoSource: root.videoSourcePath
-                    onManagePlayer: (value)=>{
-                                        translation_widget.stopValue=value
-                                    }
 
                 }
             }
@@ -108,7 +67,10 @@ RowLayout{
             Layout.fillWidth: true
             Layout.fillHeight: true
             radius:10
-            // VideoTimeline{}
+            TimelineView {
+                id: timeline_widget
+                videoPlayer: video_widget.mediaPlayer
+            }
         }
     }
 }
