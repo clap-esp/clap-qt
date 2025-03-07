@@ -34,310 +34,310 @@ Item {
     }
 
     PythonExecutor {
-           id: scriptExec
-           onScriptStarted: {
-               translation_loading=true
-           }
+        id: scriptExec
+        onScriptStarted: {
+            translation_loading=true
+        }
 
-           onScriptOutput: (output)=>{
-                console.log(output)
-            }
+        onScriptOutput: (output)=>{
+                            console.log(output)
+                        }
 
-           onScriptFinished:{
-               translation_loading=false
-               translation_done=true
-               readFile('translation')
+        onScriptFinished:{
+            translation_loading=false
+            translation_done=true
+            readFile('translation')
 
-           }
-           onScriptError: (error)=>{
-                hasError= true
-                console.log(error)
-            }
+        }
+        onScriptError: (error)=>{
+                           hasError= true
+                           console.log(error)
+                       }
     }
 
     ColumnLayout {
-            anchors.fill: parent
-            spacing: 5
+        anchors.fill: parent
+        spacing: 5
 
-            TabBar {
-                id: tabBar
-                Layout.fillWidth: true
-                background: Rectangle {
-                    color: constants.panel_background_color
-                }
+        TabBar {
+            id: tabBar
+            Layout.fillWidth: true
+            background: Rectangle {
+                color: constants.panel_background_color
+            }
+            Material.theme: Material.Light
+            Material.accent: Material.Purple
+
+            TabButton {
+                text: "Sous-titre"
+                font.pixelSize: 14
+                checkable: true
+                width: 100
                 Material.theme: Material.Light
+                Material.foreground: 'white'
                 Material.accent: Material.Purple
+                background: Rectangle {
+                    color: tabBar.currentIndex === 0 ? constants.default_widget_background_color : constants.default_widget_background_color
+                    radius:8
 
-                TabButton {
-                    text: "Sous-titre"
-                    font.pixelSize: 14
-                    checkable: true
-                    width: 100
-                    Material.theme: Material.Light
-                    Material.foreground: 'white'
-                    Material.accent: Material.Purple
-                    background: Rectangle {
+                    Rectangle{
+                        y: parent.height/2
+                        height: parent.height/2
+                        radius: 0
+                        width: parent.width
                         color: tabBar.currentIndex === 0 ? constants.default_widget_background_color : constants.default_widget_background_color
-                        radius:8
-
-                        Rectangle{
-                            y: parent.height/2
-                            height: parent.height/2
-                            radius: 0
-                            width: parent.width
-                            color: tabBar.currentIndex === 0 ? constants.default_widget_background_color : constants.default_widget_background_color
-                        }
                     }
                 }
-
-                TabButton {
-                    text: "Traduction"
-                    font.pixelSize: 14
-                    checkable: true
-                    width: 100
-                    Material.theme: Material.Light
-                    Material.foreground: 'white'
-                    Material.accent: Material.Purple
-                    background: Rectangle {
-                        color: tabBar.currentIndex === 1 ? constants.default_widget_background_color : constants.default_widget_background_color
-                        radius:8
-
-                        Rectangle{
-                            y: parent.height/2
-                            height: parent.height/2
-                            radius: 0
-                            width: parent.width
-                            color: tabBar.currentIndex === 1 ? constants.default_widget_background_color: constants.default_widget_background_color
-                        }
-                    }
-                }
-
             }
 
-            StackLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                currentIndex: tabBar.currentIndex
-                Rectangle {
-                    color: constants.default_widget_background_color
-                    radius: 10
-                    ColumnLayout {
-                        anchors.fill: parent
-                        spacing: 10
+            TabButton {
+                text: "Traduction"
+                font.pixelSize: 14
+                checkable: true
+                width: 100
+                Material.theme: Material.Light
+                Material.foreground: 'white'
+                Material.accent: Material.Purple
+                background: Rectangle {
+                    color: tabBar.currentIndex === 1 ? constants.default_widget_background_color : constants.default_widget_background_color
+                    radius:8
 
-                        Rectangle {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            color: constants.default_widget_background_color
-                            radius: 10
-                            clip: true
-
-                            Text{
-                                text: 'SOUS-TITRE INDISPONIBLE'
-                                anchors.centerIn: parent
-                                visible: hasError
-                                color: 'white'
-                                font.pixelSize: 20
-                                font.bold: true
-                            }
-
-                            ListView {
-                                         id: listViewTranscription
-                                         anchors.fill: parent
-                                         anchors.top: parent.top
-                                         anchors.topMargin: 50
-                                         visible: !hasError
-                                         spacing:10
-                                           model: ListModel {}
-                                           z:2
-                                           delegate: Item {
-                                               height: 50
-                                               width: parent?.width
-                                               TextBlock{
-                                                   id: textBlockTranscription
-                                                   textToDisplay: model.text
-                                                   timeCode: model.timeCode
-                                               }
-                                           }
-
-                                           ScrollBar.vertical: ScrollBar {
-                                               anchors.right: parent.right
-                                               policy: listViewTranscription.contentHeight > listViewTranscription.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-                                               active: hovered || pressed
-                                               contentItem: Rectangle {
-                                                          color: constants.scrollbar_color
-                                                          radius: 4
-                                                 }
-                                               snapMode: ScrollBar.SnapOnRelease
-                                           }
-
-                                     }
-
-                        }
+                    Rectangle{
+                        y: parent.height/2
+                        height: parent.height/2
+                        radius: 0
+                        width: parent.width
+                        color: tabBar.currentIndex === 1 ? constants.default_widget_background_color: constants.default_widget_background_color
                     }
                 }
+            }
 
+        }
 
-                Rectangle {
-                    color: constants.default_widget_background_color
-                    radius:10
+        StackLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            currentIndex: tabBar.currentIndex
+            Rectangle {
+                color: constants.default_widget_background_color
+                radius: 10
+                ColumnLayout {
+                    anchors.fill: parent
+                    spacing: 10
 
-                    ColumnLayout{
-                        anchors.fill: parent
-                        spacing: 5
-                        Row{
-                            id:container
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 10
-                            Layout.leftMargin: 20
-                            Layout.topMargin: 20
-                            spacing: parent.width - (choosen_language.width + settings.width +40)
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        color: constants.default_widget_background_color
+                        radius: 10
+                        clip: true
+
+                        Text{
+                            text: 'SOUS-TITRE INDISPONIBLE'
+                            anchors.centerIn: parent
+                            visible: hasError
+                            color: 'white'
+                            font.pixelSize: 20
+                            font.bold: true
+                        }
+
+                        ListView {
+                            id: listViewTranscription
+                            anchors.fill: parent
+                            anchors.top: parent.top
+                            anchors.topMargin: 50
                             visible: !hasError
-                            Text{
-                                id: choosen_language
-                                color: 'white'
-                                text: findLanguage(currentLanguage)
-                                font.pixelSize: 12
-                            }
-
-                            Image{
-                                id: settings
-                                source: '../images/translate.png'
-                                width:16
-                                height:16
-
-                                anchors.rightMargin: 20
-
-                                MouseArea{
-                                    anchors.fill: parent
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: languageMenu.open()
-
+                            spacing:10
+                            model: ListModel {}
+                            z:2
+                            delegate: Item {
+                                height: 50
+                                width: parent?.width
+                                TextBlock{
+                                    id: textBlockTranscription
+                                    textToDisplay: model.text
+                                    timeCode: model.timeCode
                                 }
                             }
 
-
-
-                        }
-
-
-                        Menu {
-                            id: languageMenu
-                            x: settings.x-width+10
-                            y: settings.y+ settings.height
-                            Material.theme: Material.Dark
-                            Material.background: constants.default_widget_background_color
-                            Material.foreground: 'white'
-                            contentHeight: speech.height-10
-                            Repeater{
-                                model: codeIso.codeIso
-                                MenuItem {
-                                    required property var modelData
-                                    text:modelData.lang;
-                                    onTriggered: setLanguage(modelData.code);
+                            ScrollBar.vertical: ScrollBar {
+                                anchors.right: parent.right
+                                policy: listViewTranscription.contentHeight > listViewTranscription.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                active: hovered || pressed
+                                contentItem: Rectangle {
+                                    color: constants.scrollbar_color
+                                    radius: 4
                                 }
-
+                                snapMode: ScrollBar.SnapOnRelease
                             }
 
                         }
 
-                        Rectangle{
-                            Layout.fillWidth:  true
-                            Layout.preferredHeight: parent.height-120
-                            // Layout.preferredHeight: parent.height-10
-                            color: 'transparent'
+                    }
+                }
+            }
 
-                            Text{
-                                text: 'TRADUCTION INDISPONIBLE'
-                                anchors.centerIn: parent
-                                visible: hasError
-                                color: 'white'
-                                font.pixelSize: 20
-                                font.bold: true
+
+            Rectangle {
+                color: constants.default_widget_background_color
+                radius:10
+
+                ColumnLayout{
+                    anchors.fill: parent
+                    spacing: 5
+                    Row{
+                        id:container
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 10
+                        Layout.leftMargin: 20
+                        Layout.topMargin: 20
+                        spacing: parent.width - (choosen_language.width + settings.width +40)
+                        visible: !hasError
+                        Text{
+                            id: choosen_language
+                            color: 'white'
+                            text: findLanguage(currentLanguage)
+                            font.pixelSize: 12
+                        }
+
+                        Image{
+                            id: settings
+                            source: '../images/translate.png'
+                            width:16
+                            height:16
+
+                            anchors.rightMargin: 20
+
+                            MouseArea{
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: languageMenu.open()
+
+                            }
+                        }
+
+
+
+                    }
+
+
+                    Menu {
+                        id: languageMenu
+                        x: settings.x-width+10
+                        y: settings.y+ settings.height
+                        Material.theme: Material.Dark
+                        Material.background: constants.default_widget_background_color
+                        Material.foreground: 'white'
+                        contentHeight: speech.height-10
+                        Repeater{
+                            model: codeIso.codeIso
+                            MenuItem {
+                                required property var modelData
+                                text:modelData.lang;
+                                onTriggered: setLanguage(modelData.code);
                             }
 
-                            BusyIndicator{
-                                running: translation_loading
-                                anchors.centerIn: parent
-                                Material.background: Material.Purple
-                                Material.accent: Material.DeepPurple
-                            }
+                        }
 
-                            ListView {
-                                         id: listViewTranslation
-                                         anchors.fill: parent
-                                         anchors.top: parent.top
-                                         anchors.topMargin: 25
-                                         visible: !translation_loading
-                                         spacing:10
-                                           model: ListModel {
-                                           id: translationListModel}
-                                           z:2
-                                           delegate: Item {
-                                               height: 50
-                                               width: parent?.width
-                                               TextBlock{
-                                                   id: textBlockTranslation
-                                                   textToDisplay: model.text
-                                                   timeCode: model.timeCode
-                                               }
-                                           }
+                    }
 
-                                           ScrollBar.vertical: ScrollBar {
-                                               anchors.right: parent.right
-                                               policy: listViewTranslation.contentHeight > listViewTranslation.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-                                               active: hovered || pressed
-                                               contentItem: Rectangle {
-                                                          color: constants.scrollbar_color
-                                                          radius: 4
-                                                 }
-                                               snapMode: ScrollBar.SnapOnRelease
-                                           }
+                    Rectangle{
+                        Layout.fillWidth:  true
+                        Layout.preferredHeight: parent.height-120
+                        // Layout.preferredHeight: parent.height-10
+                        color: 'transparent'
+
+                        Text{
+                            text: 'TRADUCTION INDISPONIBLE'
+                            anchors.centerIn: parent
+                            visible: hasError
+                            color: 'white'
+                            font.pixelSize: 20
+                            font.bold: true
+                        }
+
+                        BusyIndicator{
+                            running: translation_loading
+                            anchors.centerIn: parent
+                            Material.background: Material.Purple
+                            Material.accent: Material.DeepPurple
+                        }
+
+                        ListView {
+                            id: listViewTranslation
+                            anchors.fill: parent
+                            anchors.top: parent.top
+                            anchors.topMargin: 25
+                            visible: !translation_loading
+                            spacing:10
+                            model: ListModel {
+                                id: translationListModel}
+                            z:2
+                            delegate: Item {
+                                height: 50
+                                width: parent?.width
+                                TextBlock{
+                                    id: textBlockTranslation
+                                    textToDisplay: model.text
+                                    timeCode: model.timeCode
                                 }
+                            }
+
+                            ScrollBar.vertical: ScrollBar {
+                                anchors.right: parent.right
+                                policy: listViewTranslation.contentHeight > listViewTranslation.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                active: hovered || pressed
+                                contentItem: Rectangle {
+                                    color: constants.scrollbar_color
+                                    radius: 4
+                                }
+                                snapMode: ScrollBar.SnapOnRelease
+                            }
                         }
                     }
                 }
             }
         }
+    }
 
     Timer {
-                 id: processTimer
-                 interval: interval
-                 repeat: false
-                 onTriggered: {
-                     if (index < transcriptionData.length || index < translationData.length) {
-                         if(!stopValue){
-                             let element = transcriptionData[index];
-                             // listViewTranscription.model.append({
-                             //                        text: element.text,
-                             //                        timeCode: formatSeconds(element.time_start)
-                             //                    });
-                             // listViewTranscription.currentIndex = listViewTranscription.count - 1;
-                             // listViewTranscription.forceLayout()
-                             // interval= (element.time_end - element.time_start) * 1000
-                             // index++;
+        id: processTimer
+        interval: interval
+        repeat: false
+        onTriggered: {
+            if (index < transcriptionData.length || index < translationData.length) {
+                if(!stopValue){
+                    let element = transcriptionData[index];
+                    // listViewTranscription.model.append({
+                    //                        text: element.text,
+                    //                        timeCode: formatSeconds(element.time_start)
+                    //                    });
+                    // listViewTranscription.currentIndex = listViewTranscription.count - 1;
+                    // listViewTranscription.forceLayout()
+                    // interval= (element.time_end - element.time_start) * 1000
+                    // index++;
 
-                        }
-                          processTimer.start();
-                     }
+                }
+                processTimer.start();
+            }
 
-                     if(index < translationData.length){
-                         if(!stopValue){
-                             let element = translationData[index];
-                             // listViewTranslation.model.append({
-                             //                        text: element.text,
-                             //                        timeCode: formatSeconds(element.time_start)
-                             //                    });
-                             // listViewTranslation.currentIndex = listViewTranslation.count - 1;
-                             // 0listViewTranslation.forceLayout()
-                             // interval= (element.time_end - element.time_start) * 1000
-                             // index++;
+            if(index < translationData.length){
+                if(!stopValue){
+                    let element = translationData[index];
+                    // listViewTranslation.model.append({
+                    //                        text: element.text,
+                    //                        timeCode: formatSeconds(element.time_start)
+                    //                    });
+                    // listViewTranslation.currentIndex = listViewTranslation.count - 1;
+                    // 0listViewTranslation.forceLayout()
+                    // interval= (element.time_end - element.time_start) * 1000
+                    // index++;
 
-                        }
-                          processTimer.start();
-                     }
-                 }
-             }
+                }
+                processTimer.start();
+            }
+        }
+    }
 
 
     /**
@@ -363,12 +363,12 @@ Item {
 
                     for(const transcription of transcriptionData){
                         listViewTranscription.model.append({
-                                               text: transcription.text,
-                                               timeCode: formatSeconds(transcription.time_start)
-                                           });
+                                                               text: transcription.text,
+                                                               timeCode: formatSeconds(transcription.time_start)
+                                                           });
                     }
 
-                     processTimer.start();
+                    processTimer.start();
                 }
             }else{
                 translationData = JSON.parse(xhr.responseText);
@@ -377,9 +377,9 @@ Item {
                     translationListModel.clear()
                     for(const translation of translationData){
                         listViewTranslation.model.append({
-                                               text: translation.text,
-                                               timeCode: formatSeconds(translation.time_start)
-                                           });
+                                                             text: translation.text,
+                                                             timeCode: formatSeconds(translation.time_start)
+                                                         });
                     }
                 }else{
                     console.log('no translation')
@@ -429,11 +429,11 @@ Item {
 
         }else{
             const iso= codeIso.codeIso.find(iso=> iso['code']===lang)
-             if(iso){
-                 return `Traduit en ${iso['lang']}`
-             }else{
-                 return ''
-             }
+            if(iso){
+                return `Traduit en ${iso['lang']}`
+            }else{
+                return ''
+            }
         }
 
 
