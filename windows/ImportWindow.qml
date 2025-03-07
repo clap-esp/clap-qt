@@ -1,67 +1,96 @@
+import notification.type 1.0
 import QtQuick
 import QtCore
+import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Dialogs
 
+import '../Utils'
+import '../Utils/Notification'
+import "../Notification"
+import python.executor 1.0
+/**
+  * IMPORT WINDOW
+**/
 Rectangle {
+
+    readonly property var constants: Constants { }
+    readonly property var errors: Error {}
+    property string loadedFilePath: qsTr("")
+    property bool projectCreated: false
+
+    signal projectCreatedEvent(bool created)
+
     id: root
     anchors.centerIn: parent
-    width: 700
-    height: 415
-    color: "#484848"
+    width: parent.width
+    height: parent.height
+    color: constants.default_widget_background_color
 
-    property string loadedFilePath: qsTr("")
     signal importFileEvent(string processedVideoPath)
 
-    // Permet d'avoir la zone de drag and drop en pointillet
+    NotificationWidget{
+        id: notification
+    }
     Canvas {
         id: dottedBorderCanvas
-        anchors.fill: parent
+        width: parent.width/2
+        height: parent.height/2
+        anchors.centerIn: parent
         onPaint: {
             var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height); // Effacer le canvas
-            ctx.setLineDash([5, 5]); // Définit le motif des pointillés : 5px trait, 5px espace
-            ctx.strokeStyle = "black"; // Couleur de la bordure
-            ctx.lineWidth = 5; // Largeur de la bordure
-            ctx.strokeRect(0, 0, width, height); // Dessine le rectangle avec une bordure en pointillé
+            ctx.clearRect(0, 0, width, height);
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 5;
+            ctx.strokeRect(0, 0, width, height);
         }
     }
 
-    // Zone de drag and drop
     DropArea {
         anchors.fill: parent
         onEntered: (drag) => {
-                       root.color = "#cccccc";
+                       root.color = constants.on_drag_background_color;
                        drag.accept(Qt.LinkAction);
                    }
         onDropped: (drop) => {
-                       import_file(drop.urls[0]);
-                       root.color = "transparent";
+                       if (drop.urls.length > 0 && drop.urls[0] !== undefined) {
+                           let filePath = drop.urls[0].toString();
+
+                           if(!filePath.match(/\.(mp4|avi|mov|m4a|mkv)$/i)) {
+                               fileNotAVideoDialog.open();
+                               console.log("Error: Le fichier sélectionné n'est pas une vidéo.");
+                               root.color = "transparent";
+                               return;
+                           }
+
+                           root.color = "transparent";
+                           fileDialog.close();
+                           openProjectDialog(filePath)
+                       }
                    }
         onExited: {
             root.color = "transparent";
         }
     }
 
-    // Icone de la caméra
     Image {
         id: cameraImage
         source: "../images/camera.png"
-        anchors.top: parent.top
-        anchors.topMargin: 50
-        anchors.left: parent.left
-        anchors.leftMargin: 255
-        width: 200
-        height: 170
+        anchors.top: dottedBorderCanvas.top
+        anchors.horizontalCenter: dottedBorderCanvas.horizontalCenter
+        anchors.topMargin: 20
+        width: parent.width/9
+        height: parent.height/7
     }
 
-    // Bouton pour importer une vidéo
     Rectangle {
         id: importButton
-        width: 300
+        width: parent.width/4
         height: 45
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: cameraImage.top
-        anchors.topMargin: 195
+        anchors.top: cameraImage.bottom
+        anchors.topMargin: 30
         color: "#dddddd"
         radius: 25
 
@@ -70,31 +99,24 @@ Rectangle {
             font.pixelSize: 20
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-        }
+            wrapMode: Text.Wrap
 
-        Image {
-            source: "../images/camera.png"
-            width: 25
-            height: 25
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 20
         }
 
         MouseArea {
             anchors.fill: parent
             onClicked: fileDialog.open()
+            cursorShape: Qt.PointingHandCursor
 
             onPressed: {
-                importButton.color = "#bbbbbb";
+                importButton.color = constants.active_button;;
             }
 
             onReleased: {
-                importButton.color = "#dddddd";
+                importButton.color = constants.normal_button;
             }
         }
 
-        // Texte pour glisser le fichier
         Text {
             text: qsTr("ou glissez votre fichier ici")
             anchors.horizontalCenter: parent.horizontalCenter
@@ -102,19 +124,112 @@ Rectangle {
             anchors.topMargin: 70
             font.pixelSize: 20
             color: "white"
+            MouseArea {
+                cursorShape: Qt.PointingHandCursor
+                anchors.fill: parent
+
+            }
         }
 
         FileDialog {
             id: fileDialog
+            nameFilters: constants.accepted_extension
             currentFolder: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
-            onAccepted: import_file(fileDialog.selectedFile)
+            onAccepted: {
+                openProjectDialog(fileDialog.selectedFile)
+            }
         }
     }
 
+    Dialog {
+        id: projectExistsDialog
+        title: "Erreur"
+        parent: root
+        modal: true
+        dim: true
+        width: parent.width / 4
+        height: parent.height / 5
+        standardButtons: Dialog.Ok
+        anchors.centerIn: parent
+        closePolicy: Popup.NoAutoClose
+        Material.background: constants.background_color
+        Material.foreground: "white"
+
+        Text {
+            id: projectExistsText
+            text: qsTr("Un projet avec ce nom existe déjà. \nVeuillez choisir un autre nom.")
+            color: "white"
+            font.pixelSize: 14
+        }
+
+        onAccepted: projectDialog.open()
+    }
+
+    Dialog {
+        id: projectDialog
+        title: "Nom du projet"
+        parent: root
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        anchors.centerIn: parent
+        modal: true
+        dim: true
+        visible: false
+        width: parent.width / 4
+        height: parent.height / 5
+        closePolicy: Popup.NoAutoClose
+        Material.background: constants.background_color
+        Material.foreground: "white"
+
+        property string selectedFilePath: ""
+
+        TextField {
+            id: projectNameInput
+            width: parent.width
+            height: parent.height + 20
+            font.pixelSize: 14
+            placeholderText: "Entrez un nom de projet"
+            placeholderTextColor: "white"
+            Material.foreground: "white"
+            Material.accent: "white"
+        }
+
+        onAccepted: {
+            if (selectedFilePath !== "" && selectedFilePath !== undefined) {
+                let cleanedFilePath = selectedFilePath.replace("file:///", "");
+                cleanedFilePath = cleanedFilePath.replace(/%20/g, " ");
+
+                let projectPath = projectManager.createProject(cleanedFilePath, projectNameInput.text)
+                if (projectPath.startsWith("Error")) {
+                    console.log(projectPath)
+
+                    if(projectPath === "Error: Project name already exists.") {
+                        projectExistsDialog.open();
+                    }
+                } else {
+                    console.log("Project créé dans : " + projectPath)
+                    projectCreated = true;
+                    import_file(fileDialog.selectedFile)
+                }
+            } else {
+                console.log("Error: No file selected.");
+            }
+        }
+    }
+
+    function openProjectDialog(filePath) {
+        projectDialog.selectedFilePath = filePath;
+        projectDialog.open();
+    }
+
     function import_file(file_path) {
-        // TODO
-        loadedFilePath = file_path
-        console.log(`Path file : ${loadedFilePath}`)
-        importFileEvent(loadedFilePath);
+
+        const extension=String(file_path).split('.')[1]
+        if(extension && constants.valid_extension.includes(extension)){
+            loadedFilePath = file_path
+            importFileEvent(loadedFilePath);
+        }else{
+            notification.openNotification( errors.error_extension_video, NotificationTypeClass.Error)
+            root.color=constants.default_widget_background_color
+        }
     }
 }

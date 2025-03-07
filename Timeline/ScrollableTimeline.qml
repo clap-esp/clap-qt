@@ -8,76 +8,84 @@ Item {
 
     property alias contentWidth: trackContainer.width
     property MediaPlayer externalVideoPlayer
+    property var videoClipInstance: null
 
-    width: prent.width
-    height: 100
-    anchors.bottom: parent.bottom
-    clip: true
+    Layout.fillWidth: true
+    Layout.fillHeight: true
 
     Rectangle {
         id: timelineBackground
-        width: parent.width
-        height: parent.height - 200
-        color: "#1c1c1c"
+        anchors.fill: parent
+        color: "#cecece"
         radius: 5
-    }
+        anchors.margins: 10
 
-    Flickable {
-        id: trackContainer
-        width: parent.width
-        height: parent.height
-        contentWidth: trackLayout.width
-        clip: true
+        Flickable {
+            id: trackContainer
+            anchors.fill: parent
+            contentWidth: trackLayout.width
 
-        RowLayout {
-            id: trackLayout
-            width: trackContainer.contentWidth
-            height: parent.height
-            spacing: 5
+            RowLayout {
+                id: trackLayout
+                anchors.fill: parent
+                Layout.rightMargin: 20
+                Layout.leftMargin: 20
+                Layout.alignment: Qt.AlignVCenter
+            }
+        }
+
+        Rectangle {
+            id: centerPlayhead
+            width: 4
+            height: timelineBackground.height
+            color: "red"
+            anchors.horizontalCenter: parent.horizontalCenter
+            z: 10
         }
     }
 
-    Rectangle {
-        id: centerPlayhead
-        width: 4
-        height: parent.height - 200
-        color: "red"
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    function addClip(videoSource) {
-        console.log("[DEBUG] addClip appelé avec :", videoSource);
+    function addClip(player) {
+        console.log("[DEBUG] addClip appelé avec :", player.source);
 
         let component = Qt.createComponent("VideoClip.qml");
-
-        console.log("[DEBUG] Statut du composant VideoClip :", component.status);
-
         if (component.status === Component.Ready) {
-            console.log("[DEBUG] Création de l'objet VideoClip...");
-            let clip = component.createObject(trackLayout, { videoSource: videoSource });
+            videoClipInstance = component.createObject(trackLayout, {
+                                                           timelineVideoPlayer: player,
+                                                           clipDuration: player.duration,
+                                                           parent: trackLayout
+                                                       });
 
-            if (clip !== null) {
-                console.log("[DEBUG] Clip vidéo ajouté !");
+            if (videoClipInstance !== null) {
+                videoClipInstance.Layout.alignment = Qt.AlignVCenter;
+                videoClipInstance.x = centerPlayhead.x - (videoClipInstance.width / 2);
             } else {
                 console.warn("[ERROR] Impossible de créer le clip vidéo !");
             }
         } else {
             console.warn("[ERROR] Problème de chargement du composant VideoClip.qml !");
-            console.warn("[ERROR] Statut du composant :", component.status, " (0 = Null, 1 = Ready, 2 = Loading, 3 = Error)");
         }
     }
 
     Connections {
         target: externalVideoPlayer
         function onPositionChanged() {
-            if (externalVideoPlayer && externalVideoPlayer.duration > 0) {
+            if (externalVideoPlayer && externalVideoPlayer.duration > 0 && videoClipInstance) {
                 let progressRatio = externalVideoPlayer.position / externalVideoPlayer.duration;
-                let maxScroll = trackContainer.contentWidth - scrollableTimeline.width;
+                let maxOffset = videoClipInstance.width;
 
-                if (maxScroll > 0) {
-                    trackContainer.contentX = progressRation * maxScroll;
-                }
+                videoClipInstance.x = centerPlayhead.x - (progressRatio * maxOffset);
+                console.log("[DEBUG] Déplacement du VideoClip : ", videoClipInstance.x);
             }
+        }
+    }
+
+    Connections {
+        target: externalVideoPlayer
+        enabled: true
+        function onDurationChanged() {
+            console.log("[DEBUG] Durée de la vidéo mise à jour :", externalVideoPlayer.duration);
+            addClip(externalVideoPlayer);
+            enabled = false;
         }
     }
 }

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 import QtMultimedia
 
 Item {
@@ -8,70 +9,56 @@ Item {
     property MediaPlayer videoPlayer
     property bool sliderPressed: false
 
-    width: parent.width - 20
-    height: (parent.height * 0.5) - 40
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-    anchors.leftMargin: 10
-    anchors.rightMargin: 10
+    anchors.fill: parent
 
-    Rectangle {
-        id: background
-        width: parent.width
-        height: parent.height
-        color: "#1c1c1c"
-        radius: 10
-    }
-
-    Rectangle {
-        id: timeline
-        width: parent.width - 20
-        height: 50
-        color: "#333"
-        radius: 5
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 10
+    ColumnLayout {
+        id: mainLayout
+        anchors.fill: parent
+        spacing: 10
 
         Rectangle {
-            id: playhead
-            width: 4
-            height: parent.height
-            color: "red"
-            x: (videoPlayer && videoPlayer.duration > 0) ?
-                   (videoPlayer.position / videoPlayer.duration) * timeline.width : 0
-            Behavior on x {
-                NumberAnimation { duration: 100; easing.type: Easing.Linear }
+            id: timeline
+            Layout.fillWidth: true
+            Layout.preferredHeight: 50
+            color: "#cecece"
+            radius: 5
+            Layout.alignment: Qt.AlignTop
+            Layout.margins: 10
+
+            Rectangle {
+                id: playhead
+                width: 4
+                height: parent.height
+                color: "red"
+                x: (videoPlayer && videoPlayer.duration > 0) ?
+                   (videoPlayer.position / videoPlayer.duration) * (timeline.width - playhead.width) : 0
+                Behavior on x {
+                    NumberAnimation { duration: 100; easing.type: Easing.Linear }
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onPressed: sliderPressed = true
+                onReleased: sliderPressed = false
+                onClicked: function(mouse) {
+                    if (videoPlayer && videoPlayer.duration > 0) {
+                        let newTime = (mouse.x / (timeline.width - playhead.width)) * videoPlayer.duration;
+                        videoPlayer.position = newTime;
+                        playhead.x = mouse.x;
+                    }
+                }
             }
         }
 
-        MouseArea {
-            anchors.fill: parent
-            onPressed: sliderPressed = true
-            onReleased: sliderPressed = false
-            onClicked: (mouse) => {
-                           if (videoPlayer) {
-                               let newTime = (mouse.x / timeline.width) * videoPlayer.duration;
-                               if (Math.abs(newTime - videoPlayer.position) > 500) {
-                                   videoPlayer.position = newTime;
-                               }
-                           }
-                       }
-        }
-    }
-
-    ScrollableTimeline {
-        id: scrollableTimeline
-        width: parent.width
-        height: parent.height * 0.5
-        anchors.top: timeline.bottom
-        anchors.topMargin: 10
-        clip: true
-        Component.onCompleted: {
-            console.log("[DEBUG] Assigning externalVideoPlayer in ScrollableTimeline...");
-            scrollableTimeline.externalVideoPlayer = videoPlayer;
-            console.log("[DEBUG] ScrollableTimeline.externalVideoPlayer: " + scrollableTimeline.externalVideoPlayer);
+        ScrollableTimeline {
+            id: scrollableTimeline
+            Component.onCompleted: {
+                scrollableTimeline.externalVideoPlayer = videoPlayer;
+                if (videoPlayer) {
+                    addVideoClip(videoPlayer);
+                }
+            }
         }
     }
 
@@ -79,23 +66,21 @@ Item {
         target: videoPlayer
         function onPositionChanged() {
             if (!sliderPressed) {
-                let newX = (videoPlayer.position / videoPlayer.duration) * timeline.width;
-                if (Math.abs(newX - playhead.x) > 2) {
-                    playhead.x = newX;
-                }
+                let progress = videoPlayer.position / videoPlayer.duration;
+                let newX = progress * (timeline.width - playhead.width);
+                playhead.x = newX;
             }
         }
     }
 
-    function addVideoClip(videoPath) {
-        console.log("[DEBUG] Ajout du clip vidéo :", videoPath);
-        scrollableTimeline.addClip(videoPath);
+    function addVideoClip(player) {
+        scrollableTimeline.addClip(player);
     }
 
-    onVideoPlayerChanged: {
-        if (videoPlayer && videoPlayer.source) {
-            console.log("[DEBUG] Vidéo détectée dans TimelineView :", videoPlayer.source);
-            addVideoClip(videoPlayer.source);
-        }
-    }
+    // onVideoPlayerChanged: {
+    //     if (videoPlayer) {
+    //         console.log("[DEBUG] Vidéo détectée dans TimelineView :", videoPlayer.source);
+    //         addVideoClip(videoPlayer);
+    //     }
+    // }
 }
