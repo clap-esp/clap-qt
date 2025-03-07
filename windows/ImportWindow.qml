@@ -253,7 +253,7 @@ Rectangle {
         standardButtons: Dialog.Ok
         anchors.centerIn: parent
         closePolicy: Popup.NoAutoClose
-        Material.background: constants.background_color
+        Material.background: constants.panel_background_color
         Material.foreground: "white"
 
         Text {
@@ -276,17 +276,18 @@ Rectangle {
         dim: true
         visible: false
         width: parent.width / 4
-        height: parent.height / 5
+        height: parent.height / 5 + 100
         closePolicy: Popup.NoAutoClose
-        Material.background: constants.background_color
-        Material.foreground: "white"
+        Material.background: constants.panel_background_color
+        Material.foreground: Material.DeepPurple
+        Material.accent: Material.DeepPurple
 
         property string selectedFilePath: ""
 
         TextField {
             id: projectNameInput
             width: parent.width
-            height: parent.height + 20
+            height: parent.height/2
             font.pixelSize: 14
             placeholderText: "Entrez un nom de projet"
             placeholderTextColor: "white"

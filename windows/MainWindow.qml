@@ -29,7 +29,7 @@ RowLayout{
             Layout.rightMargin: 15
             spacing: 15
             Rectangle{
-                color: constants.default_widget_background_color//'#383149'
+                color: constants.default_widget_background_color
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 radius:10
@@ -54,6 +54,7 @@ RowLayout{
 
                 VideoWidget{
                     id: video_widget
+                    anchors.top:video_container.top
                     videoSource: root.videoSourcePath
 
                 }
@@ -67,6 +68,7 @@ RowLayout{
             Layout.fillWidth: true
             Layout.fillHeight: true
             radius:10
+            z:3000
             TimelineView {
                 id: timeline_widget
                 videoPlayer: video_widget.mediaPlayer
