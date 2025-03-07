@@ -8,7 +8,7 @@ logger= build_logger('THUMBNAILS GENERATION', level=20)
 
 OUTPUT_THUMBNAILS_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..','API','tmp', 'thumbnails')
 
-def generate_thumbnails(video_path, output_folder, interval=3000):
+def generate_thumbnails(video_path, output_folder, interval=1000):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -30,8 +30,10 @@ def generate_thumbnails(video_path, output_folder, interval=3000):
         if not ret:
             break
 
+        resized_frame = cv2.resize(frame, (100,50))
+
         image_path = os.path.join(output_folder, f"thumb_{index}.jpg")
-        cv2.imwrite(image_path, frame)
+        cv2.imwrite(image_path, resized_frame)
 
         thumbnail_data["thumbnails"].append({
             "time": current_time,
