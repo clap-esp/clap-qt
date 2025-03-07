@@ -45,8 +45,6 @@ Item {
     }
 
     function addClip(player) {
-        console.log("[DEBUG] addClip appelé avec :", player.source);
-
         let component = Qt.createComponent("VideoClip.qml");
         if (component.status === Component.Ready) {
             videoClipInstance = component.createObject(trackLayout, {
@@ -74,7 +72,6 @@ Item {
                 let maxOffset = videoClipInstance.width;
 
                 videoClipInstance.x = centerPlayhead.x - (progressRatio * maxOffset);
-                console.log("[DEBUG] Déplacement du VideoClip : ", videoClipInstance.x);
             }
         }
     }
@@ -83,7 +80,6 @@ Item {
         target: externalVideoPlayer
         enabled: true
         function onDurationChanged() {
-            console.log("[DEBUG] Durée de la vidéo mise à jour :", externalVideoPlayer.duration);
             addClip(externalVideoPlayer);
             enabled = false;
         }
