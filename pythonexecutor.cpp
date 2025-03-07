@@ -64,7 +64,7 @@ void PythonExecutor::executeThumbnailsGeneration(const QStringList &args ) {
     QUrl videoUrl(videoFile);
     QString videoPath= videoUrl.toLocalFile();
 
-    scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/Scripts/" + scriptName;
+    scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/API/" + scriptName;
 
     qDebug() << "Chemin final utilisé pour le script Python :" << scriptPath;
 

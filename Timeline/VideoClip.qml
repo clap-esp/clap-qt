@@ -14,20 +14,23 @@ Item {
     property int totalThumbnails: 1
 
     width: Math.max(clipDuration / 10, parent.width * 1.2)
-    height: Math.max(parent.height, 100)
+    height: 50 //Math.max(parent.height, 100)
 
     Rectangle {
         id: videoClipDisplay
         width: parent.width
         height: parent.height
-        color: "#1c1c1c"
+        color: "transparent"
         radius: 5
-        Layout.topMargin: 10
+        // Layout.topMargin: 10
+        Layout.margins: 100
+        z:1
 
         ListView {
             id: thumnailList
             width: parent.width
             height: parent.height
+            z:-100
             orientation: ListView.Horizontal
             model: ListModel { id: thumbnailModel }
 
@@ -38,13 +41,14 @@ Item {
                 Rectangle {
                     width: parent.width
                     height: parent.height
-                    color: "#1c1c1c"
+                    color: "transparent"
 
                     Image {
-                        width: parent.width
+                        width: 50
                         height: parent.height
                         source: model.filePath
                         fillMode: Image.PreserveAspectCrop
+                        verticalAlignment: Image.AlignLeft
                         anchors.fill: parent
                         anchors.margins: 2
                         cache: true

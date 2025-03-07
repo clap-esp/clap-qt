@@ -16,7 +16,7 @@ Item {
     Rectangle {
         id: timelineBackground
         anchors.fill: parent
-        color: "#cecece"
+        color: "transparent"
         radius: 5
         anchors.margins: 10
 
