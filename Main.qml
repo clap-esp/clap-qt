@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Dialogs
 import "windows"
 import 'Utils'
@@ -12,6 +13,8 @@ Window {
     readonly property var constants: Constants { }
     readonly property var messages: Success{}
     property string file_path: ''
+    property string lang: 'fr'
+    property bool hasError: false
 
     id: root
 
@@ -52,10 +55,7 @@ Window {
             loadingPopup.open()
         }
         onScriptFinished:{
-            runTranscriptionScript(file_path)
-            // loadingPopup.close();
-            // createMainWidget(file_path)
-
+            runTranscriptionScript(file_path, lang)
         }
         onScriptError: (error)=>{
                            console.log("Python Error:", error)
@@ -67,6 +67,8 @@ Window {
 
     }
 
+
+
     StackView {
         id: stack_view
         initialItem: import_window_component
@@ -76,13 +78,14 @@ Window {
 
     Component {
         id: import_window_component
+
         ImportWindow {
             id: import_window
             onImportFileEvent: {
-                let filePath = import_window.loadedFilePath;
-                file_path= filePath
-                // runTranscriptionScript(filePath)
-                runThumbnailsGenerationScript(filePath)
+                file_path = import_window.loadedFilePath;
+                // runTranscriptionScript(filePath, lang)
+                runThumbnailsGenerationScript(file_path)
+                lang= import_window.selectedLanguageCode
             }
         }
     }
@@ -105,11 +108,6 @@ Window {
 
         MainWindow {
             id: main_widget
-
-            width: stack_view.width
-            height: stack_view.height
-
-            anchors.fill: undefined
         }
     }
 
@@ -117,13 +115,15 @@ Window {
     /**
     * Run transcription script
     **/
-    function runTranscriptionScript(filePath){
-        pythonExec.executeTranscription([filePath])
+    function runTranscriptionScript(filePath, spokenLang){
+        pythonExec.executeTranscription([filePath, spokenLang])
     }
 
     function runThumbnailsGenerationScript(filePath) {
         thumbnailExec.executeThumbnailsGeneration([filePath])
     }
+
+
 
     /**
     *
@@ -132,10 +132,10 @@ Window {
     function createMainWidget(processedVideoPath) {
         stack_view.clear()
         let mainWidget = main_widget_component.createObject(stack_view, {
-                                                                "videoSourcePath": processedVideoPath
+                                                                "videoSourcePath": processedVideoPath,
+                                                                "hasTranscriptionError": false
                                                             });
-        root.color = "#000000";
-        stack_view.clear()
+        root.color = constants.panel_background_color
         stack_view.push(mainWidget, StackView.Immediate);
     }
 }
