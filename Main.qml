@@ -30,9 +30,7 @@ Window {
 
     PythonExecutor {
         id: pythonExec
-        onScriptStarted: {
-            loadingPopup.open()
-        }
+
 
         onScriptFinished:{
             loadingPopup.close();
@@ -46,6 +44,27 @@ Window {
         onScriptOutput: (value) => {
                             console.log(value)
                         }
+    }
+
+    PythonExecutor{
+        id: thumbnailExec
+        onScriptStarted: {
+            loadingPopup.open()
+        }
+        onScriptFinished:{
+            runTranscriptionScript(file_path)
+            // loadingPopup.close();
+            // createMainWidget(file_path)
+
+        }
+        onScriptError: (error)=>{
+                           console.log("Python Error:", error)
+                       }
+
+        onScriptOutput: (value) => {
+                            console.log(value)
+                        }
+
     }
 
     StackView {
@@ -62,7 +81,8 @@ Window {
             onImportFileEvent: {
                 let filePath = import_window.loadedFilePath;
                 file_path= filePath
-                runTranscriptionScript(filePath)
+                // runTranscriptionScript(filePath)
+                runThumbnailsGenerationScript(filePath)
             }
         }
     }
@@ -101,9 +121,9 @@ Window {
         pythonExec.executeTranscription([filePath])
     }
 
-    // function runThumbnailsGenerationScript(filePath) {
-    //     pythonExec.executeThumbnailsGeneration([filePath])
-    // }
+    function runThumbnailsGenerationScript(filePath) {
+        thumbnailExec.executeThumbnailsGeneration([filePath])
+    }
 
     /**
     *
