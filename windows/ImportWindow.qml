@@ -356,6 +356,8 @@ Item{
         const extension=String(file_path).split('.')[1]
         if(extension && constants.valid_extension.includes(extension)){
             loadedFilePath = file_path
+
+            console.log(selectedLanguageCode)
             importFileEvent(loadedFilePath, selectedLanguageCode);
         }else{
             notification.openNotification( errors.error_extension_video, NotificationTypeClass.Error)

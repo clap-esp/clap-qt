@@ -13,7 +13,7 @@ Window {
     readonly property var constants: Constants { }
     readonly property var messages: Success{}
     property string file_path: ''
-    property string lang: 'fr'
+    property string selectedLang: ''
     property bool hasError: false
 
     id: root
@@ -55,7 +55,7 @@ Window {
             loadingPopup.open()
         }
         onScriptFinished:{
-            runTranscriptionScript(file_path, lang)
+            runTranscriptionScript(file_path, selectedLang)
         }
         onScriptError: (error)=>{
                            console.log("Python Error:", error)
@@ -83,9 +83,9 @@ Window {
             id: import_window
             onImportFileEvent: {
                 file_path = import_window.loadedFilePath;
-                // runTranscriptionScript(filePath, lang)
                 runThumbnailsGenerationScript(file_path)
-                lang= import_window.selectedLanguageCode
+                selectedLang= import_window.selectedLanguageCode
+                console.log('import window ===> ', selectedLang)
             }
         }
     }
