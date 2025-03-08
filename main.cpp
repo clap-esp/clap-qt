@@ -6,7 +6,6 @@
 #include "pythonexecutor.h"
 #include <QProcessEnvironment>
 #include <QDir>
-#include <QQmlContext>
 
 int main(int argc, char *argv[])
 {
