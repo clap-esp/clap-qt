@@ -8,6 +8,9 @@ logger= build_logger('THUMBNAILS GENERATION', level=20)
 
 OUTPUT_THUMBNAILS_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..','API','tmp', 'thumbnails')
 
+OUTPUT_DEFAULT_PROJECT_THUMBNAIL= os.path.join(OUTPUT_THUMBNAILS_PATH, f"project_thumbnail.jpg")
+
+
 def generate_thumbnails(video_path, output_folder, interval=1000):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
@@ -18,6 +21,7 @@ def generate_thumbnails(video_path, output_folder, interval=1000):
 
     thumbnail_data = {
         "video_path": video_path,
+        "thumbnail_project":OUTPUT_DEFAULT_PROJECT_THUMBNAIL,
         "thumbnails": []
     }
 
@@ -29,6 +33,10 @@ def generate_thumbnails(video_path, output_folder, interval=1000):
         ret, frame = cap.read()
         if not ret:
             break
+
+        if index == 0 :
+            cv2.imwrite(OUTPUT_DEFAULT_PROJECT_THUMBNAIL,frame)
+
 
         resized_frame = cv2.resize(frame, (100,50))
 
