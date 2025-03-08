@@ -15,6 +15,7 @@ QtObject {
         { "code": "ko", "language": "Korean", "lang": "Coréen" },
         { "code": "hr", "language": "Croatian", "lang": "Croate" },
         { "code": "da", "language": "Danish", "lang": "Danois" },
+        {"code": "es", "language": "Spanish", "lang": "Espagnol"},
         { "code": "et", "language": "Estonian", "lang": "Estonien" },
         { "code": "fi", "language": "Finnish", "lang": "Finnois" },
         { "code": "fr", "language": "French", "lang": "Français" },

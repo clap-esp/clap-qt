@@ -22,10 +22,7 @@ qt_add_qml_module(appclap_v1
         windows/ParameterWindow.qml
         windows/MainWindow.qml
         Video/VideoWidget.qml
-        Video/VideoTimeline.qml
         Video/ButtonPlayer.qml
-        Video/VideoSlider.qml
-        Video/TimeCode.qml
         SpeechConversion/TextBlock.qml
         SpeechConversion/SpeechConversionWidget.qml
         SpeechConversion/Header.qml
@@ -55,6 +52,7 @@ qt_add_qml_module(appclap_v1
         API/app_derush.py
         API/app_transcription.py
         API/app_translation.py
+        API/generate_thumbnails.py
         requirements.txt
 
     RESOURCES
@@ -65,6 +63,7 @@ qt_add_qml_module(appclap_v1
         images/video.png
         images/translate.png
         images/exportation.png
+        images/wand.png
         Utils/Icons/camera.png
         Utils/Icons/fast-forward.png
         Utils/Icons/logo.png
@@ -75,8 +74,6 @@ qt_add_qml_module(appclap_v1
         Notification/Icons/error.png
         Notification/Icons/success.png
         Notification/Icons/warning.png
-
-
 
     SOURCES
         main.cpp

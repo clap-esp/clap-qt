@@ -249,12 +249,13 @@ Rectangle {
         modal: true
         dim: true
         width: parent.width / 4
-        height: parent.height / 5
+        height: parent.height / 5 + 50
         standardButtons: Dialog.Ok
         anchors.centerIn: parent
         closePolicy: Popup.NoAutoClose
-        Material.background: constants.background_color
-        Material.foreground: "white"
+        Material.background: constants.panel_background_color
+        Material.foreground: Material.DeepPurple
+        Material.accent: Material.DeepPurple
 
         Text {
             id: projectExistsText
@@ -276,17 +277,18 @@ Rectangle {
         dim: true
         visible: false
         width: parent.width / 4
-        height: parent.height / 5
+        height: parent.height / 5 + 50
         closePolicy: Popup.NoAutoClose
-        Material.background: constants.background_color
-        Material.foreground: "white"
+        Material.background: constants.panel_background_color
+        Material.foreground: Material.DeepPurple
+        Material.accent: Material.DeepPurple
 
         property string selectedFilePath: ""
 
         TextField {
             id: projectNameInput
             width: parent.width
-            height: parent.height + 20
+            height: parent.height/2 +20
             font.pixelSize: 14
             placeholderText: "Entrez un nom de projet"
             placeholderTextColor: "white"

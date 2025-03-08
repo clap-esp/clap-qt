@@ -15,16 +15,19 @@ Item {
 
     Rectangle {
         id: timelineBackground
-        anchors.fill: parent
-        color: "#cecece"
+        width: parent.width
+        height: 50
+        color: "transparent"
         radius: 5
-        anchors.margins: 10
 
         Flickable {
             id: trackContainer
             anchors.fill: parent
-            contentWidth: trackLayout.width
+            anchors.leftMargin:  10
+            anchors.rightMargin:  10
 
+            contentWidth: trackLayout.width
+            clip:true
             RowLayout {
                 id: trackLayout
                 anchors.fill: parent
