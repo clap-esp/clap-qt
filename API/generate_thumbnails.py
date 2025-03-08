@@ -2,10 +2,13 @@ import cv2
 import json
 import os
 import sys
+from utils.logger import build_logger
+
+logger= build_logger('THUMBNAILS GENERATION', level=20)
 
 OUTPUT_THUMBNAILS_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..','API','tmp', 'thumbnails')
 
-def generate_thumbnails(video_path, output_folder, interval=3000):
+def generate_thumbnails(video_path, output_folder, interval=1000):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -27,8 +30,10 @@ def generate_thumbnails(video_path, output_folder, interval=3000):
         if not ret:
             break
 
+        resized_frame = cv2.resize(frame, (100,50))
+
         image_path = os.path.join(output_folder, f"thumb_{index}.jpg")
-        cv2.imwrite(image_path, frame)
+        cv2.imwrite(image_path, resized_frame)
 
         thumbnail_data["thumbnails"].append({
             "time": current_time,
@@ -38,15 +43,13 @@ def generate_thumbnails(video_path, output_folder, interval=3000):
         current_time += interval
         index += 1
 
-        print(f"[LOG] Miniature générée : {image_path}")
-
     cap.release()
 
     json_path = os.path.join(output_folder, "thumbnails.json")
     with open(json_path, "w") as json_file:
         json.dump(thumbnail_data, json_file, indent=4)
-
-    print("[LOG] Toutes les miniatures ont été générées avec succès.")
+    
+    logger.info(f'Toutes les miniatures ont été générées avec succès.')
 
     return json_path
 

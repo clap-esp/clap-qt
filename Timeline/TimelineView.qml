@@ -16,22 +16,100 @@ Item {
         anchors.fill: parent
         spacing: 10
 
+
+        RowLayout{
+            Layout.fillWidth: true
+            Layout.preferredHeight: 50
+            Layout.margins:10
+            spacing:20
+
+            Rectangle{
+                radius:35
+                width:150
+                height: 30
+                color: 'white'
+
+                Row{
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 10
+
+                    Image{
+                        source: '../images/wand.png'
+                        width:16
+                        height: 16
+                        anchors.leftMargin: 20
+                    }
+
+                    Text{
+                        text: 'Dérush'
+
+                    }
+                }
+
+
+                MouseArea{
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                }
+
+
+
+            }
+
+
+            Rectangle{
+                radius:35
+                width:150
+                height: 30
+                color: 'white'
+                Row{
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 10
+
+                    Image{
+                        source: '../images/exportation.png'
+                        width:16
+                        height: 16
+                        anchors.leftMargin: 20
+                    }
+
+                    Text{
+                        text: 'Exporter'
+
+                    }
+                }
+
+
+                MouseArea{
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                }
+
+
+
+            }
+        }
+
         Rectangle {
             id: timeline
             Layout.fillWidth: true
-            Layout.preferredHeight: 50
-            color: "#cecece"
+            Layout.preferredHeight: 10
+            color: "#716A80"
             radius: 5
             Layout.alignment: Qt.AlignTop
-            Layout.margins: 10
+            Layout.leftMargin:  10
+            Layout.rightMargin:  10
+            Layout.topMargin: 10
 
             Rectangle {
                 id: playhead
-                width: 4
+                width: 3
                 height: parent.height
-                color: "red"
+                color: "#6883A5"
                 x: (videoPlayer && videoPlayer.duration > 0) ?
-                   (videoPlayer.position / videoPlayer.duration) * (timeline.width - playhead.width) : 0
+                       (videoPlayer.position / videoPlayer.duration) * (timeline.width - playhead.width) : 0
                 Behavior on x {
                     NumberAnimation { duration: 100; easing.type: Easing.Linear }
                 }
@@ -77,10 +155,4 @@ Item {
         scrollableTimeline.addClip(player);
     }
 
-    // onVideoPlayerChanged: {
-    //     if (videoPlayer) {
-    //         console.log("[DEBUG] Vidéo détectée dans TimelineView :", videoPlayer.source);
-    //         addVideoClip(videoPlayer);
-    //     }
-    // }
 }
