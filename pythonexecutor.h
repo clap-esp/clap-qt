@@ -12,7 +12,7 @@ public:
 
     Q_INVOKABLE void executeTranscription(const QStringList &args = {});
 
-    Q_INVOKABLE void executeThumbnailsGeneration(const QStringList &args = {});
+    Q_INVOKABLE void executeThumbnailsGeneration(const QString &projectName,const QStringList &args = {});
 
     Q_INVOKABLE void executeTranslation(const QStringList &args = {});
 

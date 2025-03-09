@@ -53,6 +53,8 @@ qt_add_qml_module(appclap_v1
         API/app_transcription.py
         API/app_translation.py
         API/generate_thumbnails.py
+        ProjectsList/ProjectsList.qml
+        ProjectsList/SuppressConfirmation.qml
         requirements.txt
 
     RESOURCES
@@ -64,6 +66,10 @@ qt_add_qml_module(appclap_v1
         images/translate.png
         images/exportation.png
         images/wand.png
+        images/dots.png
+        images/info.png
+        images/right-arrow.png
+        images/left-arrow.png
         Utils/Icons/camera.png
         Utils/Icons/fast-forward.png
         Utils/Icons/logo.png
@@ -83,6 +89,8 @@ qt_add_qml_module(appclap_v1
         pythonexecutor.h
         projectmanager.cpp
         projectmanager.h
+        globalVariableManager.h
+        globalVariableManager.cpp
 )
 
 
