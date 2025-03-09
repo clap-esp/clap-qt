@@ -41,8 +41,9 @@ Item {
             id: centerPlayhead
             width: 4
             height: timelineBackground.height
-            color: "red"
-            anchors.horizontalCenter: parent.horizontalCenter
+            color: "#CC6CE7"
+            anchors.left: parent.left
+            anchors.leftMargin: 20
             z: 10
         }
     }
