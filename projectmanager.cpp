@@ -66,6 +66,7 @@ QString projectManager::createProject(const QString &videoFilePath, const QStrin
         projectData["created_at"] = QDateTime::currentDateTime().toString(Qt::ISODate);
         projectData["updated_at"] = QDateTime::currentDateTime().toString(Qt::ISODate);
         projectData["thumbnail_project"]= basePath + finalProjectName + "/thumbs/project_thumbnail.jpg";
+        projectData["translated_in"]=QJsonArray();
         QJsonArray videos;
         videos.append(videoMetadata);
 
@@ -125,11 +126,44 @@ QJsonObject projectManager::deleteProject(const QString &folderName){
     return getProjectsList();
 };
 
-void projectManager::updateProject( const QJsonObject &metaData){
-    QJsonObject upDatedMetadata;
-
+void projectManager::updateProjectMetadata( const QJsonObject &metaData){
+    QJsonObject baseConfigData;
     QString folderName=globalVariable.currentProjectName();
-    upDatedMetadata["updatedAt"]= QDateTime::currentDateTime().toString(Qt::ISODate);
+    QString metadataFilePath=QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+folderName+"/metadata/config.json";
+    QFile jsonFile(metadataFilePath);
+
+
+    if(jsonFile.open(QIODeviceBase::ReadWrite)){
+        QByteArray jsonData = jsonFile.readAll();
+        jsonFile.close();
+
+        QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+        if (!doc.isNull() && doc.isObject()) {
+            baseConfigData = doc.object();
+            if(metaData.contains("translation")){
+                QString newLang= metaData.value("translation").toString();
+                QJsonArray translatedArray = baseConfigData.value("translated_in").toArray();
+                if (!translatedArray.contains(newLang)) {
+                    translatedArray.append(newLang);
+                    baseConfigData["translated_in"] = translatedArray;
+                    QStringList stringList;
+                    for (const QJsonValue &value : translatedArray) {
+                        if (value.isString()) {
+                            stringList.append(value.toString());
+                        }
+                    }
+                    globalVariable.setTranslationHistory(stringList);
+                }
+            }
+        }
+
+        qDebug() << globalVariable.translationHistory();
+        baseConfigData["updated_at"]= QDateTime::currentDateTime().toString(Qt::ISODate);
+        jsonFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        jsonFile.write(QJsonDocument(baseConfigData).toJson(QJsonDocument::Indented));
+        jsonFile.close();
+
+    }
 };
 
 
@@ -178,6 +212,10 @@ bool projectManager::copyFileInProject(const QString &fileType){
         destinationJsonPath= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_subtitles_" +spokenLang+".json";
         destinationSrtPath= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_subtitles_" +spokenLang+".srt";
 
+        QJsonObject jsonObject;
+        jsonObject["translation"] = spokenLang;
+        updateProjectMetadata(jsonObject);
+
     }
 
     qDebug() << "[LOG] chemin source json " + sourceJsonPath;
@@ -190,22 +228,6 @@ bool projectManager::copyFileInProject(const QString &fileType){
     QFile destinationJsonFile(destinationJsonPath);
     QFile destinationSrtFile(destinationSrtPath);
 
-    if(destinationJsonFile.exists()){
-        qDebug() << "[LOG] le fichier destination json existe, il va être supprimé";
-        destinationJsonFile.remove();
-    }else{
-        qDebug() << "[LOG] le fichier destination json n'existe pas";
-
-    }
-
-    if(destinationSrtFile.exists()){
-        qDebug() << "[LOG] le fichier destination srt existe, il va être supprimé";
-        destinationSrtFile.remove();
-    }else{
-        qDebug() << "[LOG] le fichier destination srt n'existe pas";
-
-    }
-
     QFile::copy(sourceJsonPath, destinationJsonPath);
     QFile::copy(sourceSrtPath, destinationSrtPath);
 
@@ -213,7 +235,4 @@ bool projectManager::copyFileInProject(const QString &fileType){
 
 };
 
-bool projectManager::copyThumbnailsInProject(const QString &projectName){
-    return true;
-};
 
