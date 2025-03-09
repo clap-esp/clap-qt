@@ -90,7 +90,8 @@ Window {
                                stack_view.clear()
                                globalVariable.setcurrentProjectName(name_value.name);
                                globalVariable.setTranslationHistory(name_value.translated_in)
-                               console.log('flobal variable ', globalVariable.translationHistory)
+                               projectManager.copySubtitleJsonInTmp()
+
                                let mainWidget = main_widget_component.createObject(stack_view, {
                                                                                        "videoSourcePath": name_value.videos[0].filePath,
                                                                                        "openingProject": true,
