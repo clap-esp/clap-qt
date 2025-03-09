@@ -228,6 +228,13 @@ bool projectManager::copyFileInProject(const QString &fileType){
     QFile destinationJsonFile(destinationJsonPath);
     QFile destinationSrtFile(destinationSrtPath);
 
+    if(destinationJsonFile.exists()){
+        destinationSrtFile.remove();
+    }
+
+    if(destinationSrtFile.exists()){
+        destinationSrtFile.remove();
+    }
     QFile::copy(sourceJsonPath, destinationJsonPath);
     QFile::copy(sourceSrtPath, destinationSrtPath);
 
@@ -236,3 +243,19 @@ bool projectManager::copyFileInProject(const QString &fileType){
 };
 
 
+bool projectManager::copySubtitleJsonInTmp(){
+    QString projectName=globalVariable.currentProjectName();
+    QString sourceJsonPath=QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_output_stt.json";;
+    QString destinationJsonPath=QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_output_stt.json");;
+
+    QFile sourceJsonFile(sourceJsonPath);
+    QFile destinationJsonFile(destinationJsonPath);
+
+    if(destinationJsonFile.exists()){
+        destinationJsonFile.remove();
+    }
+
+    QFile::copy(sourceJsonPath, destinationJsonPath);
+
+    return true;
+};
