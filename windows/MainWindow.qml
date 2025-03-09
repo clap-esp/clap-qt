@@ -12,6 +12,7 @@ RowLayout{
     id: root
     property string videoSourcePath: ""
     property bool hasTranscriptionError: false
+    property bool openingProject: false
     readonly property var constants: Constants{}
     Layout.fillWidth: true
     Layout.fillHeight: true
@@ -38,7 +39,7 @@ RowLayout{
                     id: translation_widget
                     hasError: hasTranscriptionError
                     Component.onCompleted: {
-                        translation_widget.readFile('transcription')
+                        translation_widget.readFile(openingProject, 'transcription')
                     }
                 }
 

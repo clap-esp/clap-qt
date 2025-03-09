@@ -63,10 +63,8 @@ Item {
     }
 
     function readFile() {
-        let file = "/thumbnails.json"
-        const jsonPath= 'file:///'+thumbnailsDirectoryPath+file
-
-        console.log(jsonPath)
+        let file = globalVariable.currentProjectName+ "/metadata/thumbnails.json"
+        const jsonPath= 'file:///'+currentProjectDirectoryPath+file
         var xhr = new XMLHttpRequest();
         xhr.open("GET", jsonPath, false);
         xhr.send();

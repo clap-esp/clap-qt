@@ -24,7 +24,6 @@ Item {
     property string currentLanguage: ''
     property bool translation_loading:false
     property bool translation_done:false
-
     readonly property var constants: Constants { }
     readonly property var errors: Error {}
     readonly property var codeIso: IsoLanguageCode { }
@@ -43,7 +42,9 @@ Item {
                             console.log(output)
                         }
 
+
         onScriptFinished:{
+            projectManager.copyFileInProject("translation")
             translation_loading=false
             translation_done=true
             readFile('translation')
@@ -300,54 +301,19 @@ Item {
         }
     }
 
-    Timer {
-        id: processTimer
-        interval: interval
-        repeat: false
-        onTriggered: {
-            if (index < transcriptionData.length || index < translationData.length) {
-                if(!stopValue){
-                    let element = transcriptionData[index];
-                    // listViewTranscription.model.append({
-                    //                        text: element.text,
-                    //                        timeCode: formatSeconds(element.time_start)
-                    //                    });
-                    // listViewTranscription.currentIndex = listViewTranscription.count - 1;
-                    // listViewTranscription.forceLayout()
-                    // interval= (element.time_end - element.time_start) * 1000
-                    // index++;
-
-                }
-                processTimer.start();
-            }
-
-            if(index < translationData.length){
-                if(!stopValue){
-                    let element = translationData[index];
-                    // listViewTranslation.model.append({
-                    //                        text: element.text,
-                    //                        timeCode: formatSeconds(element.time_start)
-                    //                    });
-                    // listViewTranslation.currentIndex = listViewTranslation.count - 1;
-                    // 0listViewTranslation.forceLayout()
-                    // interval= (element.time_end - element.time_start) * 1000
-                    // index++;
-
-                }
-                processTimer.start();
-            }
-        }
-    }
-
 
     /**
     * Method to read JSON file
     * fileType is transcription or tarduction
     **/
-    function readFile(fileType) {
+    function readFile(openingProject, fileType) {
 
-        let file= fileType === 'transcription' ? "/app_output_stt.json" : `/app_subtitles_${currentLanguage}.json`
-        const jsonPath= 'file:///'+dataDirectoryPath+file
+        let file;
+        let jsonPath;
+        let currentProject=globalVariable.currentProjectName
+        let currentDestLang= globalVariable.currentDestinationLang
+        file= fileType === 'transcription' ? "/app_output_stt.json" : `/app_subtitles_${currentDestLang}.json`
+        jsonPath=`file:///${currentProjectDirectoryPath}${currentProject}/metadata${file}`
         var xhr = new XMLHttpRequest();
         xhr.open("GET", jsonPath, false);
         xhr.send();
@@ -368,7 +334,6 @@ Item {
                                                            });
                     }
 
-                    processTimer.start();
                 }
             }else{
                 translationData = JSON.parse(xhr.responseText);
@@ -385,13 +350,11 @@ Item {
                     console.log('no translation')
                 }
 
-                processTimer.start();
             }
 
 
         } else {
             hasError=true
-            // notification.openNotification(errors.error_extension_video, NotificationTypeClass.Error)
         }
 
     }
@@ -401,7 +364,6 @@ Item {
     **/
     function formatSeconds(seconds) {
         if (isNaN(seconds) || seconds < 0) return "0:00";
-
         const hrs = Math.floor(seconds / 3600);
         const mins = Math.floor((seconds % 3600) / 60);
         const secs = Math.floor(seconds % 60);
@@ -414,9 +376,9 @@ Item {
     * Choose language for translation
     **/
     function setLanguage(lang){
+        globalVariable.setcurrentDestinationLang(lang)
         currentLanguage=lang
-        // console.log("current_language")
-        scriptExec.executeTranslation(lang)
+        scriptExec.executeTranslation()
     }
 
     /**
@@ -426,7 +388,6 @@ Item {
     function findLanguage(lang){
         if(lang===''){
             return 'Traduire'
-
         }else{
             const iso= codeIso.codeIso.find(iso=> iso['code']===lang)
             if(iso){

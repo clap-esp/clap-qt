@@ -107,7 +107,7 @@ Item {
                 id: playhead
                 width: 3
                 height: parent.height
-                color: "#6883A5"
+                color: "#CC6CE7" //"#6883A5"
                 x: (videoPlayer && videoPlayer.duration > 0) ?
                        (videoPlayer.position / videoPlayer.duration) * (timeline.width - playhead.width) : 0
                 Behavior on x {
