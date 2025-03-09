@@ -29,11 +29,7 @@ public:
 
     Q_INVOKABLE bool copyFileInProject(const QString &fileType);
 
-    Q_INVOKABLE void updateProject(const QJsonObject &metaData);
-
-    Q_INVOKABLE bool copyThumbnailsInProject(const QString &projectName);
-
-
+    Q_INVOKABLE void updateProjectMetadata(const QJsonObject &metaData);
 
     // Q_INVOKABLE QString addVideoToProject(const QString &projectPath, const QString &videoFilePath);
 

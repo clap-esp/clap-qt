@@ -106,6 +106,14 @@ void PythonExecutor::executeTranslation(const QStringList &args ) {
     QString scriptPath = QUrl(scriptName).toLocalFile();
     QString lang = globalVariable.currentDestinationLang();
 
+
+    QStringList history= globalVariable.translationHistory();
+
+    if(history.contains(lang)){
+        emit scriptFinished();
+        return;
+    }
+
     scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/API/" + scriptName;
 
 

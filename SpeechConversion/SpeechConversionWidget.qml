@@ -113,6 +113,29 @@ Item {
                 }
             }
 
+            TabButton {
+                text: "Historique"
+                font.pixelSize: 14
+                checkable: true
+                width: 100
+                Material.theme: Material.Light
+                Material.foreground: 'white'
+                Material.accent: Material.Purple
+                background: Rectangle {
+                    color: tabBar.currentIndex === 2 ? constants.default_widget_background_color : constants.default_widget_background_color
+                    radius:8
+
+                    Rectangle{
+                        y: parent.height/2
+                        height: parent.height/2
+                        radius: 0
+                        width: parent.width
+                        color: tabBar.currentIndex === 2 ? constants.default_widget_background_color: constants.default_widget_background_color
+                    }
+                }
+            }
+
+
         }
 
         StackLayout {
@@ -146,8 +169,10 @@ Item {
                             id: listViewTranscription
                             anchors.fill: parent
                             anchors.top: parent.top
-                            anchors.topMargin: 50
+                            anchors.topMargin: 20
+                            anchors.bottomMargin: 20
                             visible: !hasError
+                            clip: true
                             spacing:10
                             model: ListModel {}
                             z:2
@@ -158,6 +183,9 @@ Item {
                                     id: textBlockTranscription
                                     textToDisplay: model.text
                                     timeCode: model.timeCode
+                                    onChooseBlock: {
+
+                                    }
                                 }
                             }
 
@@ -268,8 +296,8 @@ Item {
                             id: listViewTranslation
                             anchors.fill: parent
                             anchors.top: parent.top
-                            anchors.topMargin: 25
                             visible: !translation_loading
+                            clip: true
                             spacing:10
                             model: ListModel {
                                 id: translationListModel}
@@ -298,6 +326,70 @@ Item {
                     }
                 }
             }
+
+            Rectangle {
+                color: constants.default_widget_background_color
+                radius:10
+
+                ColumnLayout{
+                    anchors.fill: parent
+                    spacing: 5
+
+                    Rectangle{
+                        Layout.fillWidth:  true
+                        Layout.fillHeight: true
+                        // Layout.preferredHeight: parent.height-120
+                        // Layout.preferredHeight: parent.height-10
+                        color: 'transparent'
+
+                        ListView {
+                            id: listViewHistory
+                            anchors.fill: parent
+                            anchors.top: parent.top
+                            anchors.topMargin: 15
+                            visible: !translation_loading
+                            spacing:10
+                            model: globalVariable.translationHistory
+                            clip:true
+                            z:2
+                            delegate: Item {
+                                required property var modelData
+
+                                height: 50
+                                width: parent?.width
+                                TextBlock{
+                                    id: textBlockHistory
+                                    textToDisplay: findLanguage(modelData)
+                                    timeCode: ""
+                                    history: true
+                                    onChooseBlock: loadTranslationFromHistory(modelData)
+                                }
+                            }
+
+                            ScrollBar.vertical: ScrollBar {
+                                anchors.right: parent.right
+                                policy: listViewHistory.contentHeight > listViewHistory.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                active: hovered || pressed
+                                contentItem: Rectangle {
+                                    color: constants.scrollbar_color
+                                    radius: 4
+                                }
+                                snapMode: ScrollBar.SnapOnRelease
+                            }
+                        }
+
+                        Text{
+                            text: 'HISTORIQUE DE TRADUCTION VIDE'
+                            anchors.centerIn: parent
+                            visible: !globalVariable.translationHistory.length
+                            color: 'white'
+                            font.pixelSize: 20
+                            font.bold: true
+                        }
+
+                    }
+                }
+            }
         }
     }
 
@@ -318,7 +410,9 @@ Item {
         xhr.open("GET", jsonPath, false);
         xhr.send();
 
+        console.log(jsonPath)
         if (xhr.status === 200) {
+            hasError=false
             if(fileType==='transcription'){
                 transcriptionData = JSON.parse(xhr.responseText);
                 index = 0;
@@ -398,6 +492,13 @@ Item {
         }
 
 
+    }
+
+    function loadTranslationFromHistory(lang){
+        currentLanguage=lang
+        globalVariable.setcurrentDestinationLang(lang)
+        tabBar.currentIndex=1
+        readFile(false, "translation")
     }
 
 }
