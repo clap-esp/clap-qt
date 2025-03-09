@@ -34,7 +34,7 @@ Item{
 
     Component.onCompleted: {
         const list=projectManager.getProjectsList()
-        projectsList.projects=list['projects']
+        projectsList.projects=list['projects'].sort((a,b)=>    {return new Date(b.updated_at) - new Date(a.updated_at)})
     }
 
     Rectangle {

@@ -68,6 +68,8 @@ qt_add_qml_module(appclap_v1
         images/wand.png
         images/dots.png
         images/info.png
+        images/right-arrow.png
+        images/left-arrow.png
         Utils/Icons/camera.png
         Utils/Icons/fast-forward.png
         Utils/Icons/logo.png

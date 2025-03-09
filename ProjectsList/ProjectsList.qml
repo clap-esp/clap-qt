@@ -12,12 +12,71 @@ Item{
     property var projects: []
     signal openingProject(var selected_project)
 
+    Component.onCompleted: {
+        console.log(projects.length)
+    }
 
     function deleteProject(projectName){
         const list=projectManager.deleteProject(projectName)
-        projects=list['projects']
+        projects=list['projects'].sort((a,b)=>    {return new Date(b.updated_at) - new Date(a.updated_at)})
     }
 
+
+    RowLayout{
+        x: parent.x-90
+        y:view.y +30
+        width: parent.width + 150
+        height: 20
+        visible: projects.length > 3
+        ToolButton {
+            id:  arrowLeft
+            z:500
+            icon.source: '../images/left-arrow.png'
+            icon.height: 16
+            icon.color: 'white'
+            icon.width: 16
+            Layout.alignment: Qt.AlignLeft
+
+            MouseArea{
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    if(view.currentIndex>=3){
+                        view.currentIndex-=3
+                    }
+                }
+
+            }
+
+
+        }
+
+        ToolButton {
+            id: arrowRight
+            icon.source: '../images/right-arrow.png'
+            icon.height: 16
+            icon.color: 'white'
+            icon.width: 16
+            Layout.alignment: Qt.AlignRight
+
+
+            MouseArea{
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+
+                onClicked: {
+                    if(view.currentIndex<= projects.length-4){
+                        view.currentIndex+=3
+                    }
+
+                }
+
+
+            }
+
+
+        }
+    }
 
 
     ColumnLayout{
@@ -27,6 +86,7 @@ Item{
 
         ListView {
             id: view
+            currentIndex:0
             Layout.fillWidth: true
             Layout.preferredHeight: parent.height
             Layout.topMargin: 30
