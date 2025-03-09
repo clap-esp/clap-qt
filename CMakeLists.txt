@@ -87,6 +87,8 @@ qt_add_qml_module(appclap_v1
         pythonexecutor.h
         projectmanager.cpp
         projectmanager.h
+        globalVariableManager.h
+        globalVariableManager.cpp
 )
 
 
