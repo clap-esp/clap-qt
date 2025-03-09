@@ -10,6 +10,7 @@ Item{
     anchors.top: parent.bottom
     property var constants: Constants{}
     property var projects: []
+    signal openingProject(var selected_project)
 
 
     function deleteProject(projectName){
@@ -26,14 +27,12 @@ Item{
 
         ListView {
             id: view
-            // currentIndex: indicator.currentIndex
             Layout.fillWidth: true
             Layout.preferredHeight: parent.height
             Layout.topMargin: 30
             clip: true
             orientation: ListView.Horizontal
             spacing:10
-
             model: projects
 
             delegate: Rectangle {
@@ -53,6 +52,7 @@ Item{
                     anchors.fill:parent
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
+                    onClicked: openingProject(modelData)
                 }
 
                 MultiEffect {
@@ -61,7 +61,7 @@ Item{
                     maskEnabled: true
                     maskSource: mask
                     width: view.width / 4
-                    height: view.height/4*3-20
+                    height: view.height/2
                 }
 
                 Image {
@@ -79,16 +79,14 @@ Item{
                     visible: false
                     Rectangle {
                         anchors.fill: parent
-                        radius: 5
+                        radius: 10
                     }
                 }
-
-
 
                 RowLayout{
                     id: title
                     width: parent.width/2
-                    y: mask.height + mask.y +40
+                    y: mask.height + mask.y-5
                     spacing: projectTitle.width/2
 
                     Text {
@@ -135,7 +133,17 @@ Item{
 
                 }
 
-
+                Text {
+                    id: projectSubtitle
+                    y: title.y +35
+                    Layout.preferredWidth:  parent.width /2
+                    color: 'white'
+                    text: getDate(modelData.updated_at)
+                    Layout.alignment: Qt.AlignLeft
+                    font.italic: true
+                    font.pixelSize: 10
+                    wrapMode: Text.Wrap
+                }
 
             }
 
@@ -147,6 +155,22 @@ Item{
 
 
 
+    }
+
+    function getDate(date){
+        const d=(new Date(date))
+
+        const mois = ["janvier", "février", "mars", "avril", "mai", "juin",
+                      "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        const jour = d.getDate();
+        const moisNom = mois[d.getMonth()];
+        const annee = d.getFullYear();
+        const dateFormatee = `${jour} ${moisNom} ${annee}`;
+
+        const hours= d.getHours();
+        const min= d.getMinutes();
+        const time=`${hours}h${min}`
+        return `Mis à jour le ${dateFormatee} à ${time}`
     }
 
 }
