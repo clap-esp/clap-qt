@@ -22,10 +22,12 @@ Item{
     readonly property var errors: Error {}
     property string loadedFilePath: qsTr("")
     readonly property var codeIso: IsoLanguageCode { }
-    property string selectedLanguageCode: "fr"
     property bool projectCreated:false
     property var projectListJson: []
-    signal importFileEvent(string processedVideoPath, string lang)
+    signal importFileEvent(string processedVideoPath)
+    signal openProject(var selected_project)
+    property string newProjectName:''
+
 
     anchors.fill: parent
 
@@ -103,7 +105,7 @@ Item{
                     required property var modelData
                     text:modelData.lang;
                     onTriggered:{
-                        selectedLanguageCode=modelData.code
+                        globalVariable.setcurrentSourceLang(modelData.code)
                     }
                 }
 
@@ -250,6 +252,9 @@ Item{
                 y: parent.height + 20
                 width: parent.width
                 height: 200
+                onOpeningProject: (project_value)=>{
+                                      openProject(project_value)
+                                  }
             }
 
             FileDialog {
@@ -320,11 +325,10 @@ Item{
                 if (selectedFilePath !== "" && selectedFilePath !== undefined) {
                     let cleanedFilePath = selectedFilePath.replace("file:///", "");
                     cleanedFilePath = cleanedFilePath.replace(/%20/g, " ");
-
+                    newProjectName= projectNameInput.text;                   
                     let projectPath = projectManager.createProject(cleanedFilePath, projectNameInput.text)
                     if (projectPath.startsWith("Error")) {
                         console.log(projectPath)
-
                         if(projectPath === "Error: Project name already exists.") {
                             projectExistsDialog.open();
                         }
@@ -342,7 +346,7 @@ Item{
 
     }
     function displayLanguage(){
-        const iso= codeIso.codeIso.find(iso=> iso['code']===selectedLanguageCode)
+        const iso= codeIso.codeIso.find(iso=> iso['code']===globalVariable.currentSourceLang)
         return 'Langue parlée dans la vidéo: '+ iso['lang']
     }
 
@@ -356,9 +360,7 @@ Item{
         const extension=String(file_path).split('.')[1]
         if(extension && constants.valid_extension.includes(extension)){
             loadedFilePath = file_path
-
-            console.log(selectedLanguageCode)
-            importFileEvent(loadedFilePath, selectedLanguageCode);
+            importFileEvent(loadedFilePath);
         }else{
             notification.openNotification( errors.error_extension_video, NotificationTypeClass.Error)
             root.color=constants.default_widget_background_color
