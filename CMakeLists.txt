@@ -35,6 +35,7 @@ qt_add_qml_module(appclap_v1
         Utils/Notification/Success.qml
         Utils/Constants.qml
         Utils/IsoLanguageCode.qml
+        Utils/DerushClassColor.qml
         Notification/NotificationWidget.qml
         Loading/LoadingWidget.qml
         API/utils/__init__.py
@@ -68,6 +69,7 @@ qt_add_qml_module(appclap_v1
         images/wand.png
         images/dots.png
         images/info.png
+        images/cut.png
         images/right-arrow.png
         images/left-arrow.png
         Utils/Icons/camera.png

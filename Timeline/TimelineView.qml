@@ -2,12 +2,15 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtMultimedia
+import "../Utils"
 
 Item {
     id: timelineView
 
+    property var derushColor: DerushClassColor{}
     property MediaPlayer videoPlayer
     property bool sliderPressed: false
+    property var derushData: []
 
     anchors.fill: parent
 
@@ -103,6 +106,25 @@ Item {
             Layout.rightMargin:  10
             Layout.topMargin: 10
 
+            ListModel {
+                id: listModel
+            }
+
+            Repeater{
+                id: derushedZone
+                model:listModel
+                Rectangle {
+                    required property var modelData
+                    width: (modelData.duration *1000/ videoPlayer.duration) * (timeline.width - playhead.width)
+                    height: 10
+                    color: modelData.color
+                    x: (modelData.start_time *1000/ videoPlayer.duration) * (timeline.width - playhead.width)
+
+                }
+
+
+            }
+
             Rectangle {
                 id: playhead
                 width: 3
@@ -153,6 +175,63 @@ Item {
 
     function addVideoClip(player) {
         scrollableTimeline.addClip(player);
+    }
+
+    Component.onCompleted: {
+        readFile();
+    }
+
+    function readFile() {
+        let file = globalVariable.currentProjectName+ "/metadata/app_derush.json"
+        const jsonPath= 'file:///'+currentProjectDirectoryPath+file
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", jsonPath, false);
+        xhr.send();
+
+        if (xhr.status === 200) {
+            const data=JSON.parse(xhr.responseText);
+            for(const elemn of data){
+                if(elemn.event !== "O"){
+                    switch(elemn.event) {
+                    case "STU":
+                        elemn.color = derushColor._STU;
+                        break;
+                    case "FIL":
+                        elemn.color = derushColor._FIL;
+                        break;
+                    case "REP":
+                        elemn.color = derushColor._REP;
+                        break;
+                    case "RED":
+                        elemn.color = derushColor._RED;
+                        break;
+                    case "NOI":
+                        elemn.color = derushColor._NOI;
+                        break;
+                    case "INT":
+                        elemn.color = derushColor._INT;
+                        break;
+                    case "BRE":
+                        elemn.color = derushColor._BRE;
+                        break;
+                    case "CLI":
+                        elemn.color = derushColor._CLI;
+                        break;
+                    case "SIL":
+                        elemn.color = derushColor._SIL;
+                        break;
+                    default:
+                        elemn.color = "transparent";
+                    }
+
+
+                    listModel.append(elemn)
+                }
+            }
+
+            console.log(listModel.count)
+
+        }
     }
 
 }
