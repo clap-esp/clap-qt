@@ -142,3 +142,35 @@ void PythonExecutor::executeTranslation(const QStringList &args ) {
 
     emit scriptStarted();
 }
+
+void PythonExecutor::executeDerush(){
+    QString scriptName="app_derush.py";
+
+    QString scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/API/" + scriptName;
+
+
+    QString pythonExecutable = QDir::cleanPath(QCoreApplication::applicationDirPath()) + "/../../venv/Scripts/python.exe";
+
+
+    if (!QFile::exists(pythonExecutable)) {
+        qDebug() <<"Error: Python executable not found in virtual environment.";
+    }
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+    env.insert("PATH", QDir::cleanPath(QCoreApplication::applicationDirPath()) + "/../../venv/Scripts/");
+
+    process->setProcessEnvironment(env);
+
+    process->start(pythonExecutable, QStringList() << scriptPath);
+
+    if (!QFile::exists(scriptPath)) {
+        emit scriptError("Error: Script file not found!");
+    }
+
+    if(!process->waitForStarted()) {
+        emit scriptError("Error: Could not start process.");
+    }
+
+    emit scriptStarted();
+}
