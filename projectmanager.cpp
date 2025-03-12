@@ -266,7 +266,7 @@ bool projectManager::copyFileInProject(const QString &fileType){
         sourceTextPath= QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_current_src_lang.txt");
         destinationJsonPath= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_output_stt.json";
         destinationTextPath=   QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_current_src_lang.txt";
-        destinationSrtPath= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_output_stt";
+        destinationSrtPath= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_output_stt/srt";
 
     }else if(fileType=="derush"){
         sourceJsonPath= QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_derush.json");
