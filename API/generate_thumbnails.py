@@ -6,42 +6,27 @@ from utils.logger import build_logger
 
 logger= build_logger('THUMBNAILS GENERATION', level=20)
 
-
-
-
-OUTPUT_THUMBNAILS_PATH = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..','API','tmp', 'thumbnails')
-
-
-if len(sys.argv) > 2:
+if len(sys.argv) > 3:
     video_path = sys.argv[1]
     project_name = sys.argv[2]
+    project_app_data =sys.argv[3]
 
 else:
     raise ValueError("Le chemin de la vidéo n'a pas été fourni !")
 
-OUTPUT_DEFAULT_PROJECT_THUMBNAIL=os.path.join(os.path.expanduser("~"), "Videos",  "Clap", "Projets", project_name, "thumbs")
-OUTPUT_PROJECT_METADATA_PATH=os.path.join(os.path.expanduser("~"), "Videos",  "Clap", "Projets", project_name, "metadata")
+
+OUTPUT_DEFAULT_PROJECT_THUMBNAIL=os.path.join(project_app_data, project_name, "thumbs")
+OUTPUT_PROJECT_METADATA_PATH=os.path.join(project_app_data, project_name, "metadata")
 
 logger.info(f'path ===>{OUTPUT_DEFAULT_PROJECT_THUMBNAIL} ')
+logger.info(f'new path ===>{project_app_data} ')
 
-def generate_thumbnails(video_path, output_folder, interval=1000):
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
 
-        if os.path.exists(OUTPUT_DEFAULT_PROJECT_THUMBNAIL):
-            if not os.access(OUTPUT_DEFAULT_PROJECT_THUMBNAIL, os.W_OK):
-                os.chmod(OUTPUT_DEFAULT_PROJECT_THUMBNAIL, 0o666)
+def generate_thumbnails(video_path,  interval=1000):
 
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS)
     duration = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) / fps * 1000)
-
-    thumbnail_data = {
-        "video_path": video_path,
-        "thumbnail_project": OUTPUT_DEFAULT_PROJECT_THUMBNAIL,
-        "thumbnails": []
-    }
-
     thumbnail_data_config={
         "thumbnails": []
     }
@@ -63,16 +48,8 @@ def generate_thumbnails(video_path, output_folder, interval=1000):
 
 
         resized_frame = cv2.resize(frame, (100,50))
-
-        image_path = os.path.join(output_folder, f"thumb_{index}.jpg")
-        cv2.imwrite(image_path, resized_frame)
         image_config_path= os.path.join(OUTPUT_DEFAULT_PROJECT_THUMBNAIL,f"thumb_{index}.jpg" )
         cv2.imwrite(image_config_path, resized_frame)
-
-        thumbnail_data["thumbnails"].append({
-            "time": current_time,
-            "path": image_path
-        })
 
         thumbnail_data_config["thumbnails"].append({
             "path": image_config_path
@@ -82,10 +59,6 @@ def generate_thumbnails(video_path, output_folder, interval=1000):
         index += 1
 
     cap.release()
-
-    json_path = os.path.join(output_folder, "thumbnails.json")
-    with open(json_path, "w") as json_file:
-        json.dump(thumbnail_data, json_file, indent=4)
 
     json_config_path=os.path.join(OUTPUT_PROJECT_METADATA_PATH, "thumbnails.json")
     with open(json_config_path, "w") as json_file:
@@ -97,4 +70,4 @@ def generate_thumbnails(video_path, output_folder, interval=1000):
 
 
 
-generate_thumbnails(video_path, OUTPUT_THUMBNAILS_PATH)
+generate_thumbnails(video_path)
