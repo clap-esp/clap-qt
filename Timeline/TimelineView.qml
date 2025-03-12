@@ -315,7 +315,7 @@ Item {
                 Rectangle {
                     required property var modelData
                     width: (modelData.duration *1000/ videoPlayer.duration) * (timeline.width - playhead.width)
-                    height: 10
+                    height: timeline.height
                     color: modelData.color
                     x: (modelData.start_time *1000/ videoPlayer.duration) * (timeline.width - playhead.width)
 
@@ -337,6 +337,7 @@ Item {
             }
 
             MouseArea {
+                hoverEnabled: true
                 anchors.fill: parent
                 onPressed: sliderPressed = true
                 onReleased: sliderPressed = false
@@ -347,6 +348,7 @@ Item {
                         playhead.x = mouse.x;
                     }
                 }
+
             }
         }
 

@@ -27,7 +27,9 @@ QString projectManager::generateProjectName() const {
  *
  */
 QString projectManager::findFolderByName( const QString &folderName){
-    QString path= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/";
+    //QString path= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/";
+    QString path= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
+
     QDir dir(path);
     if (!dir.exists()) return "";
     QStringList folders = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -50,10 +52,8 @@ QString projectManager::createProject(const QString &videoFilePath, const QStrin
         return "Error: File does not exist -> " + videoFilePath;
     }
 
-    qDebug() <<  QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/.clap";
-
-
-    QString basePath =  QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/";
+    // QString basePath =  QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/";
+    QString basePath =  QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
 
     QDir baseDir(basePath);
     if (!baseDir.exists()) {
@@ -109,7 +109,8 @@ QString projectManager::createProject(const QString &videoFilePath, const QStrin
 
 QJsonObject projectManager::getProjectsList(){
     QJsonArray projectsArray;
-    QString rootPath=  QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/";
+    QString rootPath=  QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
+
     QDirIterator it(rootPath, QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
 
     while (it.hasNext()) {
@@ -172,7 +173,8 @@ QJsonObject projectManager::deleteProject(const QString &folderName){
 void projectManager::updateProjectMetadata( const QJsonObject &metaData){
     QJsonObject baseConfigData;
     QString folderName=globalVariable.currentProjectName();
-    QString metadataFilePath=QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+folderName+"/metadata/config.json";
+    QString metadataFilePath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+folderName+"/metadata/config.json";
+
     QFile jsonFile(metadataFilePath);
 
 
@@ -200,7 +202,6 @@ void projectManager::updateProjectMetadata( const QJsonObject &metaData){
             }
         }
 
-        qDebug() << globalVariable.translationHistory();
         baseConfigData["updated_at"]= QDateTime::currentDateTime().toString(Qt::ISODate);
         jsonFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
         jsonFile.write(QJsonDocument(baseConfigData).toJson(QJsonDocument::Indented));
@@ -259,28 +260,26 @@ bool projectManager::copyFileInProject(const QString &fileType){
     QString destinationTextPath;
     QString projectName=globalVariable.currentProjectName();
 
-    qDebug() << "[LOG] copy file - type "+ fileType +" -- project "+ projectName;
-
     if(fileType=="transcription"){
         sourceJsonPath= QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_output_stt.json");
         sourceSrtPath= QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_output_stt.srt");
         sourceTextPath= QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_current_src_lang.txt");
-        destinationJsonPath= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_output_stt.json";
-        destinationTextPath=   QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_current_src_lang.txt";
-        destinationSrtPath= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_output_stt";
+        destinationJsonPath= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_output_stt.json";
+        destinationTextPath=   QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_current_src_lang.txt";
+        destinationSrtPath= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_output_stt";
 
     }else if(fileType=="derush"){
         sourceJsonPath= QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_derush.json");
         sourceSrtPath= QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_output_stt.srt");
-        destinationJsonPath= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_derush.json";
-        destinationSrtPath= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_output_stt.srt";
+        destinationJsonPath= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_derush.json";
+        destinationSrtPath= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_output_stt.srt";
 
     }else{
         QString spokenLang= globalVariable.currentDestinationLang();
         sourceJsonPath=  QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_subtitles_" +spokenLang+".json");
         sourceSrtPath=  QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_subtitles_" +spokenLang+".srt");
-        destinationJsonPath= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_subtitles_" +spokenLang+".json";
-        destinationSrtPath= QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_subtitles_" +spokenLang+".srt";
+        destinationJsonPath= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_subtitles_" +spokenLang+".json";
+        destinationSrtPath= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_subtitles_" +spokenLang+".srt";
 
         QJsonObject jsonObject;
         jsonObject["translation"] = spokenLang;
@@ -312,10 +311,16 @@ bool projectManager::copyFileInProject(const QString &fileType){
         destinationTextFile.remove();
     }
 
+    sourceJsonFile.exists();
+
     QFile::copy(sourceJsonPath, destinationJsonPath);
+
+
     QFile::copy(sourceSrtPath, destinationSrtPath);
+
     if(sourceTextFile.exists()){
         QFile::copy(sourceTextPath, destinationTextPath);
+
     }
 
     return true;
@@ -331,11 +336,10 @@ bool projectManager::copyFileInProject(const QString &fileType){
 
 bool projectManager::copySubtitleJsonInTmp(){
     QString projectName=globalVariable.currentProjectName();
-
-    QString sourceJsonPath=QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_output_stt.json";;
+    QString sourceJsonPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_output_stt.json";;
     QString destinationJsonPath=QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_output_stt.json");;
     QString sourceTextPath= QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp/app_current_src_lang.txt");
-    QString destinationTextPath=   QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/"+ projectName+"/metadata/app_current_src_lang.txt";
+    QString destinationTextPath=   QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/"+ projectName+"/metadata/app_current_src_lang.txt";
 
     QFile sourceJsonFile(sourceJsonPath);
     QFile destinationJsonFile(destinationJsonPath);

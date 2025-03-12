@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QCoreApplication>
 #include "globalVariableManager.h"
+#include <QStandardPaths>
 
 PythonExecutor::PythonExecutor(QObject *parent) : QObject(parent) {
     process = new QProcess(this);
@@ -33,7 +34,7 @@ void PythonExecutor::executeTranscription(const QStringList &args ) {
     QString pythonExecutable = QDir::cleanPath(QCoreApplication::applicationDirPath()) + "/../../venv/Scripts/python.exe";
 
     if (!QFile::exists(pythonExecutable)) {
-        qDebug() <<"Error: Python executable not found in virtual environment.";
+        emit scriptError("Error: Python executable not found in virtual environment.");
     }
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -71,13 +72,12 @@ void PythonExecutor::executeThumbnailsGeneration(const QString &projectName, con
 
     qDebug() << projectName;
 
-    qDebug() << "Chemin final utilisé pour le script Python :" << scriptPath;
 
     QString pythonExecutable = QDir::cleanPath(QCoreApplication::applicationDirPath()) + "/../../venv/Scripts/python.exe";
 
 
     if (!QFile::exists(pythonExecutable)) {
-        qDebug() <<"Error: Python executable not found in virtual environment.";
+        emit scriptError("Error: Python executable not found in virtual environment.");
     }
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -86,7 +86,10 @@ void PythonExecutor::executeThumbnailsGeneration(const QString &projectName, con
 
     process->setProcessEnvironment(env);
 
-    process->start(pythonExecutable, QStringList() << scriptPath << videoPath << finalProjectName  );
+    QString pathConfig= QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
+
+
+    process->start(pythonExecutable, QStringList() << scriptPath << videoPath << finalProjectName  << pathConfig);
 
     if (!QFile::exists(scriptPath)) {
         emit scriptError("Error: Script file not found!");
@@ -121,7 +124,7 @@ void PythonExecutor::executeTranslation(const QStringList &args ) {
 
 
     if (!QFile::exists(pythonExecutable)) {
-        qDebug() <<"Error: Python executable not found in virtual environment.";
+        emit scriptError("Error: Python executable not found in virtual environment.");
     }
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
