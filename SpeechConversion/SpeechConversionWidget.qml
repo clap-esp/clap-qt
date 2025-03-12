@@ -470,6 +470,11 @@ Item {
     * Choose language for translation
     **/
     function setLanguage(lang){
+        if(globalVariable.currentSourceLang===lang){
+            tabBar.currentIndex=0
+            return;
+        }
+
         globalVariable.setcurrentDestinationLang(lang)
         currentLanguage=lang
         scriptExec.executeTranslation()
