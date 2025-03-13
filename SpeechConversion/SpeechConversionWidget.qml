@@ -24,7 +24,6 @@ Item {
     property string currentLanguage: ''
     property bool translation_loading:false
     property bool translation_done:false
-
     readonly property var constants: Constants { }
     readonly property var errors: Error {}
     readonly property var codeIso: IsoLanguageCode { }
@@ -43,7 +42,9 @@ Item {
                             console.log(output)
                         }
 
+
         onScriptFinished:{
+            projectManager.copyFileInProject("translation")
             translation_loading=false
             translation_done=true
             readFile('translation')
@@ -112,6 +113,29 @@ Item {
                 }
             }
 
+            TabButton {
+                text: "Historique"
+                font.pixelSize: 14
+                checkable: true
+                width: 100
+                Material.theme: Material.Light
+                Material.foreground: 'white'
+                Material.accent: Material.Purple
+                background: Rectangle {
+                    color: tabBar.currentIndex === 2 ? constants.default_widget_background_color : constants.default_widget_background_color
+                    radius:8
+
+                    Rectangle{
+                        y: parent.height/2
+                        height: parent.height/2
+                        radius: 0
+                        width: parent.width
+                        color: tabBar.currentIndex === 2 ? constants.default_widget_background_color: constants.default_widget_background_color
+                    }
+                }
+            }
+
+
         }
 
         StackLayout {
@@ -145,8 +169,10 @@ Item {
                             id: listViewTranscription
                             anchors.fill: parent
                             anchors.top: parent.top
-                            anchors.topMargin: 50
+                            anchors.topMargin: 20
+                            anchors.bottomMargin: 20
                             visible: !hasError
+                            clip: true
                             spacing:10
                             model: ListModel {}
                             z:2
@@ -157,6 +183,9 @@ Item {
                                     id: textBlockTranscription
                                     textToDisplay: model.text
                                     timeCode: model.timeCode
+                                    onChooseBlock: {
+
+                                    }
                                 }
                             }
 
@@ -267,8 +296,8 @@ Item {
                             id: listViewTranslation
                             anchors.fill: parent
                             anchors.top: parent.top
-                            anchors.topMargin: 25
                             visible: !translation_loading
+                            clip: true
                             spacing:10
                             model: ListModel {
                                 id: translationListModel}
@@ -297,44 +326,69 @@ Item {
                     }
                 }
             }
-        }
-    }
 
-    Timer {
-        id: processTimer
-        interval: interval
-        repeat: false
-        onTriggered: {
-            if (index < transcriptionData.length || index < translationData.length) {
-                if(!stopValue){
-                    let element = transcriptionData[index];
-                    // listViewTranscription.model.append({
-                    //                        text: element.text,
-                    //                        timeCode: formatSeconds(element.time_start)
-                    //                    });
-                    // listViewTranscription.currentIndex = listViewTranscription.count - 1;
-                    // listViewTranscription.forceLayout()
-                    // interval= (element.time_end - element.time_start) * 1000
-                    // index++;
+            Rectangle {
+                color: constants.default_widget_background_color
+                radius:10
 
+                ColumnLayout{
+                    anchors.fill: parent
+                    spacing: 5
+
+                    Rectangle{
+                        Layout.fillWidth:  true
+                        Layout.fillHeight: true
+                        // Layout.preferredHeight: parent.height-120
+                        // Layout.preferredHeight: parent.height-10
+                        color: 'transparent'
+
+                        ListView {
+                            id: listViewHistory
+                            anchors.fill: parent
+                            anchors.top: parent.top
+                            anchors.topMargin: 15
+                            visible: !translation_loading
+                            spacing:10
+                            model: globalVariable.translationHistory
+                            clip:true
+                            z:2
+                            delegate: Item {
+                                required property var modelData
+
+                                height: 50
+                                width: parent?.width
+                                TextBlock{
+                                    id: textBlockHistory
+                                    textToDisplay: findLanguage(modelData)
+                                    timeCode: ""
+                                    history: true
+                                    onChooseBlock: loadTranslationFromHistory(modelData)
+                                }
+                            }
+
+                            ScrollBar.vertical: ScrollBar {
+                                anchors.right: parent.right
+                                policy: listViewHistory.contentHeight > listViewHistory.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                active: hovered || pressed
+                                contentItem: Rectangle {
+                                    color: constants.scrollbar_color
+                                    radius: 4
+                                }
+                                snapMode: ScrollBar.SnapOnRelease
+                            }
+                        }
+
+                        Text{
+                            text: 'HISTORIQUE DE TRADUCTION VIDE'
+                            anchors.centerIn: parent
+                            visible: !globalVariable.translationHistory.length
+                            color: 'white'
+                            font.pixelSize: 20
+                            font.bold: true
+                        }
+
+                    }
                 }
-                processTimer.start();
-            }
-
-            if(index < translationData.length){
-                if(!stopValue){
-                    let element = translationData[index];
-                    // listViewTranslation.model.append({
-                    //                        text: element.text,
-                    //                        timeCode: formatSeconds(element.time_start)
-                    //                    });
-                    // listViewTranslation.currentIndex = listViewTranslation.count - 1;
-                    // 0listViewTranslation.forceLayout()
-                    // interval= (element.time_end - element.time_start) * 1000
-                    // index++;
-
-                }
-                processTimer.start();
             }
         }
     }
@@ -344,15 +398,21 @@ Item {
     * Method to read JSON file
     * fileType is transcription or tarduction
     **/
-    function readFile(fileType) {
+    function readFile(openingProject, fileType) {
 
-        let file= fileType === 'transcription' ? "/app_output_stt.json" : `/app_subtitles_${currentLanguage}.json`
-        const jsonPath= 'file:///'+dataDirectoryPath+file
+        let file;
+        let jsonPath;
+        let currentProject=globalVariable.currentProjectName
+        let currentDestLang= globalVariable.currentDestinationLang
+        file= fileType === 'transcription' ? "/app_output_stt.json" : `/app_subtitles_${currentDestLang}.json`
+        jsonPath=`file:///${currentProjectDirectoryPath}${currentProject}/metadata${file}`
         var xhr = new XMLHttpRequest();
         xhr.open("GET", jsonPath, false);
         xhr.send();
 
+        console.log(jsonPath)
         if (xhr.status === 200) {
+            hasError=false
             if(fileType==='transcription'){
                 transcriptionData = JSON.parse(xhr.responseText);
                 index = 0;
@@ -368,7 +428,6 @@ Item {
                                                            });
                     }
 
-                    processTimer.start();
                 }
             }else{
                 translationData = JSON.parse(xhr.responseText);
@@ -385,13 +444,11 @@ Item {
                     console.log('no translation')
                 }
 
-                processTimer.start();
             }
 
 
         } else {
             hasError=true
-            // notification.openNotification(errors.error_extension_video, NotificationTypeClass.Error)
         }
 
     }
@@ -401,7 +458,6 @@ Item {
     **/
     function formatSeconds(seconds) {
         if (isNaN(seconds) || seconds < 0) return "0:00";
-
         const hrs = Math.floor(seconds / 3600);
         const mins = Math.floor((seconds % 3600) / 60);
         const secs = Math.floor(seconds % 60);
@@ -414,9 +470,9 @@ Item {
     * Choose language for translation
     **/
     function setLanguage(lang){
+        globalVariable.setcurrentDestinationLang(lang)
         currentLanguage=lang
-        // console.log("current_language")
-        scriptExec.executeTranslation(lang)
+        scriptExec.executeTranslation()
     }
 
     /**
@@ -426,7 +482,6 @@ Item {
     function findLanguage(lang){
         if(lang===''){
             return 'Traduire'
-
         }else{
             const iso= codeIso.codeIso.find(iso=> iso['code']===lang)
             if(iso){
@@ -437,6 +492,13 @@ Item {
         }
 
 
+    }
+
+    function loadTranslationFromHistory(lang){
+        currentLanguage=lang
+        globalVariable.setcurrentDestinationLang(lang)
+        tabBar.currentIndex=1
+        readFile(false, "translation")
     }
 
 }

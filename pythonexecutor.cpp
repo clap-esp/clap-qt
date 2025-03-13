@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QDir>
 #include <QCoreApplication>
-
+#include "globalVariableManager.h"
 
 PythonExecutor::PythonExecutor(QObject *parent) : QObject(parent) {
     process = new QProcess(this);
@@ -24,7 +24,7 @@ void PythonExecutor::executeTranscription(const QStringList &args ) {
     QString scriptName="app_transcription.py";
     QString scriptPath = QUrl(scriptName).toLocalFile();
     QString videoFile = args[0];
-    QString spokenLang= args[1];
+    QString spokenLang=  globalVariable.currentSourceLang();
     QUrl videoUrl(videoFile);
     QString videoPath= videoUrl.toLocalFile();
 
@@ -56,21 +56,24 @@ void PythonExecutor::executeTranscription(const QStringList &args ) {
 }
 
 
-void PythonExecutor::executeThumbnailsGeneration(const QStringList &args ) {
+void PythonExecutor::executeThumbnailsGeneration(const QString &projectName, const QStringList &args ) {
 
     QString scriptName="generate_thumbnails.py";
     QString scriptPath = QUrl(scriptName).toLocalFile();
     QString videoFile = args[0];
+
     QUrl videoUrl(videoFile);
     QString videoPath= videoUrl.toLocalFile();
 
     scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/API/" + scriptName;
 
+    QString finalProjectName = projectName.trimmed();
+
+    qDebug() << projectName;
+
     qDebug() << "Chemin final utilisé pour le script Python :" << scriptPath;
 
     QString pythonExecutable = QDir::cleanPath(QCoreApplication::applicationDirPath()) + "/../../venv/Scripts/python.exe";
-
-    qDebug() << "python executable :" << pythonExecutable;
 
 
     if (!QFile::exists(pythonExecutable)) {
@@ -83,7 +86,7 @@ void PythonExecutor::executeThumbnailsGeneration(const QStringList &args ) {
 
     process->setProcessEnvironment(env);
 
-    process->start(pythonExecutable, QStringList() << scriptPath << videoPath );
+    process->start(pythonExecutable, QStringList() << scriptPath << videoPath << finalProjectName  );
 
     if (!QFile::exists(scriptPath)) {
         emit scriptError("Error: Script file not found!");
@@ -101,8 +104,15 @@ void PythonExecutor::executeTranslation(const QStringList &args ) {
 
     QString scriptName="app_translation.py";
     QString scriptPath = QUrl(scriptName).toLocalFile();
-    QString lang = args[0];
+    QString lang = globalVariable.currentDestinationLang();
 
+
+    QStringList history= globalVariable.translationHistory();
+
+    if(history.contains(lang)){
+        emit scriptFinished();
+        return;
+    }
 
     scriptPath=QCoreApplication::applicationDirPath() + "/clap_v1/API/" + scriptName;
 

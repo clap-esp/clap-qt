@@ -2,11 +2,14 @@ import QtQuick 2.15
 import QtQuick.Layouts
 
 Rectangle {
+    id: textBlockContainer
     width: parent.width
     height: 50
     color: "transparent"
     property string textToDisplay:''
     property string timeCode: ''
+    property bool history: false
+    signal chooseBlock()
     radius: 5
 
     RowLayout{
@@ -26,6 +29,7 @@ Rectangle {
         Text{
             id: timeCodeText
             text: timeCode
+            visible: !history
             color: "#fff"
             padding: 10
             font.pixelSize: 12
@@ -49,9 +53,18 @@ Rectangle {
 
 
     MouseArea {
+        hoverEnabled: history
         cursorShape: Qt.PointingHandCursor
         anchors.fill: parent
         onClicked: {
+            chooseBlock()
+        }
+        onEntered: {
+            textBlockContainer.color="#81789b"
+        }
+
+        onExited: {
+            textBlockContainer.color="transparent"
         }
     }
 }

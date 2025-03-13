@@ -13,7 +13,6 @@ Window {
     readonly property var constants: Constants { }
     readonly property var messages: Success{}
     property string file_path: ''
-    property string lang: 'fr'
     property bool hasError: false
 
     id: root
@@ -36,6 +35,7 @@ Window {
 
 
         onScriptFinished:{
+            projectManager.copyFileInProject("transcription")
             loadingPopup.close();
             createMainWidget(file_path)
 
@@ -55,7 +55,7 @@ Window {
             loadingPopup.open()
         }
         onScriptFinished:{
-            runTranscriptionScript(file_path, lang)
+            runTranscriptionScript(file_path)
         }
         onScriptError: (error)=>{
                            console.log("Python Error:", error)
@@ -83,10 +83,22 @@ Window {
             id: import_window
             onImportFileEvent: {
                 file_path = import_window.loadedFilePath;
-                // runTranscriptionScript(filePath, lang)
-                runThumbnailsGenerationScript(file_path)
-                lang= import_window.selectedLanguageCode
+                runThumbnailsGenerationScript(globalVariable.currentProjectName ,file_path)
             }
+
+            onOpenProject: (name_value)=>{
+                               stack_view.clear()
+                               globalVariable.setcurrentProjectName(name_value.name);
+                               globalVariable.setTranslationHistory(name_value.translated_in)
+                               projectManager.copySubtitleJsonInTmp()
+
+                               let mainWidget = main_widget_component.createObject(stack_view, {
+                                                                                       "videoSourcePath": name_value.videos[0].filePath,
+                                                                                       "openingProject": true,
+                                                                                   });
+                               root.color = constants.panel_background_color
+                               stack_view.push(mainWidget, StackView.Immediate);
+                           }
         }
     }
 
@@ -115,12 +127,12 @@ Window {
     /**
     * Run transcription script
     **/
-    function runTranscriptionScript(filePath, spokenLang){
-        pythonExec.executeTranscription([filePath, spokenLang])
+    function runTranscriptionScript(filePath){
+        pythonExec.executeTranscription([filePath])
     }
 
-    function runThumbnailsGenerationScript(filePath) {
-        thumbnailExec.executeThumbnailsGeneration([filePath])
+    function runThumbnailsGenerationScript(projectName, filePath) {
+        thumbnailExec.executeThumbnailsGeneration(projectName, [filePath])
     }
 
 
