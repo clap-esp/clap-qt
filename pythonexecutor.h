@@ -16,7 +16,7 @@ public:
 
     Q_INVOKABLE void executeTranslation(const QStringList &args = {});
 
-    // Q_INVOKABLE QString executeDerush(const QString &scriptName, const QStringList &args = {});
+    Q_INVOKABLE void executeDerush();
 
     // Q_INVOKABLE QString executeTranslation(const QString &scriptName, const QStringList &args = {});
 
