@@ -30,12 +30,66 @@ Se placer dans le dossier clap-qt
     ```pip install -r requirements.txt```
 
 
+
+
+
 ## 🔨 Compilation et exécution du projet
 
 1. Ouvrir le projet dans Qt Creator.
 2. Compiler le projet avec le kit Qt approprié.
 3. Exécuter l'application depuis Qt Creator.
 
+
+
+# 📁 Stockage des fichiers dans CLAP
+
+Ci-dessous la structure du dossier d'un projet clap :
+
+```
+📦 Nom du projet
+├─ metadata
+│  ├─ config.json
+│  ├─ app_output_stt.srt
+│  ├─ app_output_stt.json
+│  ├─ app_subtitles_{lang}.srt
+│  ├─ app_subtitles_{lang}.json
+│  ├─ app_derush.json
+│  └─ app_current_src_lang.txt
+└─ thumbs
+   └─ *.png
+```
+
+## 📍 Emplacement du dossier  selon l'OS
+
+
+| Système | Chemin d'accès                                                                    |
+|---------|-----------------------------------------------------------------------------------|
+| windows | C:\Users\NomUtilisateur\AppData\Roaming\appclap_v1\NomDuProjet\                     |
+| macos   | /Users/NomUtilisateur/Library/Application Support/appclap_v1/NomDuProjet/         |
+| linux   | /home/NomUtilisateur/.local/share/NomDeLApp/appclap_v1/                           |
+
+
+
+
+## 📂 Contenu du dossier metadata
+
+Ce dossier contient :
+
+✅ Les fichiers de transcription et de traduction générés par les scripts Python exécutés dans l’application. (*.srt, *.json)
+
+✅ Le fichier de configuration du projet, créé lors de l'initialisation d'un nouveau projet dans CLAP. (config.json)
+
+
+## 📂 Contenu du dossier thumbs
+
+Ce dossier contient :
+
+✅ Les miniatures générées et utilisées dans la frise (timeline) et dans la liste des projets (dans l'UI)
+
+
+## 📝 Fichier config.json
+
+Le fichier ````config.json```` contient les informations essentielles du projet. Il est généré automatiquement à la création d’un projet.
 
 
 

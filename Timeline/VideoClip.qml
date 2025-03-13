@@ -73,7 +73,7 @@ Item {
             jsonData = JSON.parse(xhr.responseText);
             let jsonDataThumbnails = jsonData["thumbnails"];
             index = 0
-            totalThumbnails = jsonDataThumbnails.length  // Mise à jour du total des miniatures
+            totalThumbnails = jsonDataThumbnails.length
             thumbnailModel.clear()
             for (index = 0; index < jsonDataThumbnails.length; index++) {
                 let imagePath = jsonDataThumbnails[index]["path"];

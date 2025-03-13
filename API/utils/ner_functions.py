@@ -14,20 +14,24 @@ logging.getLogger("tensorflow").setLevel(logging.ERROR)
 logging.getLogger("transformers").setLevel(logging.ERROR)
 
 
+
 debug_mode = None
 def log(message):
     if debug_mode:
         print(message)
 
 
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'models', 'bert-base-multilingual-cased')
+MODEL_PATH = "../../API/models/bert-base-multilingual-cased"
 MODEL_ABSPATH = os.path.abspath(MODEL_PATH)
 
-tokenizer = BertTokenizerFast.from_pretrained(MODEL_ABSPATH)
+print(f'MODEL PATH {MODEL_PATH}')
+
+
+tokenizer = BertTokenizerFast.from_pretrained(MODEL_PATH)
 special_tokens_dict = {'additional_special_tokens': ['[bruit]', '<Silence>']} # the model can receive chosen tokens
 num_added_toks = tokenizer.add_special_tokens(special_tokens_dict)
 
-model = TFBertForTokenClassification.from_pretrained(MODEL_ABSPATH)
+model = TFBertForTokenClassification.from_pretrained(MODEL_PATH)
 model.resize_token_embeddings(len(tokenizer)) # to include the special token
 
 

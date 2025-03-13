@@ -26,10 +26,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<NotificationTypeClass>("notification.type", 1, 0, "NotificationTypeClass", "Not creatable as it is an enum type");
     qmlRegisterType<PythonExecutor>("python.executor", 1, 0, "PythonExecutor");
 
-    QString tmpDirectoryPath = QDir::cleanPath(QCoreApplication::applicationDirPath() + "/../../API/tmp");
-    engine.rootContext()->setContextProperty("tmpDirectoryPath", tmpDirectoryPath);
-
-    QString currentProjectDirectoryPath=QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Clap/Projets/";
+    QString currentProjectDirectoryPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
     engine.rootContext()->setContextProperty("currentProjectDirectoryPath", currentProjectDirectoryPath);
 
     QObject::connect(

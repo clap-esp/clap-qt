@@ -30,15 +30,32 @@ Window {
     //     onOpenParameterEvent: stack_view.push(parameter_window_component, StackView.Immediate)
     // }
 
+
+    PythonExecutor{
+        id: thumbnailExec
+        onScriptStarted: {
+            loadingPopup.open()
+        }
+        onScriptFinished:{
+            runTranscriptionScript(file_path)
+        }
+        onScriptError: (error)=>{
+                           console.log("Python Error:", error)
+                       }
+
+        onScriptOutput: (value) => {
+                            console.log(value)
+                        }
+
+    }
+
     PythonExecutor {
         id: pythonExec
 
 
         onScriptFinished:{
             projectManager.copyFileInProject("transcription")
-            loadingPopup.close();
-            createMainWidget(file_path)
-
+            runDerushScript()
         }
         onScriptError: (error)=>{
                            console.log("Python Error:", error)
@@ -49,13 +66,14 @@ Window {
                         }
     }
 
+
+
     PythonExecutor{
-        id: thumbnailExec
-        onScriptStarted: {
-            loadingPopup.open()
-        }
+        id: derushExec
         onScriptFinished:{
-            runTranscriptionScript(file_path)
+            projectManager.copyFileInProject("derush")
+            loadingPopup.close();
+            createMainWidget(file_path)
         }
         onScriptError: (error)=>{
                            console.log("Python Error:", error)
@@ -135,6 +153,9 @@ Window {
         thumbnailExec.executeThumbnailsGeneration(projectName, [filePath])
     }
 
+    function runDerushScript(){
+        derushExec.executeDerush();
+    }
 
 
     /**
