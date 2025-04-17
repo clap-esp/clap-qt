@@ -3,11 +3,11 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Controls.Material
 import notification.type 1.0
-
+import '../Utils'
 
 Popup {
     id: popup
-    Material.theme: Material.Dark
+    Material.background: constants.panel_background_color
     padding: 0
     anchors.centerIn: parent
     width: parent.width < Screen.width ? parent.width/2 : parent.width/4
@@ -68,6 +68,7 @@ Popup {
                Layout.alignment: Qt.AlignHCenter
                wrapMode: Text.Wrap
                horizontalAlignment: Text.AlignJustify
+               Layout.margins: 15
 
            }
 
@@ -78,7 +79,7 @@ Popup {
                Button {
                      text: "OK"
                      onClicked: popup.close()
-                     Material.background: Material.Indigo
+                     Material.background: constants.active_button
 
 
                 }
@@ -86,7 +87,7 @@ Popup {
                      visible: false
                      text: "Cancel"
                      onClicked: popup.close()
-                     Material.background: Material.Indigo
+                     Material.background: constants.normal_button
 
                  }
            }

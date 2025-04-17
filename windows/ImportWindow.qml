@@ -44,7 +44,7 @@ Item{
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
-        color: '#1E1B26'
+        color: constants.panel_background_color
 
 
 
@@ -140,6 +140,14 @@ Item{
                 ctx.stroke();
             }
 
+            Rectangle {
+                id: backgroundRectangle
+                width: parent.width
+                height: parent.height
+                color: "transparent"
+                radius: 35
+            }
+
 
             Rectangle {
                 id: importButton
@@ -190,6 +198,7 @@ Item{
 
 
                 Text {
+                    id: text_extension
                     text: qsTr("Extensions de fichier supportés: mp4, m4a, mov, avi")
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: text_drag.top
@@ -209,7 +218,9 @@ Item{
             DropArea {
                 anchors.fill: parent
                 onEntered: (drag) => {
-                               root.color = constants.on_drag_background_color;
+                               backgroundRectangle.color = constants.on_drag_background_color;
+                               text_extension.color = "#1c1c1c"
+                               text_drag.color = "#1c1c1c"
                                drag.accept(Qt.LinkAction);
                            }
                 onDropped: (drop) => {
@@ -217,19 +228,26 @@ Item{
                                    let filePath = drop.urls[0].toString();
 
                                    if(!filePath.match(/\.(mp4|avi|mov|m4a|mkv)$/i)) {
-                                       fileNotAVideoDialog.open();
+                                       notification.openNotification( errors.error_extension_video, NotificationTypeClass.Error)
+                                       root.color=constants.panel_background_color
                                        console.log("Error: Le fichier sélectionné n'est pas une vidéo.");
-                                       root.color = "transparent";
+                                       backgroundRectangle.color = "transparent";
+                                       text_extension.color = "#CECECE"
+                                       text_drag.color = "white"
                                        return;
                                    }
 
-                                   root.color = "transparent";
+                                   backgroundRectangle.color = "transparent";
+                                   text_extension.color = "#CECECE"
+                                   text_drag.color = "white"
                                    fileDialog.close();
                                    openProjectDialog(filePath)
                                }
                            }
                 onExited: {
-                    root.color = "transparent";
+                    backgroundRectangle.color = "transparent";
+                    text_extension.color = "#CECECE"
+                    text_drag.color = "white"
                 }
             }
 
@@ -323,9 +341,10 @@ Item{
 
             onAccepted: {
                 if (selectedFilePath !== "" && selectedFilePath !== undefined) {
-                    let cleanedFilePath = selectedFilePath.replace("file:///", "");
+                    let cleanedFilePath = selectedFilePath.replace("file:///", "")
+                    console.log(cleanedFilePath);
                     cleanedFilePath = cleanedFilePath.replace(/%20/g, " ");
-                    newProjectName= projectNameInput.text;                   
+                    newProjectName= projectNameInput.text;
                     let projectPath = projectManager.createProject(cleanedFilePath, projectNameInput.text)
                     if (projectPath.startsWith("Error")) {
                         console.log(projectPath)
@@ -335,7 +354,8 @@ Item{
                     } else {
                         console.log("Project créé dans : " + projectPath)
                         projectCreated = true;
-                        import_file(fileDialog.selectedFile)
+                        import_file(cleanedFilePath)
+                        console.log()
                     }
                 } else {
                     console.log("Error: No file selected.");
@@ -359,11 +379,16 @@ Item{
 
         const extension=String(file_path).split('.')[1]
         if(extension && constants.valid_extension.includes(extension)){
-            loadedFilePath = file_path
+            let cleanedFilePath = file_path.replace(/%20/g, " ");
+            if (Qt.platform.os === "windows") {
+                cleanedFilePath = cleanedFilePath.replace("C:/", "file:///")
+            }
+            console.log(cleanedFilePath);
+            loadedFilePath = cleanedFilePath
             importFileEvent(loadedFilePath);
         }else{
             notification.openNotification( errors.error_extension_video, NotificationTypeClass.Error)
-            root.color=constants.default_widget_background_color
+            root.color=constants.panel_background_color
         }
     }
 
