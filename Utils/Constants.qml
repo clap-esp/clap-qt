@@ -10,6 +10,4 @@ QtObject {
     readonly property string normal_button:'#dddddd'
     readonly property var accepted_extension: ["*.mp4", "*.m4a", "*.mov", "*.avi"]
     readonly property var valid_extension: ["mp4", "m4a", "mov", "avi"]
-
-
 }
