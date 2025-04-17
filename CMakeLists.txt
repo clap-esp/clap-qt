@@ -29,6 +29,8 @@ qt_add_qml_module(appclap_v1
         Timeline/ScrollableTimeline.qml
         Timeline/TimelineView.qml
         Timeline/VideoClip.qml
+        Timeline/Playhead.qml
+        Timeline/TimelineButtons.qml
         Elements/CheckBoxCustom.qml
         Elements/ButtonCustom.qml
         Utils/Notification/Error.qml
@@ -36,6 +38,7 @@ qt_add_qml_module(appclap_v1
         Utils/Constants.qml
         Utils/IsoLanguageCode.qml
         Utils/DerushClassColor.qml
+        Utils/DerushClassLegend.qml
         Notification/NotificationWidget.qml
         Loading/LoadingWidget.qml
         API/utils/__init__.py
@@ -54,6 +57,7 @@ qt_add_qml_module(appclap_v1
         API/app_transcription.py
         API/app_translation.py
         API/generate_thumbnails.py
+        API/app_exportation.py
         ProjectsList/ProjectsList.qml
         ProjectsList/SuppressConfirmation.qml
         requirements.txt

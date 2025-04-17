@@ -7,6 +7,7 @@
 #include "globalVariableManager.h"
 #include <QStandardPaths>
 
+
 PythonExecutor::PythonExecutor(QObject *parent) : QObject(parent) {
     process = new QProcess(this);
     connect(process, &QProcess::readyReadStandardOutput, this, [this]() {
@@ -176,4 +177,13 @@ void PythonExecutor::executeDerush(){
     }
 
     emit scriptStarted();
+}
+
+
+void PythonExecutor::executeCut(){
+
+    QString scriptName="app_exportation.py";
+
+
+
 }
