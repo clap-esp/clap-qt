@@ -18,6 +18,8 @@ public:
 
     Q_INVOKABLE void executeDerush();
 
+
+    Q_INVOKABLE void executeCut();
     // Q_INVOKABLE QString executeTranslation(const QString &scriptName, const QStringList &args = {});
 
 
@@ -29,6 +31,8 @@ signals:
 
 private:
     QProcess *process;
+    // QString pythonExecutable;
+    // QProcessEnvironment env;
 };
 
 #endif
